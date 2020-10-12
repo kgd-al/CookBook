@@ -9,6 +9,7 @@ namespace db {
 
 class RecipesListModel : public QStringListModel {
 public:
+  using RecipesDatabase = transparent_set<Recipe>;
 //  static constexpr int RecipeRole = Qt::UserRole + 1;
 
   RecipesListModel(void);
@@ -22,7 +23,7 @@ public:
   // map interface
   void clear (void);
 
-  auto find (int key) const {
+  auto find (Recipe::ID key) const {
     return recipes.find(key);
   }
 
@@ -34,8 +35,8 @@ public:
     return recipes.cend();
   }
 
-  Recipe& at (int key) {
-    return recipes.at(key);
+  const Recipe& at (Recipe::ID key) {
+    return *recipes.find(key);
   }
 
   Recipe& fromIndex(const QModelIndex &i);
@@ -43,7 +44,7 @@ public:
   const Recipe& recipe (int i) const {
     auto it = recipes.begin();
     std::advance(it, i);
-    return it->second;
+    return *it;
   }
 
   Recipe& recipe (int i) {
@@ -55,7 +56,7 @@ public:
   QJsonArray toJson(void);
 
 private:
-  std::map<int, Recipe> recipes;
+  RecipesDatabase recipes;
 
   Recipe::ID _nextRecipeID;
   Recipe::ID nextRecipeID (void) {

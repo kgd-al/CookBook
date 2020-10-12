@@ -28,7 +28,6 @@ struct Recipe {
 
   static QJsonValue toJson (const Recipe &r);
   static Recipe fromJson (const QJsonValue &j);
-  static ID idFromJson (const QJsonValue &j);
 
 private:
   Recipe();

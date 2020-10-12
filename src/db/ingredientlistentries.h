@@ -61,9 +61,9 @@ struct IngredientEntry : public IngredientListEntry {
 
 struct Recipe;
 struct SubRecipeEntry : public IngredientListEntry {
-  Recipe *recipe;
+  const Recipe *recipe;
 
-  SubRecipeEntry (Recipe *recipe);
+  SubRecipeEntry (const Recipe *recipe);
   SubRecipeEntry (void) : SubRecipeEntry(nullptr) {}
   virtual ~SubRecipeEntry (void) {}
 
@@ -73,7 +73,7 @@ struct SubRecipeEntry : public IngredientListEntry {
   void fromJsonInternal (const QJsonValue &j) override;
 
 private:
-  static Recipe* fromID (int id);
+  static const Recipe *fromID(db::ID id);
 };
 
 struct DecorationEntry : public IngredientListEntry {

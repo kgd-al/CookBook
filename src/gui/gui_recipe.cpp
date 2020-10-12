@@ -316,9 +316,10 @@ void Recipe::showSubRecipe(QListWidgetItem *li) {
   auto item = static_cast<IngredientListItem*>(li);
   if (item->ing->etype == db::EntryType::SubRecipe) {
     Recipe dsubrecipe (this);
-    db::Recipe *subrecipe =
+    const db::Recipe *subrecipe =
       static_cast<db::SubRecipeEntry*>(item->ing.data())->recipe;
-    dsubrecipe.show(subrecipe, true, currentRatio());
+    dsubrecipe.show(const_cast<db::Recipe*>(subrecipe), true, currentRatio());
+    /// FIXME ugly const cast
   }
 }
 

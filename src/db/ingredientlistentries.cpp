@@ -87,7 +87,7 @@ void IngredientEntry::fromJsonInternal (const QJsonValue &j) {
 
 // =============================================================================
 
-SubRecipeEntry::SubRecipeEntry (Recipe *r)
+SubRecipeEntry::SubRecipeEntry (const Recipe *r)
   : IngredientListEntry(EntryType::SubRecipe),
     recipe(r) {}
 
@@ -109,10 +109,10 @@ QJsonValue SubRecipeEntry::toJsonInternal (void) const {
 }
 
 void SubRecipeEntry::fromJsonInternal (const QJsonValue &j) {
-  recipe = fromID(j.toInt());
+  recipe = fromID(Recipe::ID(j.toInt()));
 }
 
-Recipe* SubRecipeEntry::fromID(int id) {
+const Recipe* SubRecipeEntry::fromID(Recipe::ID id) {
   return &Book::current().recipes.at(id);
 }
 

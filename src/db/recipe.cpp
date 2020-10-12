@@ -56,10 +56,6 @@ Recipe Recipe::fromJson(const QJsonValue &j) {
   return r;
 }
 
-ID Recipe::idFromJson (const QJsonValue &j) {
-  return ID(j.toObject()["id"].toInt());
-}
-
 QJsonValue Recipe::toJson(const Recipe &r) {
   QJsonObject j;
 

@@ -46,11 +46,13 @@ int main(int argc, char *argv[]) {
 
   QSettings settings;
   QString lastBook = settings.value("lastBook").toString();
+  QRect lastGeometry = settings.value("lastGeometry").toRect();
 
   QApplication::setFont(settings.value("font").value<QFont>());
 
   gui::Book w;
   if (!lastBook.isEmpty())  w.loadRecipes(lastBook);
+  if (lastGeometry.isValid()) w.setGeometry(lastGeometry);
   w.show();
 
   QList<QString> data {

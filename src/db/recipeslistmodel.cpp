@@ -2,15 +2,14 @@
 
 #include "recipeslistmodel.h"
 
-#include <QDebug>
-
 namespace db {
 
-RecipesListModel::RecipesListModel(void) : _nextRecipeID(ID(1)) {}
+RecipesListModel::RecipesListModel(void) : _nextRecipeID(ID(0)) {}
 
 void RecipesListModel::addRecipe(Recipe &&r) {
   beginInsertRows(QModelIndex(),rowCount(),rowCount());
-  recipes.emplace(nextRecipeID(), r);
+  r.id = nextRecipeID();
+  recipes.emplace(r);
   endInsertRows();
 }
 
@@ -41,9 +40,9 @@ void RecipesListModel::clear(void) {
 
 void RecipesListModel::fromJson(const QJsonArray &a) {
   for (const QJsonValue &v: a) {
-    auto id = Recipe::idFromJson(v);
-    recipes.emplace(id, Recipe::fromJson(v));
-    _nextRecipeID = std::max(id, _nextRecipeID);
+    Recipe r = Recipe::fromJson(v);
+    recipes.emplace(r);
+    _nextRecipeID = std::max(r.id, _nextRecipeID);
   }
 
   nextRecipeID();
@@ -52,7 +51,7 @@ void RecipesListModel::fromJson(const QJsonArray &a) {
 QJsonArray RecipesListModel::toJson(void) {
   QJsonArray a;
   for (const auto &p: recipes)
-    a.append(Recipe::toJson(p.second));
+    a.append(Recipe::toJson(p));
   return a;
 }
 

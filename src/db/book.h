@@ -24,7 +24,7 @@ struct Book {
 
   void clear (void);
 
-  const QString& title (int id) const;
+  const QString& title (Recipe::ID id) const;
 
   static Book& current (void);
 };

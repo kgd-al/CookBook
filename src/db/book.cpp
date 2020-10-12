@@ -56,6 +56,9 @@ bool Book::save(const QString &path) {
            << QJsonDocument(json).toJson(QJsonDocument::Indented)
                                  .toStdString().c_str();
 #else
+  qDebug() << "Saving:\n"
+           << QJsonDocument(json).toJson(QJsonDocument::Indented)
+                                 .toStdString().c_str();
   saveFile.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
 #endif
 
@@ -83,10 +86,15 @@ bool Book::load (const QString &path) {
     return false;
   }
 
+  qDebug() << "Loading:\n"
+           << json_doc.toJson(QJsonDocument::Indented)
+                      .toStdString().c_str();
+
   clear();
   QJsonObject json = json_doc.object();
   ingredients.fromJson(json["ingredients"].toArray());
   recipes.fromJson(json["recipes"].toArray());
+
 
   qInfo("Loaded and parsed database from '%s'",
         path.toStdString().c_str());
@@ -103,11 +111,11 @@ void Book::clear (void) {
   path = "";
 }
 
-const QString& Book::title (int id) const {
+const QString& Book::title (Recipe::ID id) const {
   static const QString error = "Recipe not found";
   auto it = recipes.find(id);
   if (it != recipes.end())
-    return it->second.title;
+    return it->title;
   else
     return error;
 }
