@@ -1,4 +1,7 @@
+#include <QSettings>
+#include <QApplication>
 #include <QFileDialog>
+#include <QFontDialog>
 #include <QMessageBox>
 
 #include <QMenuBar>
@@ -40,8 +43,25 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
   connect(_recipes, &QListView::activated,
           this, &Book::showRecipe);
 
+  _recipes->setContextMenuPolicy(Qt::ActionsContextMenu);
+
+//  QAction *a_del = new QAction("delete");
+//  connect(a_del, &QAction::triggered, [this] {
+//    auto index = _recipes->currentIndex();
+//    if (!index.isValid()) return;
+//    _recipes->re
+//  });
+//  _recipes->addAction(a_del);
+
   QMenuBar *bar = menuBar();
     QMenu *m_book = bar->addMenu("Book");
+      m_book->addAction(QIcon::fromTheme(""), "New",
+                        [this] {
+                          db::Book::current().clear();
+                          setModified(false);
+                        },
+                        QKeySequence("Ctrl+Shift+N"));
+
       m_book->addAction(QIcon::fromTheme(""), "Load",
                         this, qOverload<>(&Book::loadRecipes),
                         QKeySequence("Ctrl+O"));
@@ -61,6 +81,17 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
                              QKeySequence("Ctrl+I"));
 
     QMenu *m_other = bar->addMenu("Misc");
+      m_other->addAction("Font", [this] {
+        bool ok;
+        QFont font = QApplication::font();
+        font = QFontDialog::getFont(&ok, font);
+        if (ok) {
+          QApplication::setFont(font);
+          QSettings settings;
+          settings.setValue("font", font);
+        }
+
+      }, QKeySequence("Ctrl+Shift+F"));
       m_other->addAction("Update", this, &Book::showUpdateManager,
                          QKeySequence("Ctrl+U"));
 }
@@ -137,8 +168,11 @@ void Book::setAutoTitle(void) {
   QString name = book.path;
   if (name.isEmpty())
     name = "Unsaved book";
-  else
+
+  else {
+    name = name.mid(name.lastIndexOf('/')+1);
     name = "CookBook: " + name.mid(0, name.lastIndexOf('.'));
+  }
 
   if (book.modified)
     name += " *";
@@ -152,7 +186,8 @@ void Book::setModified(bool m) {
 }
 
 void Book::closeEvent(QCloseEvent *e) {
-  if (db::Book::current().modified) {
+  auto &book = db::Book::current();
+  if (book.modified) {
     auto ret = QMessageBox::warning(this, "Confirm closing",
                                     "Saving before closing?",
                                     QMessageBox::Yes,
@@ -170,6 +205,9 @@ void Book::closeEvent(QCloseEvent *e) {
       e->ignore();
     }
   }
+
+  QSettings settings;
+  settings.setValue("lastBook", book.path);
 }
 
 } // end of namespace gui

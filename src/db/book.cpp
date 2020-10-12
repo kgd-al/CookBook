@@ -99,6 +99,8 @@ bool Book::load (const QString &path) {
 void Book::clear (void) {
   recipes.clear();
   ingredients.clear();
+  modified = false;
+  path = "";
 }
 
 const QString& Book::title (int id) const {

@@ -44,8 +44,13 @@ int main(int argc, char *argv[]) {
   QCoreApplication::setOrganizationName("almann");
   QCoreApplication::setApplicationName("cookbook");
 
+  QSettings settings;
+  QString lastBook = settings.value("lastBook").toString();
+
+  QApplication::setFont(settings.value("font").value<QFont>());
+
   gui::Book w;
-  w.loadRecipes("test2.rbk");
+  if (!lastBook.isEmpty())  w.loadRecipes(lastBook);
   w.show();
 
   QList<QString> data {
