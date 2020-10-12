@@ -208,6 +208,7 @@ void Book::closeEvent(QCloseEvent *e) {
 
   QSettings settings;
   settings.setValue("lastBook", book.path);
+  settings.setValue("lastGeometry", geometry());
 }
 
 } // end of namespace gui
