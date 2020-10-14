@@ -4,6 +4,7 @@
 #include <QPushButton>
 
 #include "ingrediententrydialog.h"
+#include "common.h"
 
 #include "../db/book.h"
 
@@ -107,6 +108,8 @@ IngredientDialog::IngredientDialog (QWidget *parent, const QString &title)
 
   connect(entryTypeSelection, qOverload<int>(&QComboBox::currentIndexChanged),
           this, &IngredientDialog::updateLayout);
+
+  gui::restoreGeometry(this);
 }
 
 void IngredientDialog::typeChanged(void) {
@@ -114,10 +117,13 @@ void IngredientDialog::typeChanged(void) {
   auto &book = db::Book::current();
   auto i = type->currentIndex();
   db::IngredientData &d = book.ingredients.atIndex(i);
-  if (d.group)
-    group->setCurrentText(d.group->text);
-  group->setEnabled(d.group == nullptr);
-  unit->setModel(&d.units);
+  bool isNew = (d.group == nullptr);
+  if (!isNew) group->setCurrentText(d.group->text);
+  group->setEnabled(isNew);
+  if (isNew)
+    unit->setModel(&book.ingredients.allUnitsModel());
+  else
+    unit->setModel(&d.units);
 }
 
 bool IngredientDialog::validate(void) {
@@ -162,7 +168,11 @@ bool IngredientDialog::validate(void) {
 }
 
 void IngredientDialog::setIngredient (const Ingredient_ptr &e) {
-  entryLayout->setCurrentIndex(int(e->etype));
+  qDebug() << "Setting current layout to " << int(e->etype);
+  int index = int(e->etype);
+  entryTypeSelection->setCurrentIndex(index);
+  entryLayout->setCurrentIndex(index);
+  qDebug() << ">>" << entryLayout->currentIndex();
   switch (e->etype) {
   case db::EntryType::Ingredient: {
     auto &i = dynamic_cast<const db::IngredientEntry&>(*e.data());
@@ -236,6 +246,11 @@ db::EntryType IngredientDialog::entryType (void) const {
 
 void IngredientDialog::updateLayout (void) {
   entryLayout->setCurrentIndex(int(entryType()));
+}
+
+void IngredientDialog::closeEvent(QCloseEvent *e) {
+  gui::saveGeometry(this);
+  QDialog::closeEvent(e);
 }
 
 const QMap<db::EntryType, QString>

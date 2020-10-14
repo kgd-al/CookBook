@@ -6,11 +6,12 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 
-#include <QSettings>
 #include <QProcess>
+
 #include <QDebug>
 
 #include "updatemanager.h"
+#include "common.h"
 
 namespace gui {
 
@@ -20,19 +21,16 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
   } qpb;
 
   QVBoxLayout *layout = new QVBoxLayout;
-    QSplitter *splitter = new QSplitter;
+    QHBoxLayout *srclayout = new QHBoxLayout;
+      srclayout->addWidget(new QLabel ("Source path: "));
+      srclayout->addWidget(_path = new QLineEdit);
+      srclayout->addWidget(new QToolButton);
+    layout->addLayout(srclayout);
+
+    _splitter = new QSplitter (Qt::Vertical);
       QWidget *lholder = new QWidget;
       QGridLayout *llayout = new QGridLayout;
         int r = 0, c = 0;
-        llayout->addWidget(new QLabel ("Source path: "), r, c, Qt::AlignLeft);
-        r++; c = 0;
-
-        llayout->addWidget(new QWidget);
-        r++; c = 0;
-
-        llayout->addWidget(_path = new QLineEdit, r, c++);
-        llayout->addWidget(new QToolButton, r, c++);
-        r++; c = 0;
 
         llayout->addWidget(qpb.pull = new QPushButton("Pull"), r, c++);
         llayout->addWidget(_labels.pull = new QLabel, r, c++);
@@ -47,11 +45,11 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
         r++; c = 0;
 
       lholder->setLayout(llayout);
-    splitter->addWidget(lholder);
+    _splitter->addWidget(lholder);
 
-    splitter->addWidget(_output = new QTextEdit);
-    splitter->setStretchFactor(1, 1);
-  layout->addWidget(splitter);
+    _splitter->addWidget(_output = new QTextEdit);
+    _splitter->setStretchFactor(1, 1);
+  layout->addWidget(_splitter);
 
   QDialogButtonBox *buttons = new QDialogButtonBox;
 //    auto update = buttons->addButton("Update", QDialogButtonBox::ActionRole);
@@ -66,13 +64,18 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
   connect(qpb.compile, &QPushButton::clicked, this, &UpdateManager::doCompile);
   connect(qpb.deploy, &QPushButton::clicked, this, &UpdateManager::doDeploy);
 
-  QSettings settings;
-  _path->setText(settings.value("srcPath").toString());
-  connect(_path, &QLineEdit::textEdited, [] (const QString &path) {
+  auto &settings = localSettings(this);
+  QString path = settings.value("src").toString();
+  if (path.isEmpty()) path = BASE_DIR;
+  _path->setText(path);
+  connect(_path, &QLineEdit::textEdited, [this] (const QString &path) {
     qDebug() << "path edited. new value: " << path;
-    QSettings settings;
-    settings.setValue("srcPath", path);
+    auto &settings = localSettings(this);
+    settings.setValue("src", path);
   });
+
+  gui::restoreGeometry(this, settings);
+  _splitter->restoreState(settings.value("splitter").toByteArray());
 }
 
 void setStatus (QLabel *l, int s) {
@@ -155,6 +158,13 @@ UpdateManager::process(const QString &program, const QStringList &arguments,
   _output->append("");
 
   return r;
+}
+
+void UpdateManager::closeEvent(QCloseEvent *e) {
+  auto &settings = localSettings(this);
+  gui::saveGeometry(this, settings);
+  settings.setValue("splitter", _splitter->saveState());
+  QDialog::closeEvent(e);
 }
 
 } // end of namespace gui

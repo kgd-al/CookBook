@@ -1,4 +1,3 @@
-#include <QSettings>
 #include <QApplication>
 #include <QFileDialog>
 #include <QFontDialog>
@@ -10,9 +9,9 @@
 #include "gui_book.h"
 #include "ingredientsmanager.h"
 #include "updatemanager.h"
+#include "common.h"
 #include "../db/recipeslistmodel.h"
 
-#include <QDebug>
 
 namespace gui {
 
@@ -94,6 +93,13 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
       }, QKeySequence("Ctrl+Shift+F"));
       m_other->addAction("Update", this, &Book::showUpdateManager,
                          QKeySequence("Ctrl+U"));
+      m_other->addAction("Clear settings", [] { QSettings().clear(); });
+
+  auto &settings = localSettings(this);
+  QString lastBook = settings.value("lastBook").toString();
+  if (!lastBook.isEmpty())  loadRecipes(lastBook);
+
+  gui::restoreGeometry(this, settings);
 }
 
 Book::~Book(void) {}
@@ -120,9 +126,10 @@ void Book::showRecipe(const QModelIndex &index) {
 }
 
 bool Book::saveRecipes(void) {
-  return saveRecipes(
-        QFileDialog::getSaveFileName(
-          this, "Define where to save the book", ".", fileFilter));
+  QString path = QFileDialog::getSaveFileName(
+    this, "Define where to save the book", ".", fileFilter);
+  if (!path.isEmpty())  return saveRecipes(path);
+  return false;
 }
 
 bool Book::saveRecipes(const QString &path) {
@@ -206,9 +213,9 @@ void Book::closeEvent(QCloseEvent *e) {
     }
   }
 
-  QSettings settings;
+  auto &settings = localSettings(this);
   settings.setValue("lastBook", book.path);
-  settings.setValue("lastGeometry", geometry());
+  gui::saveGeometry(this, settings);
 }
 
 } // end of namespace gui

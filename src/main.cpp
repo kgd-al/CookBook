@@ -1,5 +1,6 @@
 #include <QApplication>
-#include <QSettings>
+#include <QTranslator>
+#include <QLibraryInfo>
 #include <QWindow>
 
 #include <QJsonDocument>
@@ -8,6 +9,7 @@
 #include <QTimeLine>
 
 #include "gui/gui_book.h"
+#include "gui/common.h"
 
 void simulateKey (const QString &kstr) {
   const QKeySequence kseq = kstr;
@@ -19,13 +21,15 @@ void simulateKey (const QString &kstr) {
 
 //    qDebug() << "Requesting " << kstr;
   auto *w = QGuiApplication::focusWindow();
+
 //    qDebug() << "Focus is on " << FOCUSOBJ;
 //    qDebug() << "Sent" << kstr << " PRESS";
-  QCoreApplication::postEvent(w, new QKeyEvent(QEvent::KeyPress, key,
-                                               modifiers, kstr));
-//    qDebug() << "Sent" << kstr << " RELEASE";
-  QCoreApplication::postEvent(w, new QKeyEvent(QEvent::KeyRelease,
-                                               key, modifiers));
+
+  for (QEvent::Type t: {QEvent::KeyPress, QEvent::KeyRelease}) {
+    auto e = new QKeyEvent(t, key, modifiers, kstr);
+//    if(!handleShortcutEvent(e, w))
+    QCoreApplication::postEvent(w, e);
+  }
 //    qDebug() << "Done " << kstr;
   QDebug q = qDebug().nospace();
   q << kstr;
@@ -35,24 +39,49 @@ void simulateKey (const QString &kstr) {
 int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
 
-//  QLocale loc = QLocale::system(); // current locale
-////  loc.set(QLocale::c().decimalPoint()); // borrow decimal char from the "C" locale
-//  loc.setNumberOptions(QLocale::c().numberOptions()); // borrow number options from the "C" locale
-//  QLocale::setDefault(loc); // set as default
-  QLocale::setDefault(QLocale::c());
-
   QCoreApplication::setOrganizationName("almann");
   QCoreApplication::setApplicationName("cookbook");
 
   QSettings settings;
-  QString lastBook = settings.value("lastBook").toString();
-  QRect lastGeometry = settings.value("lastGeometry").toRect();
+  qDebug() << "Current settings:";
+  for (QString k: settings.allKeys())
+    qDebug() << "\t" << k << ": " << settings.value(k);
+  qDebug() << "************************\n";
 
   QApplication::setFont(settings.value("font").value<QFont>());
 
+  QLocale fr_locale (QLocale::French);
+//  QLocale fr_locale = QLocale::system();
+
+  /// FIXME Does not work (on some buttons)
+  QTranslator qtTranslator;
+  qDebug() << "qtTranslator.load(" << fr_locale
+           << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << ")";
+  if (qtTranslator.load(fr_locale,
+              "qt", "_",
+              QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
+    qDebug() << ">> ok";
+    a.installTranslator(&qtTranslator);
+  }
+
+  QTranslator qtBaseTranslator;
+  qDebug() << "qtBaseTranslator (" << "qtbase_" << fr_locale.name()
+           << ")";
+  if (qtBaseTranslator.load("qtbase_" + fr_locale.name(),
+              QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
+    qDebug() << ">> ok";
+    qDebug() << "Installed qtbase translator:"
+             << a.installTranslator(&qtBaseTranslator);
+  }
+  qDebug() << "************************\n";
+
+  //  QLocale loc = QLocale::system(); // current locale
+  ////  loc.set(QLocale::c().decimalPoint()); // borrow decimal char from the "C" locale
+  //  loc.setNumberOptions(QLocale::c().numberOptions()); // borrow number options from the "C" locale
+  //  QLocale::setDefault(loc); // set as default
+//    QLocale::setDefault(QLocale::c());
+
   gui::Book w;
-  if (!lastBook.isEmpty())  w.loadRecipes(lastBook);
-  if (lastGeometry.isValid()) w.setGeometry(lastGeometry);
   w.show();
 
   QList<QString> data {
@@ -108,10 +137,11 @@ int main(int argc, char *argv[]) {
     if (k != "-") simulateKey(k);
   });
 
-  QTimer::singleShot(100, [&timeline] {
-    qDebug() << "Start";
-    timeline.start();
-  });
+  if (!data.empty())
+    QTimer::singleShot(100, [&timeline] {
+      qDebug() << "Start";
+      timeline.start();
+    });
 
   return a.exec();
 }

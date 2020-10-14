@@ -21,8 +21,8 @@ class ListControls : public QWidget {
 public:
   ListControls (GUIList *view);
 
-  const auto* addButton (void) const {  return _add;  }
-  const auto* editButton (void) const { return _edit;  }
+  QToolButton* addButton (void) {  return _add;  }
+  QToolButton* editButton (void) { return _edit;  }
 
 private:
   const GUIList *_view;
@@ -64,7 +64,7 @@ private:
   QPushButton *_toggle;
 
   void toggleReadOnly (void);
-  void confirmed (void);
+  bool confirmed(void);
 
   void writeThrough (void);
 
@@ -77,9 +77,16 @@ private:
   void editStep (void);
 
   double currentRatio (void) const;
-  void updateDisplayedPortions (void);
+  void updateDisplayedPortions (bool spontaneous);
+  void updateDisplayedPortions (void) {
+    return updateDisplayedPortions(true);
+  }
 
   void showSubRecipe (QListWidgetItem *li);
+
+  void keyPressEvent(QKeyEvent *e) override;
+  void closeEvent(QCloseEvent *e) override;
+  bool safeQuit (QEvent *e);
 };
 
 } // end of namespace gui

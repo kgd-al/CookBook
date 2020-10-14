@@ -7,7 +7,8 @@ namespace db {
 RecipesListModel::RecipesListModel(void) : _nextRecipeID(ID(0)) {}
 
 void RecipesListModel::addRecipe(Recipe &&r) {
-  beginInsertRows(QModelIndex(),rowCount(),rowCount());
+  int i = rowCount();
+  beginInsertRows(QModelIndex(), i, i);
   r.id = nextRecipeID();
   recipes.emplace(r);
   endInsertRows();

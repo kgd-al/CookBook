@@ -16,6 +16,7 @@
 
 #include "gui_recipe.h"
 #include "ingrediententrydialog.h"
+#include "common.h"
 
 #include "../db/book.h"
 #include "../db/recipeslistmodel.h"
@@ -54,7 +55,7 @@ struct StepListItem : public QListWidgetItem {
   QVariant data (int role) const override {
     auto d = QListWidgetItem::data(role);
     if (role == Qt::DisplayRole) {
-      return "Step " + QString::number(listWidget()->row(this)+1) + ":\n"
+      return "Étape " + QString::number(listWidget()->row(this)+1) + ":\n"
           + d.toString();
     } else
       return d;
@@ -105,14 +106,14 @@ void ListControls::setState(void) {
 Recipe::Recipe(QWidget *parent) : QDialog(parent) {
   QVBoxLayout *mainLayout = new QVBoxLayout;
 
-    _title = new QLineEdit ("Untitled");
+    _title = new QLineEdit ("Sans titre");
     _title->setAlignment(Qt::AlignCenter);
     mainLayout->addWidget(_title);
 
     mainLayout->addWidget(spacer());
     QHBoxLayout *midLayout = new QHBoxLayout;
       QVBoxLayout *ilayout = new QVBoxLayout;
-        ilayout->addWidget(new QLabel ("Ingredients:"));
+        ilayout->addWidget(new QLabel ("Ingrédients:"));
         QHBoxLayout *playout = new QHBoxLayout;
           _portions = new QDoubleSpinBox;
           _portions->setMinimum(0);
@@ -137,7 +138,7 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
 
     mainLayout->addWidget(spacer());
     QVBoxLayout *slayout = new QVBoxLayout;
-      slayout->addWidget(new QLabel("Steps:"));
+      slayout->addWidget(new QLabel("Étapes:"));
       _steps = new GUIList;
       _steps->setAcceptDrops(true);
       _steps->setDragDropMode(QAbstractItemView::InternalMove);
@@ -147,10 +148,10 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
     mainLayout->addLayout(slayout);
 
     QDialogButtonBox *buttons = new QDialogButtonBox;
-      auto close = new QPushButton("Close");
+      auto close = new QPushButton("Quitter");
       close->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-      connect(close, &QPushButton::clicked, this, &Recipe::done);
-      buttons->addButton(close, QDialogButtonBox::AcceptRole);
+      connect(close, &QPushButton::clicked, this, &Recipe::close);
+      buttons->addButton(close, QDialogButtonBox::RejectRole);
 
       _toggle = new QPushButton("");
       connect(_toggle, &QPushButton::clicked, this, &Recipe::toggleReadOnly);
@@ -158,20 +159,24 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
       buttons->addButton(_toggle, QDialogButtonBox::ActionRole);
     mainLayout->addWidget(buttons);
 
+  _icontrols->addButton()->setShortcut(QKeySequence("Ctrl+I"));
   connect(_icontrols->addButton(), &QToolButton::clicked,
           this, qOverload<>(&Recipe::addIngredient));
 
+  _icontrols->editButton()->setShortcut(QKeySequence("Ctrl+Shift+I"));
   connect(_icontrols->editButton(), &QToolButton::clicked,
           this, &Recipe::editIngredient);
 
+  _scontrols->addButton()->setShortcut(QKeySequence("Ctrl+E"));
   connect(_scontrols->addButton(), &QToolButton::clicked,
           this, qOverload<>(&Recipe::addStep));
 
+  _scontrols->editButton()->setShortcut(QKeySequence("Ctrl+Shift+E"));
   connect(_scontrols->editButton(), &QToolButton::clicked,
           this, &Recipe::editStep);
 
   connect(_portions, qOverload<double>(&QDoubleSpinBox::valueChanged),
-          this, &Recipe::updateDisplayedPortions);
+          this, qOverload<>(&Recipe::updateDisplayedPortions));
 
   connect(_ingredients, &QListWidget::itemActivated,
           this, &Recipe::showSubRecipe);
@@ -179,6 +184,8 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
   _data = nullptr;
   setLayout(mainLayout);
   setReadOnly(false);
+
+  gui::restoreGeometry(this);
 }
 
 int Recipe::show (db::Recipe *recipe, bool readOnly, double ratio) {
@@ -213,10 +220,12 @@ void Recipe::writeThrough(void) {
     _data->steps.append(
       static_cast<const StepListItem*>(_steps->item(i))->step());
 
-  _data->portions = _displayedPortions;
+  _data->portions = _displayedPortions = _portions->value();
   _data->portionsLabel = _portionsLabel->text();
 
   _data->notes = _notes->toPlainText();
+
+  emit validated();
 }
 
 void Recipe::setReadOnly(bool ro) {
@@ -236,44 +245,50 @@ void Recipe::setReadOnly(bool ro) {
   _steps->setDragEnabled(!ro);
   _scontrols->setVisible(!ro);
 
-  if (isReadOnly()) _toggle->setText("Edit");
-  else              _toggle->setText("Confirm");
+  if (isReadOnly()) _toggle->setText("Modifier");
+  else              _toggle->setText("Valider");
 
   if (_data) {
     QString wtitle = _data->title;
-    if (!ro)  wtitle += " (editing)";
+    if (!ro)  wtitle += " (édition)";
     setWindowTitle(wtitle);
   }
 }
 
 void Recipe::toggleReadOnly(void) {
+  if (!isReadOnly() && !confirmed()) return;
   setReadOnly(!isReadOnly());
-  if (isReadOnly()) confirmed();
+  updateDisplayedPortions(false);
 }
 
-void Recipe::confirmed(void) {
-  emit validated();
-  if (QMessageBox::question(this, "Validate?", "Confirm recipe modification?",
+bool Recipe::confirmed(void) {
+  if (QMessageBox::question(this, tr("Valider?"), "Confirmez la modification?",
                             QMessageBox::Yes | QMessageBox::No)
-      == QMessageBox::Yes)
+      == QMessageBox::Yes) {
     writeThrough();
+    return true;
+  }
+  return false;
 }
 
 void Recipe::addIngredient(void) {
-  IngredientDialog d (this, "Input ingredient details");
+  IngredientDialog d (this, "Nouvel ingrédient");
   if (QDialog::Accepted == d.exec())
     addIngredient(d.ingredient());
 }
 
 void Recipe::addIngredient(Ingredient_ptr i) {
-  _ingredients->addItem(new IngredientListItem(i));
+  auto item = new IngredientListItem(i);
+  _ingredients->addItem(item);
+  if (_ingredients->currentItem() == nullptr)
+    _ingredients->setCurrentItem(item);
 }
 
 void Recipe::editIngredient(void) {
   auto item = static_cast<IngredientListItem*>(_ingredients->currentItem());
   auto ing = item->ing;
 
-  IngredientDialog d (this, "Update ingredient details");
+  IngredientDialog d (this, "Mise à jour");
   d.setIngredient(ing);
 
   if (QDialog::Accepted == d.exec())
@@ -283,12 +298,14 @@ void Recipe::editIngredient(void) {
 void Recipe::addStep(void) {
   bool ok = false;
   QString string = QInputDialog::getMultiLineText(
-    _steps, "Input", "Input steps details", "", &ok);
+    _steps, "Saisissez", "Nouvelle étape", "", &ok);
   if (ok && !string.isEmpty())  addStep(string);
 }
 
 void Recipe::addStep(const QString &text) {
-  _steps->addItem(new StepListItem(text));
+  auto item = new StepListItem(text);
+  _steps->addItem(item);
+  if (_steps->currentItem() == nullptr) _steps->setCurrentItem(item);
 }
 
 void Recipe::editStep(void) {
@@ -296,7 +313,7 @@ void Recipe::editStep(void) {
   QString step = item->step();
   bool ok = false;
   step = QInputDialog::getMultiLineText(
-        _steps, "Update", "Edit steps details", step, &ok);
+        _steps, "Saisissez", "Mise à jour", step, &ok);
   if (ok && !step.isEmpty())  item->setStep(step);
 }
 
@@ -304,8 +321,11 @@ double Recipe::currentRatio(void) const {
   return _portions->value() / _data->portions;
 }
 
-void Recipe::updateDisplayedPortions(void) {
-  if (!isReadOnly())  return;
+void Recipe::updateDisplayedPortions(bool spontaneous) {
+//  qDebug() << __PRETTY_FUNCTION__ << ": ratio = "
+//           << currentRatio() << " = " << _portions->value()
+//           << " / " << _data->portions;
+  if (!isReadOnly() && spontaneous)  return;
   double r = currentRatio();
   for (int i=0; i<_ingredients->count(); i++)
     static_cast<IngredientListItem*>(_ingredients->item(i))->setRatio(r);
@@ -322,5 +342,45 @@ void Recipe::showSubRecipe(QListWidgetItem *li) {
     /// FIXME ugly const cast
   }
 }
+
+void Recipe::keyPressEvent(QKeyEvent *e) {
+//  qDebug() << __PRETTY_FUNCTION__ << "(" << e << ");";
+  static const QList<int> commit_keys {
+    /*Qt::Key_Return, Qt::Key_Enter, */Qt::Key_Escape
+  };
+  if (commit_keys.contains(e->key()) && !safeQuit(e)) return;
+  QDialog::keyPressEvent(e);
+}
+
+void Recipe::closeEvent(QCloseEvent *e) {
+//  qDebug() << __PRETTY_FUNCTION__ << "(" << e << ");";
+  safeQuit(e);
+  gui::saveGeometry(this);
+}
+
+bool Recipe::safeQuit(QEvent *e) {
+//  qDebug() << __PRETTY_FUNCTION__ << "(" << e << ");";
+  if (isReadOnly()) return true;
+
+  auto ret = QMessageBox::warning(this, "Confirmation",
+                                  "Voulez vous sauvegarder?",
+                                  QMessageBox::Yes,
+                                  QMessageBox::No,
+                                  QMessageBox::Cancel);
+  switch (ret) {
+  case QMessageBox::Yes:
+    writeThrough();
+    return true;
+  case QMessageBox::No:
+    e->accept();
+    return true;
+    break;
+  case QMessageBox::Cancel:
+  default:
+    e->ignore();
+    return false;
+  }
+}
+
 
 } // end of namespace gui

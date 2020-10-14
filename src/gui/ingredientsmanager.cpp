@@ -6,6 +6,7 @@
 
 #include "ingredientsmanager.h"
 #include "../db/book.h"
+#include "common.h"
 
 namespace gui {
 
@@ -26,6 +27,15 @@ IngredientsManager::IngredientsManager(QWidget *parent)
   cbox->setModel(&db::Book::current().ingredients);
 
   table->verticalHeader()->hide();
+
+  auto &settings = localSettings(this);
+  setGeometry(settings.value("geometry").toRect());
+}
+
+void IngredientsManager::closeEvent(QCloseEvent *e) {
+  auto &settings = localSettings(this);
+  settings.setValue("geometry", geometry());
+  QDialog::closeEvent(e);
 }
 
 } // end of namespace gui

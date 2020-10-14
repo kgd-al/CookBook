@@ -6,8 +6,12 @@
 namespace gui {
 
 class IngredientsManager : public QDialog {
+  Q_OBJECT
 public:
   IngredientsManager(QWidget *parent);
+  ~IngredientsManager(void) {}
+
+  void closeEvent(QCloseEvent *e);
 };
 
 } // end of namespace gui

@@ -34,6 +34,8 @@ struct IngredientDialog : public QDialog {
 
   void updateLayout (void);
 
+  void closeEvent(QCloseEvent *e) override;
+
 private:
   bool validate (void);
 

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 
+#include <QSplitter>
 #include <QLabel>
 #include <QLineEdit>
 #include <QTextEdit>
@@ -12,17 +13,19 @@
 namespace gui {
 
 class UpdateManager : public QDialog {
+  Q_OBJECT
 public:
   UpdateManager(QWidget *parent);
+  ~UpdateManager (void) {}
 
 private:
   QLineEdit *_path;
   QTextEdit *_output;
+  QSplitter *_splitter;
 
   struct {
     QLabel *pull, *compile, *deploy;
   } _labels;
-
 
   void doPull (void);
   void doCompile (void);
@@ -49,6 +52,8 @@ private:
   }
 
   void logOutput (void);
+
+  void closeEvent(QCloseEvent *e);
 };
 
 } // end of namespace gui

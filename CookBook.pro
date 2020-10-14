@@ -17,6 +17,8 @@ TEMPLATE = app
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
+DEFINES += BASE_DIR=\\\"$$system(pwd)\\\"
+
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
@@ -37,7 +39,8 @@ SOURCES += \
     src/gui/gui_book.cpp \
     src/gui/ingredientsmanager.cpp \
     src/main.cpp \
-    src/gui/updatemanager.cpp
+    src/gui/updatemanager.cpp \
+    src/gui/common.cpp
 
 HEADERS += \
     src/db/ingredientdata.h \
@@ -52,4 +55,5 @@ HEADERS += \
     src/gui/autofiltercombobox.hpp \
     src/gui/ingrediententrydialog.h \
     src/gui/ingredientsmanager.h \
-    src/gui/updatemanager.h
+    src/gui/updatemanager.h \
+    src/gui/common.h

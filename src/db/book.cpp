@@ -86,9 +86,9 @@ bool Book::load (const QString &path) {
     return false;
   }
 
-  qDebug() << "Loading:\n"
-           << json_doc.toJson(QJsonDocument::Indented)
-                      .toStdString().c_str();
+//  qDebug() << "Loading:\n"
+//           << json_doc.toJson(QJsonDocument::Indented)
+//                      .toStdString().c_str();
 
   clear();
   QJsonObject json = json_doc.object();
