@@ -39,7 +39,10 @@ QVariant IngredientsModel::data (const QModelIndex &index, int role) const {
     if (!item.group)  return QVariant();
     return item.group->color;
 
-  } else
+  } else if (role == IngredientRole)
+    return atIndex(index.row()).id;
+
+  else
     return QVariant();
 }
 
@@ -57,16 +60,38 @@ Qt::ItemFlags IngredientsModel::flags(const QModelIndex &index) const {
   return QAbstractTableModel::flags(index);
 }
 
-bool IngredientsModel::insertRows(int row, int count, const QModelIndex&) {
-  if (row < rowCount())  return false;
+bool IngredientsModel::insertRows(int row, int count, const QModelIndex &) {
+  auto rows = rowCount();
+  if (row < rows)  return false;
 
   qDebug().nospace() << "Inserting rows [" << row << "," << row+count-1 << "]. ";
 
-  IngredientData d;
-  d.id = nextIngredientID();
-  _data.insert(d);
+  beginInsertRows(QModelIndex(), rows, rows);
+    IngredientData d;
+    d.id = nextIngredientID();
+    _data.insert(d);
+    _tmpData.insert(d.id);
+  endInsertRows();
 
   return true;
+}
+
+int IngredientsModel::validateTemporaryData(const IIDList &ids) {
+  for (auto id: ids)  _tmpData.erase(id);
+
+  uint removed = 0;
+  for (auto id: _tmpData) {
+    auto it = _data.find(id);
+    Q_ASSERT(it != _data.end());
+    auto index = std::distance(_data.begin(), it);
+    beginRemoveRows(QModelIndex(), index, index);
+    _data.erase(it);
+    endRemoveRows();
+  }
+
+  _tmpData.clear();
+
+  return removed;
 }
 
 bool IngredientsModel::removeRows(int row, int count, const QModelIndex&) {
@@ -110,8 +135,10 @@ void IngredientsModel::fromJson(const QJsonArray &j) {
 
 QJsonArray IngredientsModel::toJson(void) const {
   QJsonArray j;
-  for (const IngredientData &d: _data)
+  for (const IngredientData &d: _data) {
+    Q_ASSERT(d.group);
     j.append(IngredientData::toJson(d));
+  }
   return j;
 }
 

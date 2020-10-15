@@ -87,12 +87,12 @@ ListControls::ListControls (GUIList *view) : _view(view) {
   connect(_view->selectionModel(), &QItemSelectionModel::currentRowChanged,
           this, &ListControls::setState);
 
-//  connect(_del, &QToolButton::clicked,
-//          [this] {
-//    if (QMessageBox::question(this, "Confirm", "Confirm suppression?")
-//        == QMessageBox::Yes)
-//      qDeleteAll(_view->selectedItems());
-//  });
+  connect(_del, &QToolButton::clicked,
+          [this] {
+    if (QMessageBox::question(this, "Confirm", "Confirm suppression?")
+        == QMessageBox::Yes)
+      qDeleteAll(_view->selectedItems());
+  });
 
   setState();
 }

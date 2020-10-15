@@ -22,6 +22,10 @@ void Book::addRecipe(Recipe &&r) {
 
 //#define FAKE_SAVE 1
 bool Book::save(const QString &path) {
+  QJsonObject json;
+  json["recipes"] = recipes.toJson();
+  json["ingredients"] = ingredients.toJson();
+
   int eindex = path.lastIndexOf('.');
   QString backup = path.mid(0, eindex);
   backup += ".backup";
@@ -39,17 +43,6 @@ bool Book::save(const QString &path) {
     return false;
   }
 #endif
-
-  QJsonObject json;
-
-  json["recipes"] = recipes.toJson();
-
-//  /// TODO Remove
-//  IngredientsModel ingredients2 (false);
-//  ingredients2.fromScratch(recipes);
-
-  json["ingredients"] = ingredients.toJson();
-//  json["ingredients-rebuilt"] = ingredients2.toJson();
 
 #ifdef FAKE_SAVE
   qDebug() << "Not saving! Displaying below instead:\n"

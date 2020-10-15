@@ -148,6 +148,15 @@ bool IngredientDialog::validate(void) {
   db::EntryType t = entryType();
   switch (t) {
   case db::EntryType::Ingredient:
+//    qDebug() << "Current index: " << type->currentIndex();
+//    qDebug() << " Current text: " << type->currentText();
+//    qDebug() << " Current data: " << type->currentData(Qt::DisplayRole);
+//    qDebug() << " Current data: " << type->currentData(Qt::EditRole);
+//    qDebug() << " Current data: " << type->currentData(db::IngredientsModel::IngredientRole);
+    using IM = db::IngredientsModel;
+    static_cast<IM*>(type->model())->validateTemporaryData({
+      db::ID(type->currentData(IM::IngredientRole).toInt())});
+
     if (amount->text().toDouble() <= 0) error(amount);
     // unit can be empty
     if (type->currentIndex() == NoIndex) error(type);

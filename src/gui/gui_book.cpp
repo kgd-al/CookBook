@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include <QFontDialog>
 #include <QMessageBox>
+#include <QDesktopServices>
 
 #include <QMenuBar>
 #include <QMenu>
@@ -94,6 +95,9 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
       m_other->addAction("Update", this, &Book::showUpdateManager,
                          QKeySequence("Ctrl+U"));
       m_other->addAction("Clear settings", [] { QSettings().clear(); });
+      m_other->addAction("Bug tracker", [] {
+        QDesktopServices::openUrl(QUrl("https://github.com/kgd-al/CookBook/issues"));
+      });
 
   auto &settings = localSettings(this);
   QString lastBook = settings.value("lastBook").toString();

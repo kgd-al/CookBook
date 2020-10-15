@@ -11,16 +11,18 @@ namespace db {
 class IngredientsModel : public QAbstractTableModel {
 public:
   static constexpr auto IngredientRole = Qt::UserRole + 1;
+  using IID = IngredientData::ID;
+  using IIDList = std::set<IID>;
 
   IngredientsModel(void) {}
 
   void clear (void);
 
-  const IngredientData& at (IngredientData::ID id) const {
+  const IngredientData& at (IID id) const {
     return *_data.find(id);
   }
 
-  IngredientData& at (IngredientData::ID id) {
+  IngredientData& at (IID id) {
     return const_cast<IngredientData&>(
       const_cast<const IngredientsModel*>(this)->at(id));
   }
@@ -50,7 +52,9 @@ public:
                int role) override;
   Qt::ItemFlags flags(const QModelIndex &index) const override;
 
-  bool insertRows(int row, int count, const QModelIndex &parent) override;
+  bool insertRows(int row, int count, const QModelIndex&) override;
+  int validateTemporaryData (const IIDList &ids);
+
   bool removeRows(int row, int count, const QModelIndex &) override;
 
   QJsonArray toJson (void) const;
@@ -64,10 +68,12 @@ private:
   IngredientsDatabase _data;
   QStringListModel _unitsModel;
 
-  IngredientData::ID _nextIngredientID;
-  IngredientData::ID nextIngredientID (void) {
+  IIDList _tmpData;
+
+  IID _nextIngredientID;
+  IID nextIngredientID (void) {
     auto v = _nextIngredientID;
-    _nextIngredientID = ID(int(_nextIngredientID)+1);
+    _nextIngredientID = IID(int(_nextIngredientID)+1);
     return v;
   }
 };
