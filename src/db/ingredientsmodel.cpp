@@ -7,7 +7,7 @@
 namespace db {
 
 int IngredientsModel::columnCount(const QModelIndex&) const {
-  return 2;
+  return 3;
 }
 
 QVariant IngredientsModel::headerData(int section, Qt::Orientation orientation,
@@ -18,6 +18,7 @@ QVariant IngredientsModel::headerData(int section, Qt::Orientation orientation,
   switch (section) {
   case 0:   return "Name";
   case 1:   return "Units";
+  case 2:   return "Used";
   default:  return "N/A";
   }
 }
@@ -28,6 +29,7 @@ QVariant IngredientsModel::data (const QModelIndex &index, int role) const {
     switch (index.column()) {
     case 0:   return item.text;
     case 1:   return item.units.join(',');
+    case 2:   return item.used;
     default:  return "N/A";
     }
 
@@ -57,7 +59,11 @@ bool IngredientsModel::setData(const QModelIndex &index, const QVariant &value,
 }
 
 Qt::ItemFlags IngredientsModel::flags(const QModelIndex &index) const {
-  return QAbstractTableModel::flags(index);
+  auto flg = QAbstractTableModel::flags(index);
+  if (index.isValid())
+    flg |= Qt::ItemIsEditable;
+
+  return flg;
 }
 
 bool IngredientsModel::insertRows(int row, int count, const QModelIndex &) {

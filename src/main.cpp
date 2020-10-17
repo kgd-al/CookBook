@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <QApplication>
 #include <QTranslator>
 #include <QLibraryInfo>
@@ -10,6 +12,32 @@
 
 #include "gui/gui_book.h"
 #include "gui/common.h"
+
+QFile logfile ("log");
+void logger (QtMsgType type, const QMessageLogContext &context,
+             const QString &message) {
+
+  static const QMap<QtMsgType, QString> types {
+    {    QtDebugMsg, "## Debug" },
+    {     QtInfoMsg, "### Info" },
+    {  QtWarningMsg, "# Warning" },
+    { QtCriticalMsg, " Critical" },
+    {    QtFatalMsg, "### Fatal" },
+    {   QtSystemMsg, "## System" }
+  };
+
+  QString typeStr = types.value(type);
+
+  if (logfile.isOpen()) {
+    QTextStream qts (&logfile);
+    qts << "##" << typeStr << " (" << context.file << ":"
+        << context.line << ", " << context.function << "):\n"
+        << message << "\n";
+  }
+  std::cerr << "##" << typeStr.toStdString() << " (" << context.file << ":"
+            << context.line << ", " << context.function << "):\n"
+            << message.toStdString() << "\n";
+}
 
 void simulateKey (const QString &kstr) {
   const QKeySequence kseq = kstr;
@@ -39,14 +67,21 @@ void simulateKey (const QString &kstr) {
 int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
 
+  if (!logfile.open(QIODevice::WriteOnly))
+    qWarning("Failed to open log file");
+  qInstallMessageHandler(logger);
+
   QCoreApplication::setOrganizationName("almann");
   QCoreApplication::setApplicationName("cookbook");
 
   QSettings settings;
-  qDebug() << "Current settings:";
-  for (QString k: settings.allKeys())
-    qDebug() << "\t" << k << ": " << settings.value(k);
-  qDebug() << "************************\n";
+  {
+    auto q = qDebug();
+    q << "Current settings:\n";
+    for (QString k: settings.allKeys())
+      q << "\t" << k << ": " << settings.value(k) << "\n";
+    q << "************************\n";
+  }
 
   QApplication::setFont(settings.value("font").value<QFont>());
 
@@ -79,7 +114,7 @@ int main(int argc, char *argv[]) {
   ////  loc.set(QLocale::c().decimalPoint()); // borrow decimal char from the "C" locale
   //  loc.setNumberOptions(QLocale::c().numberOptions()); // borrow number options from the "C" locale
   //  QLocale::setDefault(loc); // set as default
-//    QLocale::setDefault(QLocale::c());
+    QLocale::setDefault(QLocale::c());
 
   gui::Book w;
   w.show();

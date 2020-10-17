@@ -14,6 +14,17 @@ void RecipesListModel::addRecipe(Recipe &&r) {
   endInsertRows();
 }
 
+void RecipesListModel::delRecipe(Recipe *r) {
+  auto it = find(r->id);
+  if (it != recipes.end()) {
+    auto index = std::distance(recipes.begin(), it);
+    beginRemoveRows(QModelIndex(), index, index);
+
+    recipes.erase(it);
+    endRemoveRows();
+  }
+}
+
 Recipe& RecipesListModel::fromIndex (const QModelIndex &i) {
   return recipe(i.row());
 }
@@ -45,6 +56,11 @@ void RecipesListModel::fromJson(const QJsonArray &a) {
     recipes.emplace(r);
     _nextRecipeID = std::max(r.id, _nextRecipeID);
   }
+
+  for (const Recipe &r: recipes)
+    for (auto &i: r.ingredients)
+      if (i->etype == EntryType::SubRecipe)
+        static_cast<SubRecipeEntry*>(i.data())->setRecipeFromHackedPointer();
 
   nextRecipeID();
 }

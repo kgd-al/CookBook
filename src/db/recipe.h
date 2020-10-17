@@ -10,6 +10,7 @@ namespace db {
 struct Recipe {
   using ID = db::ID;
   ID id = ID::INVALID;
+  int used;
 
   QString title;
 
@@ -23,6 +24,12 @@ struct Recipe {
   QString notes;
 
   QStringList ingredientList (double r) const;
+
+  // On update
+  void updateUsageCounts (const IngredientList &newList);
+
+  // On deletion
+  void updateUsageCounts(void);
 
   static Recipe defaultRecipe (void);
 

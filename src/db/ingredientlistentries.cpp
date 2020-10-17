@@ -46,7 +46,8 @@ QVariant IngredientEntry::data (int role, double r) const {
     else
       d = QString::number(i / P);
     d += " ";
-    if (!unit->isEmpty()) {
+
+    if (!unit->isEmpty() && *unit != IngredientData::NoUnit) {
       d += *unit + " ";
 
       /// NOTE Does not work for mute 'h'
@@ -71,7 +72,7 @@ QJsonValue IngredientEntry::toJsonInternal (void) const {
 }
 
 void IngredientEntry::fromJsonInternal (const QJsonValue &j) {
-  const auto &idb = db::Book::current().ingredients;
+  auto &idb = db::Book::current().ingredients;
   const QJsonArray ja = j.toArray();
   uint k=0;
   amount = ja[k++].toDouble();
@@ -87,7 +88,7 @@ void IngredientEntry::fromJsonInternal (const QJsonValue &j) {
 
 // =============================================================================
 
-SubRecipeEntry::SubRecipeEntry (const Recipe *r)
+SubRecipeEntry::SubRecipeEntry (Recipe *r)
   : IngredientListEntry(EntryType::SubRecipe),
     recipe(r) {}
 
@@ -109,11 +110,13 @@ QJsonValue SubRecipeEntry::toJsonInternal (void) const {
 }
 
 void SubRecipeEntry::fromJsonInternal (const QJsonValue &j) {
-  recipe = fromID(Recipe::ID(j.toInt()));
+//  recipe = fromID(Recipe::ID(j.toInt()));
+  recipe = (db::Recipe*)(uintptr_t)j.toInt();
 }
 
-const Recipe* SubRecipeEntry::fromID(Recipe::ID id) {
-  return &Book::current().recipes.at(id);
+void SubRecipeEntry::setRecipeFromHackedPointer(void) {
+  Recipe::ID id = (Recipe::ID)reinterpret_cast<uintptr_t>(recipe);
+  recipe = &Book::current().recipes.at(id);
 }
 
 // =============================================================================

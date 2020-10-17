@@ -22,15 +22,41 @@ struct AutoFilterComboBox : public QComboBox {
   }
 
   void focusOutEvent(QFocusEvent *e) {
-    if (QComboBox::NoInsert != insertPolicy()) {
-      int index = this->count();
+    insertionOnFocusOut();
+    QComboBox::focusOutEvent(e);
+  }
+
+  void insertionOnFocusOut (void) {
+    if (QComboBox::NoInsert == insertPolicy()) {
+      setCurrentText(completer()->currentCompletion());
+      return;
+    }
+
+//    QDebug q = qDebug().nospace();
+//    q << completer()->currentCompletion() << "\n";
+//    q << lineEdit()->text() << "\n";
+//    q << completer()->currentRow() << "\n";
+//    q << findText(completer()->currentCompletion()) << "\n";
+//    q << findText(lineEdit()->text()) << "\n";
+
+    if (!completer()->currentCompletion().isEmpty()) {
+      setCurrentIndex(findText(completer()->currentCompletion()));
+
+    } else {
+      QString text = lineEdit()->text();
+      int index;
+      if (!duplicatesEnabled()) {
+        index = findText(text);
+        if (index != -1) {
+          setCurrentIndex(index);
+          return;
+        }
+      }
+
+      index = count();
       insertItem(index, lineEdit()->text());
       setCurrentIndex(index);
-
-    } else
-      setCurrentText(completer()->currentCompletion());
-
-    QComboBox::focusOutEvent(e);
+    }
   }
 };
 

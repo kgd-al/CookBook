@@ -54,9 +54,12 @@ struct IngredientData {
   QString text = "N/A";
   AlimentaryGroupData const *group = nullptr;
   EditableStringListModel units;
+  int used = 0;
 
   static QJsonArray toJson (const IngredientData &d);
   static IngredientData fromJson (QJsonArray j);
+
+  static const QString NoUnit;
 };
 
 using AlimentaryGroupsDatabase = AlimentaryGroupData::AlimentaryGroupsDatabase;

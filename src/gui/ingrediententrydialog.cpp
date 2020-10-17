@@ -226,7 +226,9 @@ IngredientDialog::Ingredient_ptr IngredientDialog::ingredient (void) const {
     int u_index = d.units.indexOf(unit->currentText());
     if (u_index == NoIndex) {
       u_index = d.units.rowCount();
-      d.units.append(unit->currentText());
+      QString unitStr = unit->currentText();
+      if (unitStr.isEmpty())  unitStr = db::IngredientData::NoUnit;
+      d.units.append(unitStr);
     }
     QString *unit_ptr = &d.units[u_index];
 

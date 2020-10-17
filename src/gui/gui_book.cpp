@@ -124,7 +124,6 @@ void Book::addRecipe(void) {
 
 void Book::showRecipe(const QModelIndex &index) {
   Recipe recipe (this);
-//  index.data()
   connect(&recipe, &Recipe::validated, [this] { setModified(true); });
   recipe.show(&db::Book::current().recipes.fromIndex(index), true);
 }
@@ -164,8 +163,13 @@ bool Book::loadRecipes(const QString &path) {
 }
 
 void Book::showIngredientsManager(void) {
-  IngredientsManager manager (this);
-  manager.exec();
+  auto &settings = localSettings(this);
+  if (settings.value("modal").toBool()) {
+    IngredientsManager manager (this);
+    manager.exec();
+
+  } else
+    (new IngredientsManager (this))->show();
 }
 
 void Book::showUpdateManager(void) {

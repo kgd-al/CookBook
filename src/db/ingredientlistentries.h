@@ -33,9 +33,9 @@ protected:
 struct IngredientEntry : public IngredientListEntry {
   double amount;
   const QString * unit;
-  const IngredientData * idata;
+  IngredientData * idata;
 
-  IngredientEntry (double a, const QString * u, const IngredientData * d)
+  IngredientEntry (double a, const QString * u, IngredientData * d)
     : IngredientListEntry(EntryType::Ingredient),
       amount(a), unit(u), idata(d) {}
   IngredientEntry (void) : IngredientEntry(0, nullptr, nullptr) {}
@@ -61,9 +61,9 @@ struct IngredientEntry : public IngredientListEntry {
 
 struct Recipe;
 struct SubRecipeEntry : public IngredientListEntry {
-  const Recipe *recipe;
+  Recipe *recipe;
 
-  SubRecipeEntry (const Recipe *recipe);
+  SubRecipeEntry (Recipe *recipe);
   SubRecipeEntry (void) : SubRecipeEntry(nullptr) {}
   virtual ~SubRecipeEntry (void) {}
 
@@ -71,9 +71,9 @@ struct SubRecipeEntry : public IngredientListEntry {
 
   QJsonValue toJsonInternal (void) const override;
   void fromJsonInternal (const QJsonValue &j) override;
+  void setRecipeFromHackedPointer(void);
 
 private:
-  static const Recipe *fromID(db::ID id);
 };
 
 struct DecorationEntry : public IngredientListEntry {

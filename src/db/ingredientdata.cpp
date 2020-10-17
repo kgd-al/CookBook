@@ -17,23 +17,27 @@ const AlimentaryGroupsDatabase AlimentaryGroupData::database {
   { ID(9),  "Alcools", QColor::fromRgb( 64, 224, 208) },
 };
 
+const QString IngredientData::NoUnit = "Ø";
+
 QJsonArray IngredientData::toJson (const IngredientData &d) {
   QJsonArray j;
   j.append(d.id);
   j.append(d.text);
   j.append(d.group->id);
   j.append(QJsonValue::fromVariant(QVariant::fromValue(d.units.list())));
-  Q_ASSERT(j.size() == 4);
+  j.append(d.used);
+  Q_ASSERT(j.size() == 5);
   return j;
 }
 
 IngredientData IngredientData::fromJson (QJsonArray j) {
-  Q_ASSERT(j.size() == 4);
+  Q_ASSERT(j.size() == 5);
   IngredientData d;
   d.id = ID(j.takeAt(0).toInt());
   d.text = j.takeAt(0).toString();
   d.group = &(*AlimentaryGroupData::database.find(ID(j.takeAt(0).toInt())));
   d.units = j.takeAt(0).toVariant().toStringList();
+  d.used = j.takeAt(0).toInt();
   return d;
 }
 

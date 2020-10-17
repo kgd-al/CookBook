@@ -29,6 +29,22 @@ QWidget* spacer (void) {
   return w;
 }
 
+/// TODO Make it work and make it pretty
+struct StrangeWidget : public QLineEdit {
+  bool edit = false;
+  StrangeWidget (const QString &s) : QLineEdit(s) {}
+  void setEdit (bool e) {
+    edit = e;
+//    setFrame(edit);
+    setReadOnly(!edit);
+//    setSizePolicy(edit ? QSizePolicy::MinimumExpanding : QSizePolicy::Fixed,
+//                  QSizePolicy::Fixed);
+//    setAutoFillBackground(edit);
+    updateGeometry();
+    update();
+  }
+};
+
 struct IngredientListItem : public QListWidgetItem {
   using Ingredient_ptr = db::IngredientEntry::ptr;
   Ingredient_ptr ing;
@@ -105,10 +121,15 @@ void ListControls::setState(void) {
 
 Recipe::Recipe(QWidget *parent) : QDialog(parent) {
   QVBoxLayout *mainLayout = new QVBoxLayout;
+  mainLayout->setSizeConstraint(QLayout::SetNoConstraint);
 
-    _title = new QLineEdit ("Sans titre");
+    _title = new StrangeWidget ("Sans titre");
     _title->setAlignment(Qt::AlignCenter);
-    mainLayout->addWidget(_title);
+    mainLayout->addWidget(_title, 0, Qt::AlignCenter);
+
+    QGridLayout *dlayout = new QGridLayout;
+      dlayout->addWidget(_references = new QLabel(""));
+    mainLayout->addLayout(dlayout);
 
     mainLayout->addWidget(spacer());
     QHBoxLayout *midLayout = new QHBoxLayout;
@@ -148,15 +169,15 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
     mainLayout->addLayout(slayout);
 
     QDialogButtonBox *buttons = new QDialogButtonBox;
-      auto close = new QPushButton("Quitter");
-      close->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-      connect(close, &QPushButton::clicked, this, &Recipe::close);
-      buttons->addButton(close, QDialogButtonBox::RejectRole);
+      auto del = new QToolButton();
+      buttons->addButton(del, QDialogButtonBox::DestructiveRole);
+      connect(del, &QToolButton::clicked, this, &Recipe::deleteRequested);
 
-      _toggle = new QPushButton("");
+      auto close = buttons->addButton("Quitter", QDialogButtonBox::RejectRole);
+      connect(close, &QPushButton::clicked, this, &Recipe::close);
+
+      _toggle = buttons->addButton("", QDialogButtonBox::ActionRole);
       connect(_toggle, &QPushButton::clicked, this, &Recipe::toggleReadOnly);
-      _toggle->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-      buttons->addButton(_toggle, QDialogButtonBox::ActionRole);
     mainLayout->addWidget(buttons);
 
   _icontrols->addButton()->setShortcut(QKeySequence("Ctrl+I"));
@@ -193,6 +214,14 @@ int Recipe::show (db::Recipe *recipe, bool readOnly, double ratio) {
 
   _title->setText(_data->title);
 
+  if (_data->used > 0) {
+    QString t = QString::number(_data->used) + " reference";
+    if (_data->used > 1)  t += "s";
+    _references->setText(t);
+  } else
+    _references->setText("");
+  _references->setVisible(_data->used > 0);
+
   for (const db::Recipe::Ingredient_ptr &i: recipe->ingredients) addIngredient(i);
   for (const QString &s: recipe->steps)  addStep(s);
 
@@ -210,10 +239,13 @@ int Recipe::show (db::Recipe *recipe, bool readOnly, double ratio) {
 void Recipe::writeThrough(void) {
   _data->title = _title->text();
 
-  _data->ingredients.clear();
+  // Make a copy for usage comparison
+  decltype(_data->ingredients) newIngredients;
   for (int i=0; i<_ingredients->count(); i++)
-    _data->ingredients.append(
+    newIngredients.append(
       static_cast<const IngredientListItem*>(_ingredients->item(i))->ing);
+  _data->updateUsageCounts(newIngredients);
+  _data->ingredients = newIngredients;
 
   _data->steps.clear();
   for (int i=0; i<_steps->count(); i++)
@@ -229,7 +261,11 @@ void Recipe::writeThrough(void) {
 }
 
 void Recipe::setReadOnly(bool ro) {
-  _title->setEnabled(!ro);
+  _readOnly = ro;
+
+//  _title->setEnabled(!ro);
+  static_cast<StrangeWidget*>(_title)->setEdit(!ro);
+
   _notes->setEnabled(!ro);
 
   if (!ro) {
@@ -248,11 +284,7 @@ void Recipe::setReadOnly(bool ro) {
   if (isReadOnly()) _toggle->setText("Modifier");
   else              _toggle->setText("Valider");
 
-  if (_data) {
-    QString wtitle = _data->title;
-    if (!ro)  wtitle += " (édition)";
-    setWindowTitle(wtitle);
-  }
+  setWindowTitle(ro ? "Consultation" : "Édition");
 }
 
 void Recipe::toggleReadOnly(void) {
@@ -336,9 +368,9 @@ void Recipe::showSubRecipe(QListWidgetItem *li) {
   auto item = static_cast<IngredientListItem*>(li);
   if (item->ing->etype == db::EntryType::SubRecipe) {
     Recipe dsubrecipe (this);
-    const db::Recipe *subrecipe =
+    db::Recipe *subrecipe =
       static_cast<db::SubRecipeEntry*>(item->ing.data())->recipe;
-    dsubrecipe.show(const_cast<db::Recipe*>(subrecipe), true, currentRatio());
+    dsubrecipe.show(subrecipe, true, currentRatio());
     /// FIXME ugly const cast
   }
 }
@@ -382,5 +414,28 @@ bool Recipe::safeQuit(QEvent *e) {
   }
 }
 
+void Recipe::deleteRequested(void) {
+  if (_data->used > 0) {
+    QMessageBox::warning(this, "Illégal",
+                         "Cette recette est référencée par d'autre. La"
+                         " suppression n'est pas autorisée!",
+                         QMessageBox::Ok);
+    return;
+  }
+
+  if (QMessageBox::warning(this, "Supprimer?",
+                           "Voulez vous definitivement supprimer '"
+                           + _data->title + "?",
+                           QMessageBox::Yes | QMessageBox::No)
+      != QMessageBox::Yes)
+    return;
+
+  db::Book &book = db::Book::current();
+
+  _data->updateUsageCounts();
+  book.recipes.delRecipe(_data);
+
+  emit deleted();
+}
 
 } // end of namespace gui

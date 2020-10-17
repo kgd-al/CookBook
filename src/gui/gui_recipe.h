@@ -42,16 +42,20 @@ public:
 
   void setReadOnly (bool ro);
   bool isReadOnly (void) {
-    return !_title->isEnabled();
+    return _readOnly;
   }
 
 signals:
   void validated (void);  // Confirm button has been clicked
+  void deleted (void);  // Delete button has been cliked (and deletion is legal)
 
 private:
   db::Recipe *_data;
+  bool _readOnly;
 
   QLineEdit *_title;
+
+  QLabel *_references;
 
   double _displayedPortions;
   QDoubleSpinBox *_portions;
@@ -87,6 +91,8 @@ private:
   void keyPressEvent(QKeyEvent *e) override;
   void closeEvent(QCloseEvent *e) override;
   bool safeQuit (QEvent *e);
+
+  void deleteRequested (void);
 };
 
 } // end of namespace gui

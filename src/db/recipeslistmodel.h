@@ -15,6 +15,7 @@ public:
   RecipesListModel(void);
 
   void addRecipe (Recipe &&r);
+  void delRecipe (Recipe *r);
 
   // Model Qt interface
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -35,8 +36,16 @@ public:
     return recipes.cend();
   }
 
-  const Recipe& at (Recipe::ID key) {
-    return *recipes.find(key);
+  const Recipe& at (Recipe::ID key) const {
+    auto it = recipes.find(key);
+    if (it == recipes.end())
+      throw std::invalid_argument("No recipe for this key");
+    return *it;
+  }
+
+  Recipe& at (Recipe::ID key) {
+    return const_cast<Recipe&>(
+      const_cast<const RecipesListModel*>(this)->at(key));
   }
 
   Recipe& fromIndex(const QModelIndex &i);
