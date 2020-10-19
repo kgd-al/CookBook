@@ -1,12 +1,12 @@
 #include <QJsonArray>
 
-#include "recipeslistmodel.h"
+#include "recipesmodel.h"
 
 namespace db {
 
-RecipesListModel::RecipesListModel(void) : _nextRecipeID(ID(0)) {}
+RecipesModel::RecipesModel(void) : _nextRecipeID(ID(0)) {}
 
-void RecipesListModel::addRecipe(Recipe &&r) {
+void RecipesModel::addRecipe(Recipe &&r) {
   int i = rowCount();
   beginInsertRows(QModelIndex(), i, i);
   r.id = nextRecipeID();
@@ -14,7 +14,7 @@ void RecipesListModel::addRecipe(Recipe &&r) {
   endInsertRows();
 }
 
-void RecipesListModel::delRecipe(Recipe *r) {
+void RecipesModel::delRecipe(Recipe *r) {
   auto it = find(r->id);
   if (it != recipes.end()) {
     auto index = std::distance(recipes.begin(), it);
@@ -25,15 +25,15 @@ void RecipesListModel::delRecipe(Recipe *r) {
   }
 }
 
-Recipe& RecipesListModel::fromIndex (const QModelIndex &i) {
+Recipe& RecipesModel::fromIndex (const QModelIndex &i) {
   return recipe(i.row());
 }
 
-int RecipesListModel::rowCount(const QModelIndex&) const {
+int RecipesModel::rowCount(const QModelIndex&) const {
   return recipes.size();
 }
 
-QVariant RecipesListModel::data (const QModelIndex &index, int role) const {
+QVariant RecipesModel::data (const QModelIndex &index, int role) const {
   QVariant v;
   switch (role) {
   case Qt::DisplayRole:
@@ -44,13 +44,13 @@ QVariant RecipesListModel::data (const QModelIndex &index, int role) const {
   return v;
 }
 
-void RecipesListModel::clear(void) {
+void RecipesModel::clear(void) {
   beginResetModel();
   recipes.clear();
   endResetModel();
 }
 
-void RecipesListModel::fromJson(const QJsonArray &a) {
+void RecipesModel::fromJson(const QJsonArray &a) {
   for (const QJsonValue &v: a) {
     Recipe r = Recipe::fromJson(v);
     recipes.emplace(r);
@@ -65,7 +65,7 @@ void RecipesListModel::fromJson(const QJsonArray &a) {
   nextRecipeID();
 }
 
-QJsonArray RecipesListModel::toJson(void) {
+QJsonArray RecipesModel::toJson(void) {
   QJsonArray a;
   for (const auto &p: recipes)
     a.append(Recipe::toJson(p));

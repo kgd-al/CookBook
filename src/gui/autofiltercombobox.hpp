@@ -54,8 +54,19 @@ struct AutoFilterComboBox : public QComboBox {
       }
 
       index = count();
+      qDebug() << "\n@@@@\nInserting " << lineEdit()->text() << "in"
+               << model();
       insertItem(index, lineEdit()->text());
       setCurrentIndex(index);
+
+      QDebug q = qDebug().nospace();
+      q << "Model " << model() << " of " << model()->rowCount() << " items\n";
+      q << "Contents:\n";
+      for (int i=0; i<count(); i++)
+        q << itemText(i) << "\n";
+      q << "\n";
+      q << "Current index: " << currentIndex() << "\n"
+        << " Current text: " << currentText() << "\n";
     }
   }
 };

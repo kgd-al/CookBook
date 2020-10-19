@@ -47,8 +47,8 @@ QVariant IngredientEntry::data (int role, double r) const {
       d = QString::number(i / P);
     d += " ";
 
-    if (!unit->isEmpty() && *unit != IngredientData::NoUnit) {
-      d += *unit + " ";
+    if (!unit->text.isEmpty() && unit->text != IngredientData::NoUnit) {
+      d += unit->text + " ";
 
       /// NOTE Does not work for mute 'h'
       if (VOWELS.contains(type().at(0).toUpper()))
@@ -68,7 +68,7 @@ QVariant IngredientEntry::data (int role, double r) const {
 
 QJsonValue IngredientEntry::toJsonInternal (void) const {
   Q_ASSERT(valid());
-  return QJsonArray { amount, *unit, idata->id };
+  return QJsonArray { amount, unit->id, idata->id };
 }
 
 void IngredientEntry::fromJsonInternal (const QJsonValue &j) {
@@ -76,14 +76,15 @@ void IngredientEntry::fromJsonInternal (const QJsonValue &j) {
   const QJsonArray ja = j.toArray();
   uint k=0;
   amount = ja[k++].toDouble();
-  QString unit = ja[k++].toString();
+  auto u_id = UnitData::ID(ja[k++].toInt());
 
   auto ingredient_id = ID(ja[k++].toInt());
   idata = &idb.at(ingredient_id);
 
-  int uindex = idata->units.indexOf(unit);
-  Q_ASSERT(uindex >= 0);
-  this->unit = &idata->units[uindex];
+//  auto u_it = idata->units.find(u_id);
+//  Q_ASSERT(u_it != idata->units.end());
+//  unit = &((*u_it).get());
+  unit = &Book::current().units.at(u_id);
 }
 
 // =============================================================================

@@ -4,45 +4,22 @@
 #include <QAbstractItemModel>
 
 #include "ingredientdata.h"
-#include "recipeslistmodel.h"
+#include "basemodel.h"
+#include "recipesmodel.h"
 
 namespace db {
 
-class IngredientsModel : public QAbstractTableModel {
+class IngredientsModel : public BaseModel<IngredientData> {
 public:
   static constexpr auto IngredientRole = Qt::UserRole + 1;
-  using IID = IngredientData::ID;
-  using IIDList = std::set<IID>;
+//  using IID = IngredientData::ID;
+  using IIDList = std::set<ID>;
 
   IngredientsModel(void) {}
 
   void clear (void);
 
-  const IngredientData& at (IID id) const {
-    return *_data.find(id);
-  }
-
-  IngredientData& at (IID id) {
-    return const_cast<IngredientData&>(
-      const_cast<const IngredientsModel*>(this)->at(id));
-  }
-
-  const IngredientData& atIndex (int index) const {
-    auto it = _data.begin();
-    std::advance(it, index);
-    return *it;
-  }
-
-  IngredientData& atIndex (int index) {
-    return const_cast<IngredientData&>(
-      const_cast<const IngredientsModel*>(this)->atIndex(index));
-  }
-
-  int rowCount (const QModelIndex & = QModelIndex()) const override {
-    return _data.size();
-  }
-
-  int columnCount(const QModelIndex &) const override;
+  int columnCount(const QModelIndex& = QModelIndex()) const override;
 
   QVariant headerData(int section, Qt::Orientation orientation, int role)
     const override;
@@ -57,25 +34,13 @@ public:
 
   bool removeRows(int row, int count, const QModelIndex &) override;
 
+  void valueModified (ID id) override;
+
   QJsonArray toJson (void) const;
   void fromJson (const QJsonArray &j);
 
-  QStringListModel& allUnitsModel (void) {
-    return _unitsModel;
-  }
-
 private:
-  IngredientsDatabase _data;
-  QStringListModel _unitsModel;
-
   IIDList _tmpData;
-
-  IID _nextIngredientID;
-  IID nextIngredientID (void) {
-    auto v = _nextIngredientID;
-    _nextIngredientID = IID(int(_nextIngredientID)+1);
-    return v;
-  }
 };
 
 }

@@ -7,7 +7,7 @@
 namespace db {
 
 int IngredientsModel::columnCount(const QModelIndex&) const {
-  return 3;
+  return 2;
 }
 
 QVariant IngredientsModel::headerData(int section, Qt::Orientation orientation,
@@ -17,8 +17,8 @@ QVariant IngredientsModel::headerData(int section, Qt::Orientation orientation,
 
   switch (section) {
   case 0:   return "Name";
-  case 1:   return "Units";
-  case 2:   return "Used";
+//  case 1:   return "Units";
+  case 1:   return "Used";
   default:  return "N/A";
   }
 }
@@ -28,8 +28,8 @@ QVariant IngredientsModel::data (const QModelIndex &index, int role) const {
     auto &item = atIndex(index.row());
     switch (index.column()) {
     case 0:   return item.text;
-    case 1:   return item.units.join(',');
-    case 2:   return item.used;
+//    case 1:   return item.listOfUnits();
+    case 1:   return item.used;
     default:  return "N/A";
     }
 
@@ -53,8 +53,10 @@ bool IngredientsModel::setData(const QModelIndex &index, const QVariant &value,
 
   qDebug() << "setData(" << index << value << role << ")";
   if (role != Qt::EditRole)  return false;
+  Q_ASSERT(index.isValid());
 
   atIndex(index.row()).text = value.toString();
+  emit dataChanged(index, index, {role});
   return true;
 }
 
@@ -67,14 +69,17 @@ Qt::ItemFlags IngredientsModel::flags(const QModelIndex &index) const {
 }
 
 bool IngredientsModel::insertRows(int row, int count, const QModelIndex &) {
+  auto q = qDebug().nospace();
+  q << "Inserting rows [" << row << "," << row+count-1 << "] in " << this;
+
   auto rows = rowCount();
   if (row < rows)  return false;
 
-  qDebug().nospace() << "Inserting rows [" << row << "," << row+count-1 << "]. ";
+  q << ": ok";
 
   beginInsertRows(QModelIndex(), rows, rows);
     IngredientData d;
-    d.id = nextIngredientID();
+    d.id = nextID();
     _data.insert(d);
     _tmpData.insert(d.id);
   endInsertRows();
@@ -107,6 +112,11 @@ bool IngredientsModel::removeRows(int row, int count, const QModelIndex&) {
   return false;
 }
 
+void IngredientsModel::valueModified(ID id) {
+  int index = indexOf(id);
+  emit dataChanged(createIndex(index, 0), createIndex(index, columnCount()));
+}
+
 void IngredientsModel::clear(void) {
   beginResetModel();
   _data.clear();
@@ -125,17 +135,12 @@ void IngredientsModel::clear(void) {
 
 void IngredientsModel::fromJson(const QJsonArray &j) {
   beginResetModel();
-  QStringList units;
-  _nextIngredientID = ID(0);
   for (const QJsonValue &v: j) {
     auto d = IngredientData::fromJson(v.toArray());
-    units.append(d.units.list());
     _data.insert(d);
-    _nextIngredientID = std::max(_nextIngredientID, d.id);
+    _nextID = std::max(_nextID, d.id);
   }
-  units.sort(Qt::CaseInsensitive);
-  _unitsModel.setStringList(units);
-  nextIngredientID();
+  nextID();
   endResetModel();
 }
 

@@ -6,6 +6,7 @@
 
 #include "autofiltercombobox.hpp"
 #include "../db/ingredientlistentries.h"
+#include "../db/unitsmodel.h"
 
 namespace gui {
 

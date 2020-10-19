@@ -3,7 +3,7 @@
 #include <QJsonDocument>
 
 #include "book.h"
-#include "recipeslistmodel.h"
+#include "recipesmodel.h"
 
 #include <QDebug>
 
@@ -25,6 +25,7 @@ bool Book::save(const QString &path) {
   QJsonObject json;
   json["recipes"] = recipes.toJson();
   json["ingredients"] = ingredients.toJson();
+  json["units"] = units.toJson();
 
   int eindex = path.lastIndexOf('.');
   QString backup = path.mid(0, eindex);
@@ -85,6 +86,7 @@ bool Book::load (const QString &path) {
 
   clear();
   QJsonObject json = json_doc.object();
+  units.fromJson(json["units"].toArray());
   ingredients.fromJson(json["ingredients"].toArray());
   recipes.fromJson(json["recipes"].toArray());
 

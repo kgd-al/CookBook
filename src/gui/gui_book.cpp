@@ -11,7 +11,7 @@
 #include "ingredientsmanager.h"
 #include "updatemanager.h"
 #include "common.h"
-#include "../db/recipeslistmodel.h"
+#include "../db/recipesmodel.h"
 
 
 namespace gui {
@@ -104,6 +104,10 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
   if (!lastBook.isEmpty())  loadRecipes(lastBook);
 
   gui::restoreGeometry(this, settings);
+
+  /// TODO remove
+  showIngredientsManager();
+  setFocus();
 }
 
 Book::~Book(void) {}

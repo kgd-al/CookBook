@@ -8,8 +8,6 @@
 #include <QStringListModel>
 #include <QAbstractListModel>
 
-#include "editablestringlistmodel.h"
-
 namespace db {
 
 enum ID : int { INVALID = -1 };
@@ -38,6 +36,19 @@ struct TransparentID_CMP {
 template <typename T>
 using transparent_set = std::set<T, TransparentID_CMP<T>>;
 
+struct UnitData {
+  using ID = db::ID;
+  ID id = ID::INVALID;
+  QString text = "N/A";
+  int used = 0;
+
+  static QJsonArray toJson (const UnitData &d);
+  static UnitData fromJson (QJsonArray j);
+
+  using Database = transparent_set<UnitData>;
+};
+using UnitDatabase = UnitData::Database;
+
 struct AlimentaryGroupData {
   using ID = db::ID;
   ID id = ID::INVALID;
@@ -47,23 +58,22 @@ struct AlimentaryGroupData {
   using AlimentaryGroupsDatabase = transparent_set<AlimentaryGroupData>;
   static const AlimentaryGroupsDatabase database;
 };
+using AlimentaryGroupsDatabase = AlimentaryGroupData::AlimentaryGroupsDatabase;
 
 struct IngredientData {
   using ID = db::ID;
   ID id = ID::INVALID;
   QString text = "N/A";
   AlimentaryGroupData const *group = nullptr;
-  EditableStringListModel units;
   int used = 0;
 
   static QJsonArray toJson (const IngredientData &d);
   static IngredientData fromJson (QJsonArray j);
 
   static const QString NoUnit;
+  using Database = transparent_set<IngredientData>;
 };
-
-using AlimentaryGroupsDatabase = AlimentaryGroupData::AlimentaryGroupsDatabase;
-using IngredientsDatabase = transparent_set<IngredientData>;
+using IngredientsDatabase = IngredientData::Database;
 
 } // end of namespace db
 

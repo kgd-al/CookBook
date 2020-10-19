@@ -32,10 +32,10 @@ protected:
 
 struct IngredientEntry : public IngredientListEntry {
   double amount;
-  const QString * unit;
-  IngredientData * idata;
+  UnitData *unit;
+  IngredientData *idata;
 
-  IngredientEntry (double a, const QString * u, IngredientData * d)
+  IngredientEntry (double a, UnitData *u, IngredientData *d)
     : IngredientListEntry(EntryType::Ingredient),
       amount(a), unit(u), idata(d) {}
   IngredientEntry (void) : IngredientEntry(0, nullptr, nullptr) {}

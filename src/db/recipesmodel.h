@@ -7,12 +7,12 @@
 
 namespace db {
 
-class RecipesListModel : public QStringListModel {
+class RecipesModel : public QAbstractListModel {
 public:
   using RecipesDatabase = transparent_set<Recipe>;
 //  static constexpr int RecipeRole = Qt::UserRole + 1;
 
-  RecipesListModel(void);
+  RecipesModel(void);
 
   void addRecipe (Recipe &&r);
   void delRecipe (Recipe *r);
@@ -45,7 +45,7 @@ public:
 
   Recipe& at (Recipe::ID key) {
     return const_cast<Recipe&>(
-      const_cast<const RecipesListModel*>(this)->at(key));
+      const_cast<const RecipesModel*>(this)->at(key));
   }
 
   Recipe& fromIndex(const QModelIndex &i);
@@ -58,7 +58,7 @@ public:
 
   Recipe& recipe (int i) {
     return const_cast<Recipe&>(
-      const_cast<const RecipesListModel*>(this)->recipe(i));
+      const_cast<const RecipesModel*>(this)->recipe(i));
   }
 
   void fromJson (const QJsonArray &a);

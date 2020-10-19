@@ -1,8 +1,12 @@
 #include <QVBoxLayout>
 #include <QTableView>
 #include <QHeaderView>
+#include <QStyledItemDelegate>
+#include <QApplication>
+#include <QPainter>
 
 #include <QComboBox>
+//#include <QDebug>
 
 #include "ingredientsmanager.h"
 #include "../db/book.h"
@@ -15,18 +19,43 @@ IngredientsManager::IngredientsManager(QWidget *parent)
 
   setWindowTitle("Gestionnaire d'ingrédients");
 
-  QVBoxLayout *layout = new QVBoxLayout;
-  QTableView *table = new QTableView;
-  QComboBox *cbox = new QComboBox;
+  QGridLayout *layout = new QGridLayout;
+    QTableView *ltable = new QTableView;
+    layout->addWidget(ltable, 0, 0);
 
-  layout->addWidget(table);
-  layout->addWidget(cbox);
+    QComboBox *lcbox = new QComboBox;
+    layout->addWidget(lcbox, 1, 0);
+
+    QTableView *rtable = new QTableView;
+    layout->addWidget(rtable, 0, 1);
+
+    QComboBox *rcbox = new QComboBox;
+    layout->addWidget(rcbox, 1, 1);
   setLayout(layout);
 
-  table->setModel(&db::Book::current().ingredients);
-  cbox->setModel(&db::Book::current().ingredients);
+  auto isorter = new QSortFilterProxyModel (this);
+  isorter->setSourceModel(&db::Book::current().ingredients);
+  ltable->setModel(isorter);
+  ltable->verticalHeader()->hide();
+  ltable->setSortingEnabled(true);
+  ltable->sortByColumn(1, Qt::DescendingOrder);
+  auto lheader = ltable->horizontalHeader();
+  lheader->setSectionResizeMode(0, QHeaderView::Stretch);
+  lheader->setSectionResizeMode(1, QHeaderView::ResizeToContents);
 
-  table->verticalHeader()->hide();
+  lcbox->setModel(&db::Book::current().ingredients);
+
+  auto usorter = new QSortFilterProxyModel (this);
+  usorter->setSourceModel(&db::Book::current().units);
+  rtable->setModel(usorter);
+  rtable->verticalHeader()->hide();
+  rtable->setSortingEnabled(true);
+  rtable->sortByColumn(1, Qt::DescendingOrder);
+  auto rheader = rtable->horizontalHeader();
+  rheader->setSectionResizeMode(0, QHeaderView::Stretch);
+  rheader->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+
+  rcbox->setModel(&db::Book::current().units);
 
   auto &settings = localSettings(this);
   setGeometry(settings.value("geometry").toRect());

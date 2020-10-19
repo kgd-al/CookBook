@@ -1,6 +1,8 @@
 #include <QJsonArray>
 
 #include "ingredientdata.h"
+#include "unitsmodel.h"
+#include "book.h"
 
 namespace db {
 
@@ -19,12 +21,29 @@ const AlimentaryGroupsDatabase AlimentaryGroupData::database {
 
 const QString IngredientData::NoUnit = "Ø";
 
+QJsonArray UnitData::toJson (const UnitData &d) {
+  QJsonArray j;
+  j.append(d.id);
+  j.append(d.text);
+  j.append(d.used);
+  Q_ASSERT(j.size() == 3);
+  return j;
+}
+
+UnitData UnitData::fromJson (QJsonArray j) {
+  Q_ASSERT(j.size() == 3);
+  UnitData d;
+  d.id = ID(j.takeAt(0).toInt());
+  d.text = j.takeAt(0).toString();
+  d.used = j.takeAt(0).toInt();
+  return d;
+}
+
 QJsonArray IngredientData::toJson (const IngredientData &d) {
   QJsonArray j;
   j.append(d.id);
   j.append(d.text);
   j.append(d.group->id);
-  j.append(QJsonValue::fromVariant(QVariant::fromValue(d.units.list())));
   j.append(d.used);
   Q_ASSERT(j.size() == 5);
   return j;
@@ -36,7 +55,6 @@ IngredientData IngredientData::fromJson (QJsonArray j) {
   d.id = ID(j.takeAt(0).toInt());
   d.text = j.takeAt(0).toString();
   d.group = &(*AlimentaryGroupData::database.find(ID(j.takeAt(0).toInt())));
-  d.units = j.takeAt(0).toVariant().toStringList();
   d.used = j.takeAt(0).toInt();
   return d;
 }

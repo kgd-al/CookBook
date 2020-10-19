@@ -15,6 +15,8 @@ namespace gui {
 class UpdateManager : public QDialog {
   Q_OBJECT
 public:
+  static constexpr int RebootCode = 254;
+
   UpdateManager(QWidget *parent);
   ~UpdateManager (void) {}
 

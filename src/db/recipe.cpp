@@ -3,6 +3,7 @@
 #include <QJsonDocument>
 
 #include "recipe.h"
+#include "book.h"
 
 #include <QDebug>
 
@@ -29,15 +30,19 @@ Recipe::Recipe() {}
 // On update
 void Recipe::updateUsageCounts (const IngredientList &newList) {
 
+  QMap<db::UnitData*, int> u_counts;
   QMap<db::IngredientData*, int> i_counts;
   QMap<db::Recipe*, int> r_counts;
   const auto process =
-    [&i_counts, &r_counts] (const auto &in, int sign) {
+    [&u_counts, &i_counts, &r_counts] (const auto &in, int sign) {
     for (auto &i: in) {
       switch (i->etype) {
-      case db::EntryType::Ingredient:
-        i_counts[static_cast<db::IngredientEntry*>(i.data())->idata] += sign;
+      case db::EntryType::Ingredient: {
+        auto entry = static_cast<db::IngredientEntry*>(i.data());
+        i_counts[entry->idata] += sign;
+        u_counts[entry->unit] += sign;
         break;
+      }
       case db::EntryType::SubRecipe:
         r_counts[static_cast<db::SubRecipeEntry*>(i.data())->recipe] += sign;
         break;
@@ -50,14 +55,32 @@ void Recipe::updateUsageCounts (const IngredientList &newList) {
 
   QDebug q = qDebug().nospace();
   q << "Processing differing usage counts\n";
+  q << "Units:\n";
+  for (auto key: u_counts.keys())
+    q << "\t" << key->text << u_counts.value(key) << "\n";
   q << "Ingredients:\n";
-  q << i_counts << "\n";
+  for (auto key: i_counts.keys())
+    q << "\t" << key->text << i_counts.value(key) << "\n";
   q << "Subrecipes:\n";
-  q << r_counts << "\n";
+  for (auto key: r_counts.keys())
+    q << "\t" << key->title << r_counts.value(key) << "\n";
 
-  for (auto it = i_counts.begin(); it != i_counts.end(); ++it)
-    if (it.value() != 0)
+  auto &book = Book::current();
+  auto &umodel = book.units;
+  for (auto it = u_counts.begin(); it != u_counts.end(); ++it) {
+    if (it.value() != 0) {
       it.key()->used += it.value();
+      umodel.valueModified(it.key()->id);
+    }
+  }
+
+  auto &imodel = Book::current().ingredients;
+  for (auto it = i_counts.begin(); it != i_counts.end(); ++it) {
+    if (it.value() != 0) {
+      it.key()->used += it.value();
+      imodel.valueModified(it.key()->id);
+    }
+  }
 
   for (auto it = r_counts.begin(); it != r_counts.end(); ++it)
     if (it.value() != 0)

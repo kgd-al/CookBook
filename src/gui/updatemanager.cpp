@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 
+#include <QApplication>
 #include <QProcess>
 
 #include <QDebug>
@@ -22,7 +23,7 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
 
   QVBoxLayout *layout = new QVBoxLayout;
     QHBoxLayout *srclayout = new QHBoxLayout;
-      srclayout->addWidget(new QLabel ("Source path: "));
+      srclayout->addWidget(new QLabel ("Dossier source: "));
       srclayout->addWidget(_path = new QLineEdit);
       srclayout->addWidget(new QToolButton);
     layout->addLayout(srclayout);
@@ -36,11 +37,11 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
         llayout->addWidget(_labels.pull = new QLabel, r, c++);
         r++; c = 0;
 
-        llayout->addWidget(qpb.compile = new QPushButton("Compile"), r, c++);
+        llayout->addWidget(qpb.compile = new QPushButton("Compiler"), r, c++);
         llayout->addWidget(_labels.compile = new QLabel, r, c++);
         r++; c = 0;
 
-        llayout->addWidget(qpb.deploy = new QPushButton("Deploy"), r, c++);
+        llayout->addWidget(qpb.deploy = new QPushButton("Relancer"), r, c++);
         llayout->addWidget(_labels.deploy = new QLabel, r, c++);
         r++; c = 0;
 
@@ -106,7 +107,9 @@ void UpdateManager::doCompile(void) {
 }
 
 void UpdateManager::doDeploy(void) {
-
+  qApp->exit(RebootCode);
+//  qApp->quit();
+  QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
 }
 
 void UpdateManager::logOutput (void) {

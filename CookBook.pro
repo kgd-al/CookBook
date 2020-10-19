@@ -33,14 +33,15 @@ SOURCES += \
     src/db/editablestringlistmodel.cpp \
     src/db/ingredientsmodel.cpp \
     src/db/ingredientlistentries.cpp \
-    src/db/recipeslistmodel.cpp \
     src/gui/ingrediententrydialog.cpp \
     src/gui/gui_recipe.cpp \
     src/gui/gui_book.cpp \
     src/gui/ingredientsmanager.cpp \
     src/main.cpp \
     src/gui/updatemanager.cpp \
-    src/gui/common.cpp
+    src/gui/common.cpp \
+    src/db/unitsmodel.cpp \
+    src/db/recipesmodel.cpp
 
 HEADERS += \
     src/db/ingredientdata.h \
@@ -49,11 +50,13 @@ HEADERS += \
     src/db/editablestringlistmodel.h \
     src/db/ingredientsmodel.h \
     src/db/ingredientlistentries.h \
-    src/db/recipeslistmodel.h \
     src/gui/gui_book.h \
     src/gui/gui_recipe.h \
     src/gui/autofiltercombobox.hpp \
     src/gui/ingrediententrydialog.h \
     src/gui/ingredientsmanager.h \
     src/gui/updatemanager.h \
-    src/gui/common.h
+    src/gui/common.h \
+    src/db/unitsmodel.h \
+    src/db/recipesmodel.h \
+    src/db/basemodel.h

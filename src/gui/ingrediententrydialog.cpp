@@ -53,10 +53,16 @@ IngredientDialog::IngredientDialog (QWidget *parent, const QString &title)
   iholder->setLayout(ilayout);
   entryLayout->addWidget(iholder);
 
-  unit->setModel(&book.ingredients.allUnitsModel());
+  auto unitModel = new QSortFilterProxyModel(this);
+  unitModel->setSourceModel(&book.units);
+  unitModel->sort(1, Qt::DescendingOrder);
+  unit->setModel(unitModel);
   unit->setCurrentIndex(NoIndex);
 
-  type->setModel(&book.ingredients);
+  auto typeModel = new QSortFilterProxyModel(this);
+  typeModel->setSourceModel(&book.ingredients);
+  typeModel->sort(1, Qt::DescendingOrder);
+  type->setModel(typeModel);
   type->setCurrentIndex(NoIndex);
   connect(type, qOverload<int>(&QComboBox::currentIndexChanged),
           this, &IngredientDialog::typeChanged);
@@ -120,10 +126,6 @@ void IngredientDialog::typeChanged(void) {
   bool isNew = (d.group == nullptr);
   if (!isNew) group->setCurrentText(d.group->text);
   group->setEnabled(isNew);
-  if (isNew)
-    unit->setModel(&book.ingredients.allUnitsModel());
-  else
-    unit->setModel(&d.units);
 }
 
 bool IngredientDialog::validate(void) {
@@ -154,7 +156,7 @@ bool IngredientDialog::validate(void) {
 //    qDebug() << " Current data: " << type->currentData(Qt::EditRole);
 //    qDebug() << " Current data: " << type->currentData(db::IngredientsModel::IngredientRole);
     using IM = db::IngredientsModel;
-    static_cast<IM*>(type->model())->validateTemporaryData({
+    db::Book::current().ingredients.validateTemporaryData({
       db::ID(type->currentData(IM::IngredientRole).toInt())});
 
     if (amount->text().toDouble() <= 0) error(amount);
@@ -186,7 +188,7 @@ void IngredientDialog::setIngredient (const Ingredient_ptr &e) {
   case db::EntryType::Ingredient: {
     auto &i = dynamic_cast<const db::IngredientEntry&>(*e.data());
     amount->setText(QString::number(i.amount));
-    unit->setCurrentText(*i.unit);
+    unit->setCurrentText(i.unit->text);
     type->setCurrentIndex(type->findText(i.idata->text));
     group->setCurrentText(i.idata->group->text);
     typeChanged();
@@ -213,6 +215,7 @@ IngredientDialog::Ingredient_ptr IngredientDialog::ingredient (void) const {
     using I_ID = db::IngredientData::ID;
     using AGD = db::AlimentaryGroupData;
     using G_ID = AGD::ID;
+    using U_ID = db::UnitData::ID;
 
     qDebug() << "Processing ingredient:\n"
              << type->currentIndex();
@@ -223,22 +226,37 @@ IngredientDialog::Ingredient_ptr IngredientDialog::ingredient (void) const {
     if (!d.group)
       d.group = &(*AGD::database.find(G_ID(group->currentData().toInt())));
 
-    int u_index = d.units.indexOf(unit->currentText());
-    if (u_index == NoIndex) {
-      u_index = d.units.rowCount();
-      QString unitStr = unit->currentText();
-      if (unitStr.isEmpty())  unitStr = db::IngredientData::NoUnit;
-      d.units.append(unitStr);
-    }
-    QString *unit_ptr = &d.units[u_index];
+//    int u_index = d.units.indexOf(unit->currentText());
+//    if (u_index == NoIndex) {
+//      u_index = d.units.rowCount();
+//      QString unitStr = unit->currentText();
+//      if (unitStr.isEmpty())  unitStr = db::IngredientData::NoUnit;
+//      d.units.append(unitStr);
+//    }
+//    QString *unit_ptr = &d.units[u_index];
 
-    ptr = new db::IngredientEntry (amount->text().toDouble(), unit_ptr, &d);
+//    ptr = new db::IngredientEntry (amount->text().toDouble(), unit_ptr, &d);
+
+//    auto &u_data = db::Book::current().units.at(u_id);
+//    // First search in local unit database
+//    auto u_id = U_ID(unit->currentData(db::UnitsModel::IDRole).toInt());
+//    auto u_local_it = d.units.find(u_id);
+//    if (u_local_it == d.units.end()) {  // Add to local database
+//      auto u_global_it = db::Book::current().units.at(u_id);
+//      d.units.insert()
+//    }
+
+    auto u_id = U_ID(unit->currentData(db::UnitsModel::IDRole).toInt());
+    auto &u_data = db::Book::current().units.at(u_id);
+
+    ptr = new db::IngredientEntry (amount->text().toDouble(), &u_data, &d);
+
     break;
   }
 
   case db::EntryType::SubRecipe:
     ptr = new db::SubRecipeEntry (
-      &static_cast<db::RecipesListModel*>(
+      &static_cast<db::RecipesModel*>(
         recipe->model())->recipe(recipe->currentIndex()));
     break;
 

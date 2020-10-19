@@ -19,7 +19,7 @@
 #include "common.h"
 
 #include "../db/book.h"
-#include "../db/recipeslistmodel.h"
+#include "../db/recipesmodel.h"
 
 namespace gui {
 

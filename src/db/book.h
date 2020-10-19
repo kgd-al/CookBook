@@ -3,8 +3,9 @@
 
 #include <map>
 
-#include "recipeslistmodel.h"
+#include "recipesmodel.h"
 #include "ingredientsmodel.h"
+#include "unitsmodel.h"
 
 namespace db {
 
@@ -12,8 +13,9 @@ struct Book {
   QString path;
   bool modified;
 
-  RecipesListModel recipes;
+  RecipesModel recipes;
   IngredientsModel ingredients;
+  UnitsModel units;
 
   Book(void);
 
