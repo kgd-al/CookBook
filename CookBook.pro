@@ -41,7 +41,8 @@ SOURCES += \
     src/gui/updatemanager.cpp \
     src/gui/common.cpp \
     src/db/unitsmodel.cpp \
-    src/db/recipesmodel.cpp
+    src/db/recipesmodel.cpp \
+    src/gui/listcontrols.cpp
 
 HEADERS += \
     src/db/ingredientdata.h \
@@ -59,4 +60,5 @@ HEADERS += \
     src/gui/common.h \
     src/db/unitsmodel.h \
     src/db/recipesmodel.h \
-    src/db/basemodel.h
+    src/db/basemodel.h \
+    src/gui/listcontrols.h

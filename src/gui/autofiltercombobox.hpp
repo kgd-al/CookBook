@@ -4,12 +4,16 @@
 #include <QComboBox>
 #include <QCompleter>
 #include <QLineEdit>
+#include <QAbstractItemView>
 
 #include <QDebug>
 
 namespace gui {
 
-struct AutoFilterComboBox : public QComboBox {
+class AutoFilterComboBox : public QComboBox {
+  QString emptyAlias;
+
+public:
   AutoFilterComboBox (QComboBox::InsertPolicy policy
                       = QComboBox::InsertAtBottom) {
     setEditable(true);
@@ -19,6 +23,10 @@ struct AutoFilterComboBox : public QComboBox {
     c->setCompletionMode(QCompleter::PopupCompletion);
     c->setCompletionRole(Qt::DisplayRole);
     c->setFilterMode(Qt::MatchContains);
+  }
+
+  void setEmptyAlias (const QString &alias = QString()) {
+    emptyAlias = alias;
   }
 
   void focusOutEvent(QFocusEvent *e) {
@@ -39,11 +47,15 @@ struct AutoFilterComboBox : public QComboBox {
 //    q << findText(completer()->currentCompletion()) << "\n";
 //    q << findText(lineEdit()->text()) << "\n";
 
-    if (!completer()->currentCompletion().isEmpty()) {
+    if (!completer()->currentCompletion().isEmpty()
+        && completer()->popup()->isVisible()) {
+
       setCurrentIndex(findText(completer()->currentCompletion()));
 
     } else {
       QString text = lineEdit()->text();
+      if (text.isEmpty() && !emptyAlias.isEmpty())  text = emptyAlias;
+
       int index;
       if (!duplicatesEnabled()) {
         index = findText(text);

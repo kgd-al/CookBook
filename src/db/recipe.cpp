@@ -55,15 +55,15 @@ void Recipe::updateUsageCounts (const IngredientList &newList) {
 
   QDebug q = qDebug().nospace();
   q << "Processing differing usage counts\n";
-  q << "Units:\n";
+  if (!u_counts.empty()) q << "Units:\n";
   for (auto key: u_counts.keys())
-    q << "\t" << key->text << u_counts.value(key) << "\n";
-  q << "Ingredients:\n";
+    q << "\t" << key->text << ": " << u_counts.value(key) << "\n";
+  if (!i_counts.empty()) q << "Ingredients:\n";
   for (auto key: i_counts.keys())
-    q << "\t" << key->text << i_counts.value(key) << "\n";
-  q << "Subrecipes:\n";
+    q << "\t" << key->text << ": " << i_counts.value(key) << "\n";
+  if (!r_counts.empty()) q << "Subrecipes:\n";
   for (auto key: r_counts.keys())
-    q << "\t" << key->title << r_counts.value(key) << "\n";
+    q << "\t" << key->title << ": " << r_counts.value(key) << "\n";
 
   auto &book = Book::current();
   auto &umodel = book.units;

@@ -17,10 +17,27 @@ QVariant IngredientsModel::headerData(int section, Qt::Orientation orientation,
 
   switch (section) {
   case 0:   return "Name";
-//  case 1:   return "Units";
   case 1:   return "Used";
   default:  return "N/A";
   }
+}
+
+void IngredientsModel::add (const QString &text, G_ID gid) {
+  int index = rowCount();
+  insertRows(index, 1, QModelIndex());
+  auto &item = atIndex(index);
+  item.text = text;
+  item.used = 0;
+  item.group = &(*AlimentaryGroupData::database.find(gid));
+  valueModified(item.id);
+}
+
+void IngredientsModel::update(ID id, const QString &text, G_ID gid) {
+  auto &item = at(id);
+  if (!text.isEmpty())  item.text = text;
+  if (gid != ID::INVALID && gid != item.group->id)
+    item.group = &(*AlimentaryGroupData::database.find(gid));
+  valueModified(item.id);
 }
 
 QVariant IngredientsModel::data (const QModelIndex &index, int role) const {
@@ -28,7 +45,6 @@ QVariant IngredientsModel::data (const QModelIndex &index, int role) const {
     auto &item = atIndex(index.row());
     switch (index.column()) {
     case 0:   return item.text;
-//    case 1:   return item.listOfUnits();
     case 1:   return item.used;
     default:  return "N/A";
     }
@@ -87,7 +103,7 @@ bool IngredientsModel::insertRows(int row, int count, const QModelIndex &) {
   return true;
 }
 
-int IngredientsModel::validateTemporaryData(const IIDList &ids) {
+int IngredientsModel::validateTemporaryData(const IDList &ids) {
   for (auto id: ids)  _tmpData.erase(id);
 
   uint removed = 0;

@@ -58,6 +58,7 @@ IngredientDialog::IngredientDialog (QWidget *parent, const QString &title)
   unitModel->sort(1, Qt::DescendingOrder);
   unit->setModel(unitModel);
   unit->setCurrentIndex(NoIndex);
+  unit->setEmptyAlias(db::IngredientData::NoUnit);
 
   auto typeModel = new QSortFilterProxyModel(this);
   typeModel->setSourceModel(&book.ingredients);

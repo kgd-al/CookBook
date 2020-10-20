@@ -11,25 +11,12 @@
 
 #include <QJsonObject>
 
+#include "listcontrols.h"
 #include "../db/recipe.h"
 
 namespace gui {
 
 using GUIList = QListWidget;
-
-class ListControls : public QWidget {
-public:
-  ListControls (GUIList *view);
-
-  QToolButton* addButton (void) {  return _add;  }
-  QToolButton* editButton (void) { return _edit;  }
-
-private:
-  const GUIList *_view;
-  QToolButton *_add, *_edit, *_del;
-
-  void setState (void);
-};
 
 class Recipe : public QDialog {
   Q_OBJECT

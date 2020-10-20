@@ -86,39 +86,6 @@ struct StepListItem : public QListWidgetItem {
   }
 };
 
-ListControls::ListControls (GUIList *view) : _view(view) {
-  QHBoxLayout *layout = new QHBoxLayout;
-  layout->addWidget(_add = new QToolButton);
-  _add->setIcon(QIcon::fromTheme("list-add"));
-  layout->addWidget(_edit = new QToolButton);
-  _edit->setIcon(QIcon::fromTheme("insert-text"));
-  layout->addWidget(_del = new QToolButton);
-  _del->setIcon(QIcon::fromTheme("list-remove"));
-  QWidget *spacer = new QWidget;
-  spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-  layout->addWidget(spacer);
-  layout->setMargin(0);
-  setLayout(layout);
-
-  connect(_view->selectionModel(), &QItemSelectionModel::currentRowChanged,
-          this, &ListControls::setState);
-
-  connect(_del, &QToolButton::clicked,
-          [this] {
-    if (QMessageBox::question(this, "Confirm", "Confirm suppression?")
-        == QMessageBox::Yes)
-      qDeleteAll(_view->selectedItems());
-  });
-
-  setState();
-}
-
-void ListControls::setState(void) {
-  bool hasSelection = _view->currentIndex().isValid();
-  _edit->setEnabled(hasSelection);
-  _del->setEnabled(hasSelection);
-}
-
 Recipe::Recipe(QWidget *parent) : QDialog(parent) {
   QVBoxLayout *mainLayout = new QVBoxLayout;
   mainLayout->setSizeConstraint(QLayout::SetNoConstraint);

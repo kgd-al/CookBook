@@ -13,11 +13,14 @@ class IngredientsModel : public BaseModel<IngredientData> {
 public:
   static constexpr auto IngredientRole = Qt::UserRole + 1;
 //  using IID = IngredientData::ID;
-  using IIDList = std::set<ID>;
+  using IDList = std::set<ID>;
+  using G_ID = AlimentaryGroupData::ID;
 
   IngredientsModel(void) {}
 
   void clear (void);
+  void add (const QString &text, G_ID gid);
+  void update (ID id, const QString &text, G_ID gid);
 
   int columnCount(const QModelIndex& = QModelIndex()) const override;
 
@@ -30,7 +33,7 @@ public:
   Qt::ItemFlags flags(const QModelIndex &index) const override;
 
   bool insertRows(int row, int count, const QModelIndex&) override;
-  int validateTemporaryData (const IIDList &ids);
+  int validateTemporaryData (const IDList &ids);
 
   bool removeRows(int row, int count, const QModelIndex &) override;
 
@@ -40,7 +43,7 @@ public:
   void fromJson (const QJsonArray &j);
 
 private:
-  IIDList _tmpData;
+  IDList _tmpData;
 };
 
 }
