@@ -129,7 +129,7 @@ void Book::addRecipe(void) {
 void Book::showRecipe(const QModelIndex &index) {
   Recipe recipe (this);
   connect(&recipe, &Recipe::validated, [this] { setModified(true); });
-  recipe.show(&db::Book::current().recipes.fromIndex(index), true);
+  recipe.show(&db::Book::current().recipes.atIndex(index.row()), true);
 }
 
 bool Book::saveRecipes(void) {

@@ -2,6 +2,7 @@
 #define DB_RECIPE_H
 
 #include <QList>
+#include <QTime>
 
 #include "ingredientlistentries.h"
 
@@ -9,6 +10,8 @@ namespace db {
 
 struct Recipe {
   using ID = db::ID;
+  using Database = transparent_set<Recipe>;
+
   ID id = ID::INVALID;
   int used;
 
@@ -16,6 +19,11 @@ struct Recipe {
 
   double portions;
   QString portionsLabel;
+
+  const RegimenData *regimen;
+  const StatusData *status;
+  const DishTypeData *type;
+  const DurationData *duration;
 
   using Ingredient_ptr = IngredientListEntry::ptr;
   using IngredientList = QList<Ingredient_ptr>;

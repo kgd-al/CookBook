@@ -55,7 +55,7 @@ QVariant IngredientsModel::data (const QModelIndex &index, int role) const {
   else if (role == Qt::DecorationRole && index.column() == 0) {
     auto item = atIndex(index.row());
     if (!item.group)  return QVariant();
-    return item.group->color;
+    return item.group->decoration;
 
   } else if (role == IngredientRole)
     return atIndex(index.row()).id;
@@ -78,7 +78,7 @@ bool IngredientsModel::setData(const QModelIndex &index, const QVariant &value,
 
 Qt::ItemFlags IngredientsModel::flags(const QModelIndex &index) const {
   auto flg = QAbstractTableModel::flags(index);
-  if (index.isValid())
+  if (index.isValid() && index.column() == 0)
     flg |= Qt::ItemIsEditable;
 
   return flg;

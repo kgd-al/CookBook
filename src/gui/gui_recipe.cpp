@@ -86,6 +86,27 @@ struct StepListItem : public QListWidgetItem {
   }
 };
 
+struct ObstinateCB : public QComboBox {
+  bool readOnly;
+  bool event (QEvent *event) {
+    if (!readOnly)  return QComboBox::event(event);
+    else
+      switch (event->type()) {
+      case QEvent::MouseButtonPress:
+      case QEvent::Wheel:
+      case QEvent::FocusIn:
+      case QEvent::FocusOut:
+      case QEvent::HoverEnter:
+      case QEvent::HoverLeave:
+      case QEvent::HoverMove:
+        return false;
+      default:
+        return QComboBox::event(event);
+      }
+    return false;
+  }
+};
+
 Recipe::Recipe(QWidget *parent) : QDialog(parent) {
   QVBoxLayout *mainLayout = new QVBoxLayout;
   mainLayout->setSizeConstraint(QLayout::SetNoConstraint);
@@ -94,9 +115,33 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
     _title->setAlignment(Qt::AlignCenter);
     mainLayout->addWidget(_title, 0, Qt::AlignCenter);
 
-    QGridLayout *dlayout = new QGridLayout;
+    QGridLayout *dlayout = new QGridLayout; {
       dlayout->addWidget(_references = new QLabel(""));
-    mainLayout->addLayout(dlayout);
+
+      int r = 0, c = 0;
+      dlayout->addWidget(new QLabel (tr("Régime")),
+                         r, c++, 1, 1, Qt::AlignCenter);
+      dlayout->addWidget(new QLabel (tr("Status")),
+                         r, c++, 1, 1, Qt::AlignCenter);
+      dlayout->addWidget(new QLabel (tr("Type")),
+                         r, c++, 1, 1, Qt::AlignCenter);
+      dlayout->addWidget(new QLabel (tr("Durée")),
+                         r, c++, 1, 1, Qt::AlignCenter);
+      r++; c = 0;
+      dlayout->addWidget(_regimen = new ObstinateCB, r, c++, Qt::AlignCenter);
+      _regimen->setModel(db::getStaticModel<db::RegimenData>());
+      dlayout->addWidget(_status = new ObstinateCB, r, c++, Qt::AlignCenter);
+      _status->setModel(db::getStaticModel<db::StatusData>());
+      _status->setStyleSheet(":disabled {background-color:#ff0000;}");
+      dlayout->addWidget(_type = new ObstinateCB, r, c++, Qt::AlignCenter);
+      _type->setModel(db::getStaticModel<db::DishTypeData>());
+      dlayout->addWidget(_duration = new ObstinateCB, r, c++, Qt::AlignCenter);
+      _duration->setModel(db::getStaticModel<db::DurationData>());
+
+      r++; c = 0;
+      dlayout->addWidget(spacer(), r, c, 1, 3);
+
+    } mainLayout->addLayout(dlayout);
 
     mainLayout->addWidget(spacer());
     QHBoxLayout *midLayout = new QHBoxLayout;
@@ -189,6 +234,11 @@ int Recipe::show (db::Recipe *recipe, bool readOnly, double ratio) {
     _references->setText("");
   _references->setVisible(_data->used > 0);
 
+  _regimen->setCurrentIndex(_data->regimen->id);
+  _status->setCurrentIndex(_data->status->id);
+  _type->setCurrentIndex(_data->type->id);
+  _duration->setCurrentIndex(_data->duration->id);
+
   for (const db::Recipe::Ingredient_ptr &i: recipe->ingredients) addIngredient(i);
   for (const QString &s: recipe->steps)  addStep(s);
 
@@ -203,8 +253,19 @@ int Recipe::show (db::Recipe *recipe, bool readOnly, double ratio) {
   return exec();
 }
 
+template <typename T>
+const T* getData (const QComboBox *cb) {
+  return &db::at(T::database,
+                 db::ID(cb->currentData(db::IDRole).toInt()));
+}
+
 void Recipe::writeThrough(void) {
   _data->title = _title->text();
+
+  _data->regimen = getData<db::RegimenData>(_regimen);
+  _data->status = getData<db::StatusData>(_status);
+  _data->type = getData<db::DishTypeData>(_type);
+  _data->duration = getData<db::DurationData>(_duration);
 
   // Make a copy for usage comparison
   decltype(_data->ingredients) newIngredients;
@@ -232,6 +293,11 @@ void Recipe::setReadOnly(bool ro) {
 
 //  _title->setEnabled(!ro);
   static_cast<StrangeWidget*>(_title)->setEdit(!ro);
+
+  static_cast<ObstinateCB*>(_regimen)->readOnly = ro;
+  static_cast<ObstinateCB*>(_status)->readOnly = ro;
+  static_cast<ObstinateCB*>(_type)->readOnly = ro;
+  static_cast<ObstinateCB*>(_duration)->readOnly = ro;
 
   _notes->setEnabled(!ro);
 
@@ -392,7 +458,7 @@ void Recipe::deleteRequested(void) {
 
   if (QMessageBox::warning(this, "Supprimer?",
                            "Voulez vous definitivement supprimer '"
-                           + _data->title + "?",
+                           + _data->title + "' ?",
                            QMessageBox::Yes | QMessageBox::No)
       != QMessageBox::Yes)
     return;
@@ -403,6 +469,8 @@ void Recipe::deleteRequested(void) {
   book.recipes.delRecipe(_data);
 
   emit deleted();
+
+  reject();
 }
 
 } // end of namespace gui

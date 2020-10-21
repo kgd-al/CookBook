@@ -43,6 +43,34 @@ struct BaseModel : public QAbstractTableModel {
     return _nextID;
   }
 
+  bool removeItem (ID id) {
+    auto it = _data.find(id);
+    Q_ASSERT(it != _data.end());
+    int index = std::distance(_data.begin(), it);
+    beginRemoveRows(QModelIndex(), index, index);
+    _data.erase(it);
+    endRemoveRows();
+    return true;
+  }
+
+  bool removeRows(int row, int count,
+                  const QModelIndex &parent = QModelIndex()) override {
+    Q_ASSERT(count == 1);
+    T &item = atIndex(row);
+    auto it = _data.find(item.id);
+    Q_ASSERT(it != _data.end());
+    beginRemoveRows(parent, row, row);
+    _data.erase(it);
+    endRemoveRows();
+    return true;
+  }
+
+  void clear (void) {
+    beginResetModel();
+    _data.clear();
+    endResetModel();
+  }
+
   virtual void valueModified (ID id) = 0;
 
 protected:

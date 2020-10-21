@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui svg
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,10 +27,8 @@ DEFINES += BASE_DIR=\\\"$$system(pwd)\\\"
 #CONFIG += object_parallel_to_source
 
 SOURCES += \
-    src/db/ingredientdata.cpp \
     src/db/recipe.cpp \
     src/db/book.cpp \
-    src/db/editablestringlistmodel.cpp \
     src/db/ingredientsmodel.cpp \
     src/db/ingredientlistentries.cpp \
     src/gui/ingrediententrydialog.cpp \
@@ -42,13 +40,12 @@ SOURCES += \
     src/gui/common.cpp \
     src/db/unitsmodel.cpp \
     src/db/recipesmodel.cpp \
-    src/gui/listcontrols.cpp
+    src/gui/listcontrols.cpp \
+    src/db/recipedata.cpp
 
 HEADERS += \
-    src/db/ingredientdata.h \
     src/db/recipe.h \
     src/db/book.h \
-    src/db/editablestringlistmodel.h \
     src/db/ingredientsmodel.h \
     src/db/ingredientlistentries.h \
     src/gui/gui_book.h \
@@ -61,4 +58,8 @@ HEADERS += \
     src/db/unitsmodel.h \
     src/db/recipesmodel.h \
     src/db/basemodel.h \
-    src/gui/listcontrols.h
+    src/gui/listcontrols.h \
+    src/db/recipedata.h
+
+RESOURCES += \
+    icons.qrc

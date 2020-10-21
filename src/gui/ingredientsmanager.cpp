@@ -2,6 +2,7 @@
 #include <QTableView>
 #include <QHeaderView>
 
+#include <QLabel>
 #include <QLineEdit>
 #include <QComboBox>
 
@@ -18,9 +19,14 @@ IngredientsManager::IngredientsManager(QWidget *parent)
 
   setWindowTitle("Gestionnaire d'ingrédients");
 
+  int r = 0, c = 0;
+
   QGridLayout *layout = new QGridLayout;
+    layout->addWidget(new QLabel(tr("Ingrédients")),
+                      r++, c, 1, 1, Qt::AlignCenter);
+
     QTableView *ltable = new QTableView;
-    layout->addWidget(ltable, 0, 0);
+    layout->addWidget(ltable, r++, c);
 
     QHBoxLayout *linput = new QHBoxLayout;
       QLineEdit *ledit =  new QLineEdit;
@@ -28,22 +34,29 @@ IngredientsManager::IngredientsManager(QWidget *parent)
       linput->addWidget(ledit);
 
       QComboBox *lbox = new QComboBox;
-      for (const db::AlimentaryGroupData &d: db::AlimentaryGroupData::database){
-        QPixmap p (15,15);
-        p.fill(d.color);
-        lbox->addItem(p, d.text, d.id);
-      }
+      /// TODO Remove
+//      for (const db::AlimentaryGroupData &d: db::AlimentaryGroupData::database){
+//        QPixmap p (15,15);
+//        p.fill(d.decoration);
+//        lbox->addItem(p, d.text, d.id);
+//      }
+      lbox->setModel(db::getStaticModel<db::AlimentaryGroupData>());
       linput->addWidget(lbox);
 
       auto lcontrols = new ListControls(ltable);
       linput->addWidget(lcontrols);
-    layout->addLayout(linput, 1, 0);
+    layout->addLayout(linput, r++, c);
 
     QComboBox *lcbox = new QComboBox;
-    layout->addWidget(lcbox, 2, 0);
+    layout->addWidget(lcbox, r++, c);
+
+  r = 0; c = 1;
+
+    layout->addWidget(new QLabel(tr("Unités")),
+                      r++, c, 1, 1, Qt::AlignCenter);
 
     QTableView *rtable = new QTableView;
-    layout->addWidget(rtable, 0, 1);
+    layout->addWidget(rtable, r++, c);
 
     QHBoxLayout *rinput = new QHBoxLayout;
       QLineEdit *redit =  new QLineEdit;
@@ -52,10 +65,10 @@ IngredientsManager::IngredientsManager(QWidget *parent)
 
       auto rcontrols = new ListControls(rtable);
       rinput->addWidget(rcontrols);
-    layout->addLayout(rinput, 1, 1);
+    layout->addLayout(rinput, r++, c);
 
     QComboBox *rcbox = new QComboBox;
-    layout->addWidget(rcbox, 2, 1);
+    layout->addWidget(rcbox, r++, c);
   setLayout(layout);
 
   auto isorter = new QSortFilterProxyModel (this);
@@ -110,6 +123,25 @@ IngredientsManager::IngredientsManager(QWidget *parent)
           [lcontrols] (const QModelIndex &current, const QModelIndex&) {
     bool unused = (current.sibling(current.row(), 1).data() == 0);
     lcontrols->delButton()->setEnabled(unused);
+  });
+
+  connect(rcontrols->addButton(), &QToolButton::clicked,
+          [redit] {
+    if (redit->text().isEmpty())  return;
+    db::Book::current().units.add(redit->text());
+  });
+
+  connect(rcontrols->editButton(), &QToolButton::clicked,
+          [rtable, redit] {
+    using UM = db::UnitsModel;
+    db::Book::current().units.update(
+      db::ID(rtable->currentIndex().data(UM::IDRole).toInt()), redit->text());
+  });
+
+  connect(rtable->selectionModel(), &QItemSelectionModel::currentRowChanged,
+          [rcontrols] (const QModelIndex &current, const QModelIndex&) {
+    bool unused = (current.sibling(current.row(), 1).data() == 0);
+    rcontrols->delButton()->setEnabled(unused);
   });
 }
 

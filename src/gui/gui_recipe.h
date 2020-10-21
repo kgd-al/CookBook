@@ -6,8 +6,10 @@
 #include <QTextEdit>
 #include <QListWidget>
 #include <QStringListModel>
+#include <QComboBox>
 #include <QSpinBox>
 #include <QLabel>
+#include <QDateTimeEdit>
 
 #include <QJsonObject>
 
@@ -47,6 +49,9 @@ private:
   double _displayedPortions;
   QDoubleSpinBox *_portions;
   QLineEdit *_portionsLabel;
+
+  QComboBox *_regimen, *_status, *_type, *_duration;
+
   GUIList *_ingredients, *_steps;
   ListControls *_icontrols, *_scontrols;
 

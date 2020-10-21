@@ -1,36 +1,50 @@
 #include <QJsonArray>
+#include <QPainter>
 
 #include "recipesmodel.h"
 
+#include <QDebug>
+
 namespace db {
 
-RecipesModel::RecipesModel(void) : _nextRecipeID(ID(0)) {}
+RecipesModel::RecipesModel(void) {}
 
 void RecipesModel::addRecipe(Recipe &&r) {
   int i = rowCount();
   beginInsertRows(QModelIndex(), i, i);
-  r.id = nextRecipeID();
-  recipes.emplace(r);
+  r.id = nextID();
+  _data.emplace(r);
   endInsertRows();
 }
 
 void RecipesModel::delRecipe(Recipe *r) {
-  auto it = find(r->id);
-  if (it != recipes.end()) {
-    auto index = std::distance(recipes.begin(), it);
-    beginRemoveRows(QModelIndex(), index, index);
+  removeItem(r->id);
+}
 
-    recipes.erase(it);
-    endRemoveRows();
+int RecipesModel::columnCount(const QModelIndex&) const {
+  return 1;
+}
+
+QIcon aggregatedIcons (const Recipe &r) {
+  QVector<QPixmap> icons {
+    RegimenData::iconFromDecoration(r.regimen->decoration),
+    StatusData::iconFromDecoration(r.status->decoration),
+    DishTypeData::iconFromDecoration(r.type->decoration),
+    DurationData::iconFromDecoration(r.duration->decoration)
+  };
+
+  static constexpr int margin = 1;
+
+  QPixmap p (icons.size()*ICON_SIZE+(icons.size()-1) * margin, ICON_SIZE);
+  p.fill(Qt::blue);
+  QPainter painter (&p);
+  for (int i=0, x=0; i<icons.size(); i++, x += ICON_SIZE+margin) {
+    qDebug() << "Drawing pixmap" << i << "at" << x;
+    painter.drawPixmap(QRect(x, 0, x+ICON_SIZE, ICON_SIZE),
+                       icons[i]);
   }
-}
-
-Recipe& RecipesModel::fromIndex (const QModelIndex &i) {
-  return recipe(i.row());
-}
-
-int RecipesModel::rowCount(const QModelIndex&) const {
-  return recipes.size();
+  qDebug() << p;
+  return p;
 }
 
 QVariant RecipesModel::data (const QModelIndex &index, int role) const {
@@ -38,36 +52,39 @@ QVariant RecipesModel::data (const QModelIndex &index, int role) const {
   switch (role) {
   case Qt::DisplayRole:
   case Qt::EditRole:
-    v = recipe(index.row()).title;
+    v = atIndex(index.row()).title;
     break;
+  case Qt::DecorationRole:
+    return aggregatedIcons(atIndex(index.row()));
+  case IDRole:
+    return atIndex(index.row()).id;
   }
   return v;
 }
 
-void RecipesModel::clear(void) {
-  beginResetModel();
-  recipes.clear();
-  endResetModel();
+void RecipesModel::valueModified(ID id) {
+  int index = indexOf(id);
+  emit dataChanged(createIndex(index, 0), createIndex(index, columnCount()));
 }
 
 void RecipesModel::fromJson(const QJsonArray &a) {
   for (const QJsonValue &v: a) {
     Recipe r = Recipe::fromJson(v);
-    recipes.emplace(r);
-    _nextRecipeID = std::max(r.id, _nextRecipeID);
+    _data.emplace(r);
+    _nextID = std::max(r.id, _nextID);
   }
 
-  for (const Recipe &r: recipes)
+  for (const Recipe &r: _data)
     for (auto &i: r.ingredients)
       if (i->etype == EntryType::SubRecipe)
         static_cast<SubRecipeEntry*>(i.data())->setRecipeFromHackedPointer();
 
-  nextRecipeID();
+  nextID();
 }
 
 QJsonArray RecipesModel::toJson(void) {
   QJsonArray a;
-  for (const auto &p: recipes)
+  for (const auto &p: _data)
     a.append(Recipe::toJson(p));
   return a;
 }

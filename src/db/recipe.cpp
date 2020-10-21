@@ -93,6 +93,7 @@ void Recipe::updateUsageCounts(void) {
     switch (i->etype) {
     case db::EntryType::Ingredient:
       static_cast<db::IngredientEntry*>(i.data())->idata->used--;
+      static_cast<db::IngredientEntry*>(i.data())->unit->used--;
       break;
     case db::EntryType::SubRecipe:
       static_cast<db::SubRecipeEntry*>(i.data())->recipe->used--;
@@ -120,6 +121,11 @@ Recipe Recipe::fromJson(const QJsonValue &j) {
 
   r.title = jo["title"].toString();
 
+  r.regimen = &at<RegimenData>(db::ID(jo["regimen"].toInt()));
+  r.status = &at<StatusData>(db::ID(jo["status"].toInt()));
+  r.type = &at<DishTypeData>(db::ID(jo["type"].toInt()));
+  r.duration = &at<DurationData>(db::ID(jo["duration"].toInt()));
+
   r.portions = jo["d-portions"].toDouble();
   r.portionsLabel = jo["t-portions"].toString();
 
@@ -140,6 +146,11 @@ QJsonValue Recipe::toJson(const Recipe &r) {
   j["used"] = r.used;
 
   j["title"] = r.title;
+
+  j["regimen"] = r.regimen->id;
+  j["status"] = r.status->id;
+  j["type"] = r.type->id;
+  j["duration"] = r.duration->id;
 
   j["d-portions"] = r.portions;
   j["t-portions"] = r.portionsLabel;

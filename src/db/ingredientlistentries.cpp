@@ -60,7 +60,7 @@ QVariant IngredientEntry::data (int role, double r) const {
     return d;
 
   } else if (role == Qt::DecorationRole)
-    return idata->group->color;
+    return idata->group->decoration;
 
   else
     return QVariant();

@@ -3,7 +3,7 @@
 
 #include <QAbstractItemModel>
 
-#include "ingredientdata.h"
+#include "recipedata.h"
 #include "basemodel.h"
 #include "recipesmodel.h"
 

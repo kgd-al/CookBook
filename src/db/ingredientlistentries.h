@@ -5,7 +5,7 @@
 #include <QJsonValue>
 #include <QSharedPointer>
 
-#include "ingredientdata.h"
+#include "recipedata.h"
 
 namespace db {
 

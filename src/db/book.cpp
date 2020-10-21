@@ -100,19 +100,11 @@ bool Book::load (const QString &path) {
 }
 
 void Book::clear (void) {
-  recipes.clear();
+  units.clear();
   ingredients.clear();
+  recipes.clear();
   modified = false;
   path = "";
-}
-
-const QString& Book::title (Recipe::ID id) const {
-  static const QString error = "Recipe not found";
-  auto it = recipes.find(id);
-  if (it != recipes.end())
-    return it->title;
-  else
-    return error;
 }
 
 } // end of namespace db

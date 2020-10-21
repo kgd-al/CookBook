@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/neutral.svg</file>
+        <file>icons/protein.svg</file>
+        <file>icons/salt.svg</file>
+        <file>icons/sugar.svg</file>
+        <file>icons/time-long.svg</file>
+        <file>icons/time-short.svg</file>
+        <file>icons/vegan.svg</file>
+        <file>icons/vegetarian.svg</file>
+    </qresource>
+</RCC>

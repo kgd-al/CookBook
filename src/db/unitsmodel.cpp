@@ -19,6 +19,21 @@ QVariant UnitsModel::headerData(int section, Qt::Orientation orientation,
   }
 }
 
+void UnitsModel::add (const QString &text) {
+  int index = rowCount();
+  insertRows(index, 1, QModelIndex());
+  auto &item = atIndex(index);
+  item.text = text;
+  item.used = 0;
+  valueModified(item.id);
+}
+
+void UnitsModel::update(ID id, const QString &text) {
+  auto &item = at(id);
+  if (!text.isEmpty())  item.text = text;
+  valueModified(item.id);
+}
+
 QVariant UnitsModel::data (const QModelIndex &index, int role) const {
   switch (role) {
   case Qt::DisplayRole: {
@@ -64,6 +79,14 @@ bool UnitsModel::setData(const QModelIndex &index, const QVariant &value,
   return true;
 }
 
+Qt::ItemFlags UnitsModel::flags(const QModelIndex &index) const {
+  auto flg = QAbstractTableModel::flags(index);
+  if (index.isValid() && index.column() == 0)
+    flg |= Qt::ItemIsEditable;
+
+  return flg;
+}
+
 void UnitsModel::valueModified(ID id) {
   int index = indexOf(id);
   emit dataChanged(createIndex(index, 0), createIndex(index, columnCount()));
@@ -89,68 +112,4 @@ QJsonArray UnitsModel::toJson(void) const {
   return j;
 }
 
-// =============================================================================
-//UnitsSubModel::UnitsSubModel (UnitReferenceDatabase &db) : _database(db) {
-//  setSourceModel(&Book::current().units);
-//}
-
-//bool UnitsSubModel::filterAcceptsRow(int source_row, const QModelIndex&) const {
-//  QDebug q = qDebug().nospace();
-//  q << "accept(" << source_row << "/" << _database.size() << ") @" << this;
-//  if (_database.empty())  return true;
-
-//  auto b = _database.find(model().atIndex(source_row).id) != _database.end();
-//  q << ": " << b;
-//  return b;
-//}
-
-//bool UnitsSubModel::insertRows(int row, int count, const QModelIndex &parent) {
-//  QDebug q = qDebug().nospace();
-//  q << "Overwriting row = " << row << " with row = model.rowCount() = "
-//    << model().rowCount() << "\n";
-//  row = model().rowCount();
-//  q << "Inserting rows [" << row << "," << row+count-1 << "] out of "
-//    << rowCount() << " in " << this;
-
-//  auto id = model().nextIDNoIncrement();
-//  auto inserted = QSortFilterProxyModel::insertRows(model().rowCount(), count, parent);
-//  q << ": " << inserted;
-//  if (!inserted)  return inserted;
-
-//  auto rows = rowCount();
-////  if (row < rows) return false;
-
-//  q = qDebug();
-//  beginInsertRows(QModelIndex(), rows, rows);
-//    q << _database.size() << "\n";
-//    _database.insert(model().at(id));
-//    q << _database.size() << "\n";
-//  endInsertRows();
-
-//  return true;
-//}
-
-//bool UnitsSubModel::setData(const QModelIndex &index, const QVariant &value,
-//                            int role) {
-
-//  qDebug() << "setData(" << index << value << role << ")";
-//  return QSortFilterProxyModel::setData(index, value, role);
-//}
-
-//const UnitsModel& UnitsSubModel::model (void) const {
-//  return dynamic_cast<UnitsModel&>(*QSortFilterProxyModel::sourceModel());
-//}
-
-// =============================================================================
-//UnitsModelSorter::UnitsModelSorter (void) {
-//  setSourceModel(&db::Book::current().units);
-//}
-
-//bool UnitsModelSorter::lessThan(const QModelIndex &lhs,
-//                                const QModelIndex &rhs) const {
-//  int u_lhs = lhs.siblingAtColumn(1).data().toInt(),
-//      u_rhs = rhs.siblingAtColumn(1).data().toInt();
-//  if (u_lhs != u_rhs) return u_lhs < u_rhs;
-//  return lhs.
-//}
 } // end of namespace db

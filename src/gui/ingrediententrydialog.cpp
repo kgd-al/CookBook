@@ -68,12 +68,12 @@ IngredientDialog::IngredientDialog (QWidget *parent, const QString &title)
   connect(type, qOverload<int>(&QComboBox::currentIndexChanged),
           this, &IngredientDialog::typeChanged);
 
-  group->addItem("");
   for (const db::AlimentaryGroupData &d: db::AlimentaryGroupData::database) {
     QPixmap p (15,15);
-    p.fill(d.color);
+    p.fill(d.decoration);
     group->addItem(p, d.text, d.id);
   }
+  group->setCurrentIndex(NoIndex);
 
   // Sub-recipe
   QWidget *rholder = new QWidget;
@@ -125,7 +125,7 @@ void IngredientDialog::typeChanged(void) {
   auto i = type->currentIndex();
   db::IngredientData &d = book.ingredients.atIndex(i);
   bool isNew = (d.group == nullptr);
-  if (!isNew) group->setCurrentText(d.group->text);
+  if (!isNew) group->setCurrentIndex(group->findText(d.group->text));
   group->setEnabled(isNew);
 }
 
@@ -148,14 +148,17 @@ bool IngredientDialog::validate(void) {
     timeline->start();
   };
 
+  auto q = qDebug().nospace();
+
   db::EntryType t = entryType();
   switch (t) {
   case db::EntryType::Ingredient:
-//    qDebug() << "Current index: " << type->currentIndex();
-//    qDebug() << " Current text: " << type->currentText();
-//    qDebug() << " Current data: " << type->currentData(Qt::DisplayRole);
-//    qDebug() << " Current data: " << type->currentData(Qt::EditRole);
-//    qDebug() << " Current data: " << type->currentData(db::IngredientsModel::IngredientRole);
+    q << "Validating ingredient:\n"
+      << amount->text().toDouble() << "\n"
+      << "(" << unit->currentIndex() << ") " << unit->currentText() << "\n"
+      << "(" << type->currentIndex() << ") " << type->currentText() << "\n"
+      << "(" << group->currentIndex() << ") " << group->currentText() << "\n";
+
     using IM = db::IngredientsModel;
     db::Book::current().ingredients.validateTemporaryData({
       db::ID(type->currentData(IM::IngredientRole).toInt())});
@@ -174,6 +177,8 @@ bool IngredientDialog::validate(void) {
     if (decoration->text().isEmpty()) error(decoration);
     break;
   }
+
+  q << ">> ok: " << ok << "\n";
 
   if (ok) accept();
   return ok;
@@ -247,6 +252,8 @@ IngredientDialog::Ingredient_ptr IngredientDialog::ingredient (void) const {
 //      d.units.insert()
 //    }
 
+    if (unit->currentIndex() == NoIndex)
+      unit->setCurrentIndex(unit->findText(db::IngredientData::NoUnit));
     auto u_id = U_ID(unit->currentData(db::UnitsModel::IDRole).toInt());
     auto &u_data = db::Book::current().units.at(u_id);
 
@@ -258,7 +265,7 @@ IngredientDialog::Ingredient_ptr IngredientDialog::ingredient (void) const {
   case db::EntryType::SubRecipe:
     ptr = new db::SubRecipeEntry (
       &static_cast<db::RecipesModel*>(
-        recipe->model())->recipe(recipe->currentIndex()));
+        recipe->model())->at(db::ID(recipe->currentData(db::IDRole).toInt())));
     break;
 
   case db::EntryType::Decoration:

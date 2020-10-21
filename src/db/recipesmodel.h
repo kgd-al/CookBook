@@ -1,78 +1,76 @@
 #ifndef RECIPESLISTMODEL_H
 #define RECIPESLISTMODEL_H
 
-#include <QStringListModel>
-
+#include "basemodel.h"
 #include "recipe.h"
 
 namespace db {
 
-class RecipesModel : public QAbstractListModel {
+class RecipesModel : public BaseModel<Recipe> {
 public:
-  using RecipesDatabase = transparent_set<Recipe>;
-//  static constexpr int RecipeRole = Qt::UserRole + 1;
-
   RecipesModel(void);
 
   void addRecipe (Recipe &&r);
   void delRecipe (Recipe *r);
 
   // Model Qt interface
-  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const override;
   QVariant data (const QModelIndex &index, int role) const override;
 
-  // map interface
-  void clear (void);
+  void valueModified(ID id) override;
 
-  auto find (Recipe::ID key) const {
-    return recipes.find(key);
-  }
+//  // map interface
+//  void clear (void);
 
-  auto begin (void) const {
-    return recipes.cbegin();
-  }
+//  auto find (Recipe::ID key) const {
+//    return recipes.find(key);
+//  }
 
-  auto end (void) const {
-    return recipes.cend();
-  }
+//  auto begin (void) const {
+//    return recipes.cbegin();
+//  }
 
-  const Recipe& at (Recipe::ID key) const {
-    auto it = recipes.find(key);
-    if (it == recipes.end())
-      throw std::invalid_argument("No recipe for this key");
-    return *it;
-  }
+//  auto end (void) const {
+//    return recipes.cend();
+//  }
 
-  Recipe& at (Recipe::ID key) {
-    return const_cast<Recipe&>(
-      const_cast<const RecipesModel*>(this)->at(key));
-  }
+//  const Recipe& at (Recipe::ID key) const {
+//    auto it = recipes.find(key);
+//    if (it == recipes.end())
+//      throw std::invalid_argument("No recipe for this key");
+//    return *it;
+//  }
 
-  Recipe& fromIndex(const QModelIndex &i);
+//  Recipe& at (Recipe::ID key) {
+//    return const_cast<Recipe&>(
+//      const_cast<const RecipesModel*>(this)->at(key));
+//  }
 
-  const Recipe& recipe (int i) const {
-    auto it = recipes.begin();
-    std::advance(it, i);
-    return *it;
-  }
+//  Recipe& fromIndex(const QModelIndex &i);
 
-  Recipe& recipe (int i) {
-    return const_cast<Recipe&>(
-      const_cast<const RecipesModel*>(this)->recipe(i));
-  }
+//  const Recipe& recipe (int i) const {
+//    auto it = recipes.begin();
+//    std::advance(it, i);
+//    return *it;
+//  }
+
+//  Recipe& recipe (int i) {
+//    return const_cast<Recipe&>(
+//      const_cast<const RecipesModel*>(this)->recipe(i));
+//  }
 
   void fromJson (const QJsonArray &a);
   QJsonArray toJson(void);
 
 private:
-  RecipesDatabase recipes;
+//  RecipesDatabase recipes;
 
-  Recipe::ID _nextRecipeID;
-  Recipe::ID nextRecipeID (void) {
-    auto v = _nextRecipeID;
-    _nextRecipeID = ID(int(_nextRecipeID)+1);
-    return v;
-  }
+//  Recipe::ID _nextRecipeID;
+//  Recipe::ID nextRecipeID (void) {
+//    auto v = _nextRecipeID;
+//    _nextRecipeID = ID(int(_nextRecipeID)+1);
+//    return v;
+//  }
 };
 
 } // end of namespace db
