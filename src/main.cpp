@@ -71,6 +71,13 @@ int main(int argc, char *argv[]) {
     qWarning("Failed to open log file");
   qInstallMessageHandler(logger);
 
+  // Register icons
+  db::AlimentaryGroupData::loadDatabase();
+  db::RegimenData::loadDatabase();
+  db::StatusData::loadDatabase();
+  db::DishTypeData::loadDatabase();
+  db::DurationData::loadDatabase();
+
   QCoreApplication::setOrganizationName("almann");
   QCoreApplication::setApplicationName("cookbook");
 

@@ -11,7 +11,10 @@
 
 namespace db {
 
-const int ICON_SIZE = 45;
+static constexpr int icons = 4;
+static constexpr int margin = 1;
+const int ICON_SIZE = 15;
+const int RECIPE_ICONS_SIZE = icons*ICON_SIZE + (icons-1)*margin;
 
 QPixmap iconFromFile (const QString &filepath) {
   QPixmap p (filepath);
@@ -19,39 +22,13 @@ QPixmap iconFromFile (const QString &filepath) {
   return p;
 }
 
-const AlimentaryGroupData::Database AlimentaryGroupData::database {
-  { ID(0), "Protéines", QColor::fromRgb(255,   0,   0) },
-  { ID(1),   "Verdure", QColor::fromRgb(  0, 255,   0) },
-  { ID(2),  "Céréales", QColor::fromRgb(255, 165,   0) },
-  { ID(3),    "Sucres", QColor::fromRgb(255, 105, 180) },
-  { ID(4),    "Épices", QColor::fromRgb(  0, 128,   0) },
-  { ID(5),  "Liquides", QColor::fromRgb(  0,   0, 190) },
-  { ID(6),   "Graines", QColor::fromRgb(160,  82,  42) },
-  { ID(7),  "Laitiers", QColor::fromRgb(255, 248, 220) },
-  { ID(8),   "Lipides", QColor::fromRgb(255, 215,   0) },
-  { ID(9),  "Alcools", QColor::fromRgb( 64, 224, 208) },
-};
-QPixmap AlimentaryGroupData::iconFromDecoration (const QColor &d) {
+QPixmap rectangularIconFromColor (const QColor &d) {
   QPixmap p (ICON_SIZE, ICON_SIZE);
   p.fill(d);
   return p;
 }
 
-const RegimenData::Database RegimenData::database {
-  { ID(0), "Protéiné",   ":/icons/protein.svg"    },
-  { ID(1), "Végétarien", ":/icons/vegetarian.svg" },
-  { ID(2), "Vegan",      ":/icons/vegan.svg"      },
-};
-QPixmap RegimenData::iconFromDecoration (const QString &d) {
-  return iconFromFile(d);
-}
-
-const StatusData::Database StatusData::database {
-  { ID(0), "", QColor(Qt::red)   },
-  { ID(1), "", QColor("#ffb000") },
-  { ID(2), "", QColor(Qt::green) },
-};
-QPixmap StatusData::iconFromDecoration (const QColor &d) {
+QPixmap circularIconFromColor (const QColor &d) {
   QPixmap p (ICON_SIZE, ICON_SIZE);
   p.fill(Qt::transparent);
   QPainter painter (&p);
@@ -62,24 +39,65 @@ QPixmap StatusData::iconFromDecoration (const QColor &d) {
   return p;
 }
 
-const DishTypeData::Database DishTypeData::database {
-  { ID(0), "Neutre", ":/icons/neutral.svg"  },
-  { ID(1), "Salé",   ":/icons/salt.svg"     },
-  { ID(2), "Sucré",  ":/icons/sugar.svg"    },
-};
-QPixmap DishTypeData::iconFromDecoration (const QString &d) {
-  return iconFromFile(d);
+#define ENTRY(I, N, R, G, B) \
+  { ID(I), N, rectangularIconFromColor(QColor::fromRgb(R,G,B)) }
+AlimentaryGroupData::Database AlimentaryGroupData::_database;
+void AlimentaryGroupData::loadDatabase(void) {
+  _database = {
+    ENTRY(0, "Protéines", 255,   0,   0),
+    ENTRY(1,   "Verdure",   0, 255,   0),
+    ENTRY(2,  "Céréales", 255, 165,   0),
+    ENTRY(3,    "Sucres", 255, 105, 180),
+    ENTRY(4,    "Épices",   0, 128,   0),
+    ENTRY(5,  "Liquides", 255,   0, 190),
+    ENTRY(6,   "Graines", 160,  82,  42),
+    ENTRY(7,  "Laitiers", 255, 248, 220),
+    ENTRY(8,   "Lipides", 255, 215,   0),
+    ENTRY(9,   "Alcools",  64, 224, 208)
+  };
+}
+#undef ENTRY
+
+#define ENTRY(I, C) { ID(I), "", circularIconFromColor(C) }
+StatusData::Database StatusData::_database;
+void StatusData::loadDatabase (void) {
+  _database = {
+    ENTRY(0, QColor(Qt::red)   ),
+    ENTRY(1, QColor("#ffb000") ),
+    ENTRY(2, QColor(Qt::green) )
+  };
+}
+#undef ENTRY
+
+#define ENTRY(I, N, F) { ID(I), N, iconFromFile(F) }
+RegimenData::Database RegimenData::_database;
+void RegimenData::loadDatabase (void) {
+  _database = {
+    ENTRY(0, "Protéiné",   ":/icons/protein.svg"    ),
+    ENTRY(1, "Végétarien", ":/icons/vegetarian.svg" ),
+    ENTRY(2, "Vegan",      ":/icons/vegan.svg"      )
+  };
 }
 
-const DurationData::Database DurationData::database {
-  { ID(0), "Rapide",    ":/icons/time-short.svg"  },
-  { ID(1), "Journée",   ":/icons/time-short.svg"  },
-  { ID(2), "Lendemain", ":/icons/time-long.svg"   },
-  { ID(3), "Très long", ":/icons/time-long.svg"   },
-};
-QPixmap DurationData::iconFromDecoration (const QString &d) {
-  return iconFromFile(d);
+DishTypeData::Database DishTypeData::_database;
+void DishTypeData::loadDatabase (void) {
+  _database = {
+    ENTRY(0, "Neutre", ":/icons/neutral.svg"  ),
+    ENTRY(1, "Salé",   ":/icons/salt.svg"     ),
+    ENTRY(2, "Sucré",  ":/icons/sugar.svg"    ),
+  };
 }
+
+DurationData::Database DurationData::_database;
+void DurationData::loadDatabase (void) {
+  _database = {
+    ENTRY(0, "Rapide",    ":/icons/time-short.svg"  ),
+    ENTRY(1, "Journée",   ":/icons/time-short.svg"  ),
+    ENTRY(2, "Lendemain", ":/icons/time-long.svg"   ),
+    ENTRY(3, "Très long", ":/icons/time-long.svg"   ),
+  };
+}
+#undef ENTRY
 
 const QString IngredientData::NoUnit = "Ø";
 
@@ -116,7 +134,7 @@ IngredientData IngredientData::fromJson (QJsonArray j) {
   IngredientData d;
   d.id = ID(j.takeAt(0).toInt());
   d.text = j.takeAt(0).toString();
-  d.group = &(*AlimentaryGroupData::database.find(ID(j.takeAt(0).toInt())));
+  d.group = &at<AlimentaryGroupData>(ID(j.takeAt(0).toInt()));
   d.used = j.takeAt(0).toInt();
   return d;
 }

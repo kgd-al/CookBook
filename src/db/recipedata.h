@@ -12,8 +12,10 @@ namespace db {
 
 enum ID : int { INVALID = -1 };
 static constexpr int IDRole = Qt::UserRole+42;
+static constexpr int PtrRole = IDRole+42;
 
 extern const int ICON_SIZE;
+extern const int RECIPE_ICONS_SIZE;
 
 template <typename T>
 struct TransparentID_CMP {
@@ -51,7 +53,7 @@ const T& at (const transparent_set<T> &set, ID id) {
 }
 
 template <typename T>
-const auto& at (ID id) {  return at(T::database, id);  }
+const auto& at (ID id) {  return at(T::database(), id);  }
 
 namespace _details { // (private)
 
@@ -80,7 +82,7 @@ private:
   template <typename T>
   std::enable_if_t<_details::HasDecoration<T>::value, QStandardItem*>
   buildItem (const T &v) {
-    return new QStandardItem(T::iconFromDecoration(v.decoration), v.text);
+    return new QStandardItem(v.decoration, v.text);
   }
 
   template <typename T>
@@ -92,7 +94,7 @@ private:
 
 template <typename T>
 BasicModel* getStaticModel (void) {
-  static BasicModel m (T::database);
+  static BasicModel m (T::database());
   return &m;
 }
 
@@ -113,58 +115,76 @@ struct AlimentaryGroupData {
   using ID = db::ID;
   ID id = ID::INVALID;
   QString text = "N/A";
-  QColor decoration;
-
-  static QPixmap iconFromDecoration (const QColor &d);
+  QPixmap decoration;
 
   using Database = transparent_set<AlimentaryGroupData>;
-  static const Database database;
+  static const Database& database (void) {
+    return _database;
+  }
+  static void loadDatabase (void);
+private:
+  static Database _database;
 };
 using AlimentaryGroupsDatabase = AlimentaryGroupData::Database;
 
 struct RegimenData {
   using ID = db::ID;
   ID id = ID::INVALID;
-  QString text = "N/A", decoration;
-
-  static QPixmap iconFromDecoration (const QString &d);
+  QString text = "N/A";
+  QPixmap decoration;
 
   using Database = transparent_set<RegimenData>;
-  static const Database database;
+  static const Database& database (void) {
+    return _database;
+  }
+  static void loadDatabase (void);
+private:
+  static Database _database;
 };
 
 struct StatusData {
   using ID = db::ID;
   ID id = ID::INVALID;
   QString text = "N/A";
-  QColor decoration;
-
-  static QPixmap iconFromDecoration (const QColor &d);
+  QPixmap decoration;
 
   using Database = transparent_set<StatusData>;
-  static const Database database;
+  static const Database& database (void) {
+    return _database;
+  }
+  static void loadDatabase (void);
+private:
+  static Database _database;
 };
 
 struct DishTypeData {
   using ID = db::ID;
   ID id = ID::INVALID;
-  QString text = "N/A", decoration;
-
-  static QPixmap iconFromDecoration (const QString &d);
+  QString text = "N/A";
+  QPixmap decoration;
 
   using Database = transparent_set<DishTypeData>;
-  static const Database database;
+  static const Database& database (void) {
+    return _database;
+  }
+  static void loadDatabase (void);
+private:
+  static Database _database;
 };
 
 struct DurationData {
   using ID = db::ID;
   ID id = ID::INVALID;
-  QString text = "N/A", decoration;
-
-  static QPixmap iconFromDecoration (const QString &d);
+  QString text = "N/A";
+  QPixmap decoration;
 
   using Database = transparent_set<DurationData>;
-  static const Database database;
+  static const Database& database (void) {
+    return _database;
+  }
+  static void loadDatabase (void);
+private:
+  static Database _database;
 };
 
 struct IngredientData {

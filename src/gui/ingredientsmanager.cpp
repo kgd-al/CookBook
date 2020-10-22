@@ -34,12 +34,6 @@ IngredientsManager::IngredientsManager(QWidget *parent)
       linput->addWidget(ledit);
 
       QComboBox *lbox = new QComboBox;
-      /// TODO Remove
-//      for (const db::AlimentaryGroupData &d: db::AlimentaryGroupData::database){
-//        QPixmap p (15,15);
-//        p.fill(d.decoration);
-//        lbox->addItem(p, d.text, d.id);
-//      }
       lbox->setModel(db::getStaticModel<db::AlimentaryGroupData>());
       linput->addWidget(lbox);
 

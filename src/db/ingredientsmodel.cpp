@@ -28,7 +28,7 @@ void IngredientsModel::add (const QString &text, G_ID gid) {
   auto &item = atIndex(index);
   item.text = text;
   item.used = 0;
-  item.group = &(*AlimentaryGroupData::database.find(gid));
+  item.group = &db::at<AlimentaryGroupData>(gid);
   valueModified(item.id);
 }
 
@@ -36,7 +36,7 @@ void IngredientsModel::update(ID id, const QString &text, G_ID gid) {
   auto &item = at(id);
   if (!text.isEmpty())  item.text = text;
   if (gid != ID::INVALID && gid != item.group->id)
-    item.group = &(*AlimentaryGroupData::database.find(gid));
+    item.group = &db::at<AlimentaryGroupData>(gid);
   valueModified(item.id);
 }
 
@@ -121,12 +121,12 @@ int IngredientsModel::validateTemporaryData(const IDList &ids) {
   return removed;
 }
 
-bool IngredientsModel::removeRows(int row, int count, const QModelIndex&) {
-  qDebug().nospace() << "Removing rows [" << row << "," << row+count-1 << "]. "
-                     << "Not implemented -> aborting";
-  Q_ASSERT(false);
-  return false;
-}
+//bool IngredientsModel::removeRows(int row, int count, const QModelIndex&) {
+//  qDebug().nospace() << "Removing rows [" << row << "," << row+count-1 << "]. "
+//                     << "Not implemented -> aborting";
+//  Q_ASSERT(false);
+//  return false;
+//}
 
 void IngredientsModel::valueModified(ID id) {
   int index = indexOf(id);

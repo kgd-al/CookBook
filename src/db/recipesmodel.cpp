@@ -25,25 +25,28 @@ int RecipesModel::columnCount(const QModelIndex&) const {
   return 1;
 }
 
-QIcon aggregatedIcons (const Recipe &r) {
+QPixmap aggregatedIcons (const Recipe &r) {
   QVector<QPixmap> icons {
-    RegimenData::iconFromDecoration(r.regimen->decoration),
-    StatusData::iconFromDecoration(r.status->decoration),
-    DishTypeData::iconFromDecoration(r.type->decoration),
-    DurationData::iconFromDecoration(r.duration->decoration)
+    r.regimen->decoration,
+//    r.status->decoration,
+//    r.type->decoration,
+//    r.duration->decoration
   };
 
   static constexpr int margin = 1;
 
   QPixmap p (icons.size()*ICON_SIZE+(icons.size()-1) * margin, ICON_SIZE);
-  p.fill(Qt::blue);
+  p.fill(Qt::transparent);
   QPainter painter (&p);
+  painter.setRenderHint(QPainter::Antialiasing, true);
+  painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+  auto q = qDebug().nospace();
   for (int i=0, x=0; i<icons.size(); i++, x += ICON_SIZE+margin) {
-    qDebug() << "Drawing pixmap" << i << "at" << x;
-    painter.drawPixmap(QRect(x, 0, x+ICON_SIZE, ICON_SIZE),
-                       icons[i]);
+    QRect r (x, 0, ICON_SIZE, ICON_SIZE);
+    q << "Drawing pixmap " << i << " in " << r << "\n";
+    painter.drawPixmap(r, icons[i]);
   }
-  qDebug() << p;
+  q << p;
   return p;
 }
 
@@ -54,10 +57,12 @@ QVariant RecipesModel::data (const QModelIndex &index, int role) const {
   case Qt::EditRole:
     v = atIndex(index.row()).title;
     break;
-  case Qt::DecorationRole:
-    return aggregatedIcons(atIndex(index.row()));
   case IDRole:
-    return atIndex(index.row()).id;
+    v = atIndex(index.row()).id;
+    break;
+  case PtrRole:
+    v = QVariant::fromValue(&atIndex(index.row()));
+    break;
   }
   return v;
 }

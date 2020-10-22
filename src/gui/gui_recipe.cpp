@@ -255,8 +255,7 @@ int Recipe::show (db::Recipe *recipe, bool readOnly, double ratio) {
 
 template <typename T>
 const T* getData (const QComboBox *cb) {
-  return &db::at(T::database,
-                 db::ID(cb->currentData(db::IDRole).toInt()));
+  return &db::at<T>(db::ID(cb->currentData(db::IDRole).toInt()));
 }
 
 void Recipe::writeThrough(void) {

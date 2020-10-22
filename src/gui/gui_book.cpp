@@ -4,6 +4,9 @@
 #include <QMessageBox>
 #include <QDesktopServices>
 
+#include <QStyledItemDelegate>
+#include <QPainter>
+
 #include <QMenuBar>
 #include <QMenu>
 
@@ -31,6 +34,43 @@ struct RecipeListItem : public QListWidgetItem {
   }
 };
 
+struct RecipeListDelegate : public QStyledItemDelegate {
+  RecipeListDelegate (QObject *parent) : QStyledItemDelegate (parent) {}
+
+//  QSize sizeHint (const QStyleOptionViewItem &option,
+//                  const QModelIndex &index) const override {
+//    return QSize(db::RECIPE_ICONS_SIZE+)
+//  }
+  void paint (QPainter *painter, const QStyleOptionViewItem &option,
+              const QModelIndex &index) const {
+    static constexpr int S = 3, M = 5;
+    int h = option.rect.height() - 2*S;
+    auto *r = index.data(db::PtrRole).value<const db::Recipe*>();
+
+    if (option.state & QStyle::State_Selected)
+      painter->fillRect(option.rect, option.palette.highlight());
+
+    painter->save();
+      painter->setRenderHint(QPainter::Antialiasing, true);
+//      painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+      painter->translate(option.rect.x(), option.rect.y());
+
+      int x = 0;
+      for (const QPixmap &p: { r->regimen->decoration, r->status->decoration,
+                               r->type->decoration, r->duration->decoration }) {
+        int w = h;
+        painter->drawPixmap(x, S, w, h, p);
+        x += w + M;
+      }
+    painter->restore();
+
+    QStyleOptionViewItem itemOption(option);
+    initStyleOption(&itemOption, index);
+    itemOption.rect.adjust(x, 0, 0, 0);
+    QApplication::style()->drawControl(QStyle::CE_ItemViewItem, &itemOption, painter, nullptr);
+  }
+};
+
 Book::Book(QWidget *parent) : QMainWindow(parent) {
   _recipes = new QListView;
   _recipes->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -39,6 +79,7 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 //                          | QAbstractItemView::EditKeyPressed);
 //  _recipes->set
   setCentralWidget(_recipes);
+  _recipes->setItemDelegate(new RecipeListDelegate (this));
 
   connect(_recipes, &QListView::activated,
           this, &Book::showRecipe);

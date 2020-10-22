@@ -51,5 +51,6 @@ private:
 } // end of namespace db
 
 Q_DECLARE_METATYPE(db::Recipe*)
+Q_DECLARE_METATYPE(const db::Recipe*)
 
 #endif // DB_RECIPE_H

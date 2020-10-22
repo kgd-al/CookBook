@@ -68,11 +68,7 @@ IngredientDialog::IngredientDialog (QWidget *parent, const QString &title)
   connect(type, qOverload<int>(&QComboBox::currentIndexChanged),
           this, &IngredientDialog::typeChanged);
 
-  for (const db::AlimentaryGroupData &d: db::AlimentaryGroupData::database) {
-    QPixmap p (15,15);
-    p.fill(d.decoration);
-    group->addItem(p, d.text, d.id);
-  }
+  group->setModel(db::getStaticModel<db::AlimentaryGroupData>());
   group->setCurrentIndex(NoIndex);
 
   // Sub-recipe
@@ -230,27 +226,7 @@ IngredientDialog::Ingredient_ptr IngredientDialog::ingredient (void) const {
       db::Book::current().ingredients.atIndex(I_ID(type->currentIndex()));
 
     if (!d.group)
-      d.group = &(*AGD::database.find(G_ID(group->currentData().toInt())));
-
-//    int u_index = d.units.indexOf(unit->currentText());
-//    if (u_index == NoIndex) {
-//      u_index = d.units.rowCount();
-//      QString unitStr = unit->currentText();
-//      if (unitStr.isEmpty())  unitStr = db::IngredientData::NoUnit;
-//      d.units.append(unitStr);
-//    }
-//    QString *unit_ptr = &d.units[u_index];
-
-//    ptr = new db::IngredientEntry (amount->text().toDouble(), unit_ptr, &d);
-
-//    auto &u_data = db::Book::current().units.at(u_id);
-//    // First search in local unit database
-//    auto u_id = U_ID(unit->currentData(db::UnitsModel::IDRole).toInt());
-//    auto u_local_it = d.units.find(u_id);
-//    if (u_local_it == d.units.end()) {  // Add to local database
-//      auto u_global_it = db::Book::current().units.at(u_id);
-//      d.units.insert()
-//    }
+      d.group = &db::at<AGD>(G_ID(group->currentData().toInt()));
 
     if (unit->currentIndex() == NoIndex)
       unit->setCurrentIndex(unit->findText(db::IngredientData::NoUnit));
