@@ -18,6 +18,11 @@ Recipe Recipe::defaultRecipe (void) {
         "d-portions": 2,
         "t-portions": "personnes",
 
+        "regimen": 1,
+        "status": 1,
+        "type": 1,
+        "duration": 1,
+
         "ing": [],
         "steps": [],
         "notes": ""

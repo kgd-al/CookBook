@@ -37,16 +37,18 @@ void UnitsModel::update(ID id, const QString &text) {
 QVariant UnitsModel::data (const QModelIndex &index, int role) const {
   switch (role) {
   case Qt::DisplayRole: {
-    const UnitData &u = atIndex(index.row());
+    const UnitData &u = atIndex(index);
     if (index.column() == 0)
       return u.text;
     else
       return u.used;
   }
   case IDRole:
-    return atIndex(index.row()).id;
+    return atIndex(index).id;
+  case PtrRole:
+    return QVariant::fromValue(&atIndex(index));
   case Qt::EditRole:
-    return atIndex(index.row()).text;
+    return atIndex(index).text;
   }
   return QVariant();
 }

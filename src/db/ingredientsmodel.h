@@ -11,8 +11,7 @@ namespace db {
 
 class IngredientsModel : public BaseModel<IngredientData> {
 public:
-  static constexpr auto IngredientRole = Qt::UserRole + 1;
-//  using IID = IngredientData::ID;
+
   using IDList = std::set<ID>;
   using G_ID = AlimentaryGroupData::ID;
 

@@ -155,9 +155,8 @@ bool IngredientDialog::validate(void) {
       << "(" << type->currentIndex() << ") " << type->currentText() << "\n"
       << "(" << group->currentIndex() << ") " << group->currentText() << "\n";
 
-    using IM = db::IngredientsModel;
     db::Book::current().ingredients.validateTemporaryData({
-      db::ID(type->currentData(IM::IngredientRole).toInt())});
+      db::ID(type->currentData(db::IDRole).toInt())});
 
     if (amount->text().toDouble() <= 0) error(amount);
     // unit can be empty
@@ -214,24 +213,27 @@ IngredientDialog::Ingredient_ptr IngredientDialog::ingredient (void) const {
   Ingredient_ptr::pointer ptr = nullptr;
   switch (t) {
   case db::EntryType::Ingredient: {
-    using I_ID = db::IngredientData::ID;
-    using AGD = db::AlimentaryGroupData;
-    using G_ID = AGD::ID;
-    using U_ID = db::UnitData::ID;
-
     qDebug() << "Processing ingredient:\n"
              << type->currentIndex();
 
-    db::IngredientData &d =
-      db::Book::current().ingredients.atIndex(I_ID(type->currentIndex()));
+    db::Book &book = db::Book::current();
+    static const auto id = [] (QComboBox *cb) {
+      return db::ID(cb->currentData(db::IDRole).toInt());
+    };
+
+    db::IngredientData &d = book.ingredients.at(id(type));
 
     if (!d.group)
-      d.group = &db::at<AGD>(G_ID(group->currentData().toInt()));
+      d.group = &db::at<db::AlimentaryGroupData>(id(group));
 
     if (unit->currentIndex() == NoIndex)
       unit->setCurrentIndex(unit->findText(db::IngredientData::NoUnit));
-    auto u_id = U_ID(unit->currentData(db::UnitsModel::IDRole).toInt());
-    auto &u_data = db::Book::current().units.at(u_id);
+    auto &u_data = book.units.at(id(unit));
+
+    auto q = qDebug().nospace();
+    q << " type: " << type->currentData(db::IDRole) << "\n"
+      << "group: " << group->currentData(db::IDRole) << "\n"
+      << " unit: " << unit->currentData(db::IDRole) << "\n";
 
     ptr = new db::IngredientEntry (amount->text().toDouble(), &u_data, &d);
 

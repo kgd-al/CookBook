@@ -1,6 +1,8 @@
 #ifndef BASEMODEL_H
 #define BASEMODEL_H
 
+#include <sstream>
+
 #include <QAbstractTableModel>
 
 template <typename T>
@@ -13,7 +15,20 @@ struct BaseModel : public QAbstractTableModel {
   }
 
   const T& at (ID id) const {
-    return *_data.find(id);
+    if (id <= 0) {
+      std::ostringstream oss;
+      oss << "ID " << id << " <= 0 is not a valid key";
+      throw std::invalid_argument(oss.str());
+    }
+
+    auto it = _data.find(id);
+    if (it == _data.end()) {
+      std::ostringstream oss;
+      oss << "Key '" << id << "' not found in the database";
+      throw std::invalid_argument(oss.str());
+    }
+
+    return *it;
   }
 
   T& at (ID id) {
@@ -30,6 +45,10 @@ struct BaseModel : public QAbstractTableModel {
   T& atIndex (int i) {
     return const_cast<T&>(
       const_cast<const BaseModel*>(this)->atIndex(i));
+  }
+
+  const T& atIndex (const QModelIndex &index) const {
+    return atIndex(index.row());
   }
 
   int indexOf (ID id) const {

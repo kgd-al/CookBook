@@ -44,16 +44,16 @@ QPixmap circularIconFromColor (const QColor &d) {
 AlimentaryGroupData::Database AlimentaryGroupData::_database;
 void AlimentaryGroupData::loadDatabase(void) {
   _database = {
-    ENTRY(0, "Protéines", 255,   0,   0),
-    ENTRY(1,   "Verdure",   0, 255,   0),
-    ENTRY(2,  "Céréales", 255, 165,   0),
-    ENTRY(3,    "Sucres", 255, 105, 180),
-    ENTRY(4,    "Épices",   0, 128,   0),
-    ENTRY(5,  "Liquides", 255,   0, 190),
-    ENTRY(6,   "Graines", 160,  82,  42),
-    ENTRY(7,  "Laitiers", 255, 248, 220),
-    ENTRY(8,   "Lipides", 255, 215,   0),
-    ENTRY(9,   "Alcools",  64, 224, 208)
+    ENTRY( 1, "Protéines", 255,   0,   0),
+    ENTRY( 2,   "Verdure",   0, 255,   0),
+    ENTRY( 3,  "Céréales", 255, 165,   0),
+    ENTRY( 4,    "Sucres", 255, 105, 180),
+    ENTRY( 5,    "Épices",   0, 128,   0),
+    ENTRY( 6,  "Liquides", 255,   0, 190),
+    ENTRY( 7,   "Graines", 160,  82,  42),
+    ENTRY( 8,  "Laitiers", 255, 248, 220),
+    ENTRY( 9,   "Lipides", 255, 215,   0),
+    ENTRY(10,   "Alcools",  64, 224, 208)
   };
 }
 #undef ENTRY
@@ -62,9 +62,9 @@ void AlimentaryGroupData::loadDatabase(void) {
 StatusData::Database StatusData::_database;
 void StatusData::loadDatabase (void) {
   _database = {
-    ENTRY(0, QColor(Qt::red)   ),
-    ENTRY(1, QColor("#ffb000") ),
-    ENTRY(2, QColor(Qt::green) )
+    ENTRY(1, QColor(Qt::red)   ),
+    ENTRY(2, QColor("#ffb000") ),
+    ENTRY(3, QColor(Qt::green) )
   };
 }
 #undef ENTRY
@@ -73,28 +73,28 @@ void StatusData::loadDatabase (void) {
 RegimenData::Database RegimenData::_database;
 void RegimenData::loadDatabase (void) {
   _database = {
-    ENTRY(0, "Protéiné",   ":/icons/protein.svg"    ),
-    ENTRY(1, "Végétarien", ":/icons/vegetarian.svg" ),
-    ENTRY(2, "Vegan",      ":/icons/vegan.svg"      )
+    ENTRY(1, "Protéiné",   ":/icons/protein.svg"    ),
+    ENTRY(2, "Végétarien", ":/icons/vegetarian.svg" ),
+    ENTRY(3, "Vegan",      ":/icons/vegan.svg"      )
   };
 }
 
 DishTypeData::Database DishTypeData::_database;
 void DishTypeData::loadDatabase (void) {
   _database = {
-    ENTRY(0, "Neutre", ":/icons/neutral.svg"  ),
-    ENTRY(1, "Salé",   ":/icons/salt.svg"     ),
-    ENTRY(2, "Sucré",  ":/icons/sugar.svg"    ),
+    ENTRY(1, "Neutre", ":/icons/neutral.svg"  ),
+    ENTRY(2, "Salé",   ":/icons/salt.svg"     ),
+    ENTRY(3, "Sucré",  ":/icons/sugar.svg"    ),
   };
 }
 
 DurationData::Database DurationData::_database;
 void DurationData::loadDatabase (void) {
   _database = {
-    ENTRY(0, "Rapide",    ":/icons/time-short.svg"  ),
-    ENTRY(1, "Journée",   ":/icons/time-short.svg"  ),
-    ENTRY(2, "Lendemain", ":/icons/time-long.svg"   ),
-    ENTRY(3, "Très long", ":/icons/time-long.svg"   ),
+    ENTRY(1, "Rapide",    ":/icons/time-short.svg"  ),
+    ENTRY(2, "Journée",   ":/icons/time-short.svg"  ),
+    ENTRY(3, "Lendemain", ":/icons/time-long.svg"   ),
+    ENTRY(4, "Très long", ":/icons/time-long.svg"   ),
   };
 }
 #undef ENTRY

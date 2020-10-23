@@ -101,21 +101,26 @@ IngredientsManager::IngredientsManager(QWidget *parent)
   connect(lcontrols->addButton(), &QToolButton::clicked,
           [ledit, lbox] {
     if (ledit->text().isEmpty())  return;
-    db::Book::current().ingredients.add(ledit->text(),
-                                        db::ID(lbox->currentData().toInt()));
+    db::Book::current()
+      .ingredients
+      .add(ledit->text(), db::ID(lbox->currentData(db::IDRole).toInt()));
   });
 
   connect(lcontrols->editButton(), &QToolButton::clicked,
           [ltable, ledit, lbox] {
-    using IM = db::IngredientsModel;
     db::Book::current().ingredients.update(
-      db::ID(ltable->currentIndex().data(IM::IngredientRole).toInt()),
-      ledit->text(), db::ID(lbox->currentData().toInt()));
+      db::ID(ltable->currentIndex().data(db::IDRole).toInt()),
+      ledit->text(), db::ID(lbox->currentData(db::IDRole).toInt()));
   });
 
   connect(ltable->selectionModel(), &QItemSelectionModel::currentRowChanged,
-          [lcontrols] (const QModelIndex &current, const QModelIndex&) {
-    bool unused = (current.sibling(current.row(), 1).data() == 0);
+          [lcontrols,ledit,lbox]
+          (const QModelIndex &current, const QModelIndex&) {
+    using namespace db;
+    auto i = current.data(PtrRole).value<const IngredientData*>();
+    bool unused = (i->used == 0);
+    ledit->setText(i->text);
+    lbox->setCurrentText(i->group->text);
     lcontrols->delButton()->setEnabled(unused);
   });
 
@@ -127,14 +132,16 @@ IngredientsManager::IngredientsManager(QWidget *parent)
 
   connect(rcontrols->editButton(), &QToolButton::clicked,
           [rtable, redit] {
-    using UM = db::UnitsModel;
     db::Book::current().units.update(
-      db::ID(rtable->currentIndex().data(UM::IDRole).toInt()), redit->text());
+      db::ID(rtable->currentIndex().data(db::IDRole).toInt()), redit->text());
   });
 
   connect(rtable->selectionModel(), &QItemSelectionModel::currentRowChanged,
-          [rcontrols] (const QModelIndex &current, const QModelIndex&) {
-    bool unused = (current.sibling(current.row(), 1).data() == 0);
+          [rcontrols, redit] (const QModelIndex &current, const QModelIndex&) {
+    using namespace db;
+    auto u = current.data(PtrRole).value<const UnitData*>();
+    bool unused = (u->used == 0);
+    redit->setText(u->text);
     rcontrols->delButton()->setEnabled(unused);
   });
 }

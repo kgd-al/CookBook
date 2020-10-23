@@ -41,27 +41,36 @@ void IngredientsModel::update(ID id, const QString &text, G_ID gid) {
 }
 
 QVariant IngredientsModel::data (const QModelIndex &index, int role) const {
-  if (role == Qt::DisplayRole) {
+  switch (role) {
+  case Qt::DisplayRole: {
     auto &item = atIndex(index.row());
     switch (index.column()) {
     case 0:   return item.text;
     case 1:   return item.used;
     default:  return "N/A";
     }
+  }
 
-  } else if (role == Qt::EditRole && index.column() == 0)
-    return atIndex(index.row()).text;
+  case Qt::EditRole:
+    return (index.column() == 0) ? atIndex(index.row()).text : QVariant();
 
-  else if (role == Qt::DecorationRole && index.column() == 0) {
-    auto item = atIndex(index.row());
-    if (!item.group)  return QVariant();
-    return item.group->decoration;
+  case Qt::DecorationRole:
+    if (index.column() == 0) {
+      auto item = atIndex(index.row());
+      if (!item.group)  return QVariant();
+      return item.group->decoration;
+    } else
+      return QVariant();
 
-  } else if (role == IngredientRole)
+  case IDRole:
     return atIndex(index.row()).id;
 
-  else
+  case PtrRole:
+    return QVariant::fromValue(&atIndex(index.row()));
+
+  default:
     return QVariant();
+  }
 }
 
 bool IngredientsModel::setData(const QModelIndex &index, const QVariant &value,

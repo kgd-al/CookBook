@@ -66,9 +66,9 @@ public:
       }
 
       index = count();
-      qDebug() << "\n@@@@\nInserting " << lineEdit()->text() << "in"
+      qDebug() << "\n@@@@\nInserting " << text << "in"
                << model();
-      insertItem(index, lineEdit()->text());
+      insertItem(index, text);
       setCurrentIndex(index);
 
       QDebug q = qDebug().nospace();

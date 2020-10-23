@@ -43,6 +43,8 @@ using transparent_set = std::set<T, TransparentID_CMP<T>>;
 
 template <typename T>
 const T& at (const transparent_set<T> &set, ID id) {
+  if (id <= 0)
+    throw std::invalid_argument("ID <= 0 is not a valid key!");
   auto it = set.find(id);
   if (it == set.end()) {
     std::ostringstream oss;
@@ -203,5 +205,8 @@ struct IngredientData {
 using IngredientsDatabase = IngredientData::Database;
 
 } // end of namespace db
+
+Q_DECLARE_METATYPE(const db::UnitData*)
+Q_DECLARE_METATYPE(const db::IngredientData*)
 
 #endif // INGREDIENTDATA_H

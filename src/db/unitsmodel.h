@@ -11,8 +11,6 @@ namespace db {
 class UnitsModel : public BaseModel<UnitData> {
   Q_OBJECT
 public:
-  static constexpr auto IDRole = Qt::UserRole + 1;
-
   UnitsModel (void) {}
 
   void add (const QString &text);

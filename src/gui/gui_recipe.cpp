@@ -234,10 +234,10 @@ int Recipe::show (db::Recipe *recipe, bool readOnly, double ratio) {
     _references->setText("");
   _references->setVisible(_data->used > 0);
 
-  _regimen->setCurrentIndex(_data->regimen->id);
-  _status->setCurrentIndex(_data->status->id);
-  _type->setCurrentIndex(_data->type->id);
-  _duration->setCurrentIndex(_data->duration->id);
+  _regimen->setCurrentIndex(_data->regimen->id-1);
+  _status->setCurrentIndex(_data->status->id-1);
+  _type->setCurrentIndex(_data->type->id-1);
+  _duration->setCurrentIndex(_data->duration->id-1);
 
   for (const db::Recipe::Ingredient_ptr &i: recipe->ingredients) addIngredient(i);
   for (const QString &s: recipe->steps)  addStep(s);
