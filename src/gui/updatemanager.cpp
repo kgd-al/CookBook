@@ -14,13 +14,13 @@
 #include "updatemanager.h"
 #include "common.h"
 
+#include "../db/recipedata.h"
+
 namespace gui {
 
-UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
-  struct {
-    QPushButton *pull, *compile, *deploy;
-  } qpb;
+static const QString windowName = "Gestionnaire d'update";
 
+UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
   QVBoxLayout *layout = new QVBoxLayout;
     QHBoxLayout *srclayout = new QHBoxLayout;
       srclayout->addWidget(new QLabel ("Dossier source: "));
@@ -33,19 +33,27 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
       QGridLayout *llayout = new QGridLayout;
         int r = 0, c = 0;
 
-        llayout->addWidget(qpb.pull = new QPushButton("Pull"), r, c++);
+        llayout->addWidget(_buttons.pull = new QPushButton("Pull"), r, c++);
+        _buttons.pull->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         llayout->addWidget(_labels.pull = new QLabel, r, c++);
+        _labels.pull->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         r++; c = 0;
 
-        llayout->addWidget(qpb.compile = new QPushButton("Compiler"), r, c++);
+        llayout->addWidget(_buttons.compile = new QPushButton("Compiler"), r, c++);
         llayout->addWidget(_labels.compile = new QLabel, r, c++);
+        _labels.compile->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         r++; c = 0;
 
-        llayout->addWidget(qpb.deploy = new QPushButton("Relancer"), r, c++);
+        llayout->addWidget(_buttons.deploy = new QPushButton("Relancer"), r, c++);
         llayout->addWidget(_labels.deploy = new QLabel, r, c++);
+        _labels.deploy->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         r++; c = 0;
+
+        for (QLabel *l: {_labels.pull, _labels.compile, _labels.deploy})
+          l->setFixedSize(db::ICON_SIZE, db::ICON_SIZE);
 
       lholder->setLayout(llayout);
+      lholder->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     _splitter->addWidget(lholder);
 
     _splitter->addWidget(_output = new QTextEdit);
@@ -61,9 +69,12 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
 
   setLayout(layout);
 
-  connect(qpb.pull, &QPushButton::clicked, this, &UpdateManager::doPull);
-  connect(qpb.compile, &QPushButton::clicked, this, &UpdateManager::doCompile);
-  connect(qpb.deploy, &QPushButton::clicked, this, &UpdateManager::doDeploy);
+  connect(_buttons.pull, &QPushButton::clicked,
+          this, &UpdateManager::doPull);
+  connect(_buttons.compile, &QPushButton::clicked,
+          this, &UpdateManager::doCompile);
+  connect(_buttons.deploy, &QPushButton::clicked,
+          this, &UpdateManager::doDeploy);
 
   auto &settings = localSettings(this);
   QString path = settings.value("src").toString();
@@ -77,6 +88,12 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
 
   gui::restoreGeometry(this, settings);
   _splitter->restoreState(settings.value("splitter").toByteArray());
+
+  setWindowTitle(windowName);
+}
+
+bool ok (int exitCode, QProcess::ExitStatus exitStatus) {
+  return exitStatus == QProcess::NormalExit && exitCode == 0;
 }
 
 void setStatus (QLabel *l, int s) {
@@ -91,19 +108,17 @@ void setStatus (QLabel *l, int s) {
 }
 
 void UpdateManager::doPull(void) {
-  auto report = process("git", "pull", ".");
-  setStatus(_labels.pull, report.ok());
+  process(_labels.pull, "git", "pull", ".");
 }
 
 void UpdateManager::doCompile(void) {
-  auto report = process("qmake",
-                        "CookBook.pro -spec linux-g++ CONFIG+=release -- -j 3");
-  if (!report.ok()) {
-    setStatus(_labels.compile, 0);
-    return;
-  }
-  report = process("make", "", "build_debug");
-  setStatus(_labels.compile, report.ok());
+  auto *p = process(_labels.compile, "qmake",
+                    "CookBook.pro -spec linux-g++ CONFIG+=release -- -j 3");
+  connect(p, qOverload<int,QProcess::ExitStatus>(&QProcess::finished),
+          [this] (int exitCode, QProcess::ExitStatus exitStatus) {
+    if (ok(exitCode, exitStatus))
+      process(_labels.compile, "make", "", "build_debug");
+  });
 }
 
 void UpdateManager::doDeploy(void) {
@@ -114,53 +129,62 @@ void UpdateManager::doDeploy(void) {
 
 void UpdateManager::logOutput (void) {
   QProcess *p = qobject_cast<QProcess*>(sender());
-  _output->append(p->readAllStandardOutput());
+  auto output = p->readAllStandardOutput();
+  qDebug() << output;
+  _output->append(output);
 }
 
-UpdateManager::ProcessReport
-UpdateManager::process(const QString &program, const QStringList &arguments,
+QProcess*
+UpdateManager::process(QLabel *monitor,
+                       const QString &program, const QStringList &arguments,
                        const QString &relativeWorkPath) {
 
   static constexpr auto decoration =
     "*************************";
 
-  QProcess process;
-  process.setProcessChannelMode(QProcess::MergedChannels);
-  process.setWorkingDirectory(_path->text() + "/" + relativeWorkPath);
-  connect(&process, &QProcess::readyReadStandardOutput,
+  QProcess *process = new QProcess(this);
+  process->setProcessChannelMode(QProcess::MergedChannels);
+  process->setWorkingDirectory(_path->text() + "/" + relativeWorkPath);
+  connect(process, &QProcess::readyReadStandardOutput,
           this, &UpdateManager::logOutput);
 
   _output->append(decoration);
-  _output->append("Executing " + program + arguments.join(" "));
-  _output->append("In " + process.workingDirectory());
+  _output->append("Executing " + program + " " + arguments.join(" "));
+  _output->append("In " + process->workingDirectory());
   _output->append("\n");
 
-  process.start(program, arguments);
+  process->start(program, arguments);
+  working(program);
 
-  ProcessReport r;
-  r.qprocess = process.waitForFinished();
-  r.exit_status = process.exitStatus();
-  r.return_value = process.exitCode();
+  connect(process, qOverload<int,QProcess::ExitStatus>(&QProcess::finished),
+          [this, monitor, process]
+          (int exitCode, QProcess::ExitStatus exitStatus){
 
-  QString s;
-  QTextStream qss (&s);
-  qss << "QProcess Ok? " << r.qprocess;
-  _output->append(s);
-  s.clear();
-  qss << "Exit status: " << r.exit_status;
-  _output->append(s);
-  s.clear();
-  qss << "  Exit code: " << r.return_value;
-  _output->append(s);
-  s.clear();
-  qss << "         OK? " << r.ok();
-  _output->append(s);
-  s.clear();
+    QString s;
+    QTextStream qss (&s);
+    bool _ok = ok(exitCode, exitStatus);
+    qss << "Exit status: " << exitStatus;
+    _output->append(s);
+    s.clear();
+    qss << "  Exit code: " << exitCode;
+    _output->append(s);
+    s.clear();
+    qss << "         OK? " << _ok;
+    _output->append(s);
+    s.clear();
 
-  _output->append(decoration);
-  _output->append("");
+    setStatus(_labels.pull, _ok);
 
-  return r;
+    _output->append(decoration);
+    _output->append("");
+  });
+  connect(process, qOverload<int,QProcess::ExitStatus>(&QProcess::finished),
+          process, &QProcess::deleteLater);
+
+  connect(process, qOverload<int,QProcess::ExitStatus>(&QProcess::finished),
+          this, &UpdateManager::stoppedWorking);
+
+  return process;
 }
 
 void UpdateManager::closeEvent(QCloseEvent *e) {
@@ -168,6 +192,18 @@ void UpdateManager::closeEvent(QCloseEvent *e) {
   gui::saveGeometry(this, settings);
   settings.setValue("splitter", _splitter->saveState());
   QDialog::closeEvent(e);
+}
+
+void UpdateManager::working(const QString &name) {
+  setWindowTitle("Travail en cours: " + name);
+  for (QPushButton *b: {_buttons.pull,_buttons.compile,_buttons.deploy})
+    b->setEnabled(false);
+}
+
+void UpdateManager::stoppedWorking(void) {
+  setWindowTitle(windowName);
+  for (QPushButton *b: {_buttons.pull,_buttons.compile,_buttons.deploy})
+    b->setEnabled(true);
 }
 
 } // end of namespace gui

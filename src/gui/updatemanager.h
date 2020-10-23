@@ -29,33 +29,33 @@ private:
     QLabel *pull, *compile, *deploy;
   } _labels;
 
+  struct {
+    QPushButton *pull, *compile, *deploy;
+  } _buttons;
+
+
   void doPull (void);
   void doCompile (void);
   void doDeploy (void);
 
-  struct ProcessReport {
-    bool qprocess = true;
-    QProcess::ExitStatus exit_status = QProcess::NormalExit;
-    int return_value = 0;
-
-    bool ok (void) const {
-      return qprocess
-          && (exit_status == QProcess::NormalExit)
-          && (return_value == 0);
-    }
-  };
-
-  ProcessReport process (const QString &program, const QStringList &arguments,
-                         const QString &relativeWorkPath = ".");
-  ProcessReport process (const QString &program, const QString &arguments,
-                         const QString &relativeWorkPath = ".") {
-    return process(program, arguments.split(' ', QString::SkipEmptyParts),
+  QProcess* process (QLabel *monitor,
+                     const QString &program, const QStringList &arguments,
+                     const QString &relativeWorkPath = ".");
+  QProcess* process (QLabel *monitor,
+                     const QString &program, const QString &arguments,
+                     const QString &relativeWorkPath = ".") {
+    return process(monitor,
+                   program, arguments.split(' ', QString::SkipEmptyParts),
                    relativeWorkPath);
   }
 
   void logOutput (void);
 
   void closeEvent(QCloseEvent *e);
+
+private:
+  void working (const QString &name);
+  void stoppedWorking (void);
 };
 
 } // end of namespace gui
