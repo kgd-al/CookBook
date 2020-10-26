@@ -56,7 +56,12 @@ QVariant IngredientEntry::data (int role, double r) const {
       else
         d += "de ";
     }
+
     d += type();
+
+    if (!qualif.isEmpty())
+      d += " (" + qualif + ")";
+
     return d;
 
   } else if (role == Qt::DecorationRole)
@@ -68,7 +73,7 @@ QVariant IngredientEntry::data (int role, double r) const {
 
 QJsonValue IngredientEntry::toJsonInternal (void) const {
   Q_ASSERT(valid());
-  return QJsonArray { amount, unit->id, idata->id };
+  return QJsonArray { amount, unit->id, idata->id, qualif };
 }
 
 void IngredientEntry::fromJsonInternal (const QJsonValue &j) {
@@ -85,6 +90,8 @@ void IngredientEntry::fromJsonInternal (const QJsonValue &j) {
 //  Q_ASSERT(u_it != idata->units.end());
 //  unit = &((*u_it).get());
   unit = &Book::current().units.at(u_id);
+
+  qualif = ja[k++].toString();
 }
 
 // =============================================================================

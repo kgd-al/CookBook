@@ -43,11 +43,13 @@ IngredientDialog::IngredientDialog (QWidget *parent, const QString &title)
   addCell(new QLabel ("Quantité"));
   addCell(new QLabel ("Unité"));
   addCell(new QLabel ("Type"));
+  addCell(new QLabel ("(Adjectif)"));
   addCell(new QLabel ("Groupe"));
   r++; c = 0;
   addCell(amount = new QLineEdit);
   addCell(unit = new AutoFilterComboBox);
   addCell(type = new AutoFilterComboBox);
+  addCell(qualif = new QLineEdit);
   addCell(group = new AutoFilterComboBox (QComboBox::NoInsert));
 
   iholder->setLayout(ilayout);
@@ -118,10 +120,14 @@ IngredientDialog::IngredientDialog (QWidget *parent, const QString &title)
 void IngredientDialog::typeChanged(void) {
   qDebug() << "New type: " << type->currentText();
   auto &book = db::Book::current();
-  auto i = type->currentIndex();
-  db::IngredientData &d = book.ingredients.atIndex(i);
+  auto id = db::ID(type->currentData(db::IDRole).toInt());
+  db::IngredientData &d = book.ingredients.at(id);
   bool isNew = (d.group == nullptr);
-  if (!isNew) group->setCurrentIndex(group->findText(d.group->text));
+  if (!isNew) {
+    group->setCurrentIndex(group->findText(d.group->text));
+    qDebug() << group->currentIndex() << "=" << group->findText(d.group->text)
+             << "= find(" << d.group->text << ")";
+  }
   group->setEnabled(isNew);
 }
 
@@ -153,6 +159,7 @@ bool IngredientDialog::validate(void) {
       << amount->text().toDouble() << "\n"
       << "(" << unit->currentIndex() << ") " << unit->currentText() << "\n"
       << "(" << type->currentIndex() << ") " << type->currentText() << "\n"
+      << "    " << qualif->text() << "\n"
       << "(" << group->currentIndex() << ") " << group->currentText() << "\n";
 
     db::Book::current().ingredients.validateTemporaryData({
@@ -161,6 +168,7 @@ bool IngredientDialog::validate(void) {
     if (amount->text().toDouble() <= 0) error(amount);
     // unit can be empty
     if (type->currentIndex() == NoIndex) error(type);
+    // qualif can be empty
     if (group->currentIndex() == NoIndex)  error(group);
     break;
 
@@ -191,6 +199,7 @@ void IngredientDialog::setIngredient (const Ingredient_ptr &e) {
     amount->setText(QString::number(i.amount));
     unit->setCurrentText(i.unit->text);
     type->setCurrentIndex(type->findText(i.idata->text));
+    qualif->setText(i.qualif);
     group->setCurrentText(i.idata->group->text);
     typeChanged();
     break;
@@ -235,7 +244,8 @@ IngredientDialog::Ingredient_ptr IngredientDialog::ingredient (void) const {
       << "group: " << group->currentData(db::IDRole) << "\n"
       << " unit: " << unit->currentData(db::IDRole) << "\n";
 
-    ptr = new db::IngredientEntry (amount->text().toDouble(), &u_data, &d);
+    ptr = new db::IngredientEntry (amount->text().toDouble(), &u_data, &d,
+                                   qualif->text());
 
     break;
   }

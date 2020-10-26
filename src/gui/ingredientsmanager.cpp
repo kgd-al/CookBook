@@ -73,6 +73,7 @@ IngredientsManager::IngredientsManager(QWidget *parent)
   ltable->verticalHeader()->hide();
   ltable->setSortingEnabled(true);
   ltable->sortByColumn(1, Qt::DescendingOrder);
+//  ltable->setIconSize(QSize(db::iconSize(), db::iconSize()));
   auto lheader = ltable->horizontalHeader();
   lheader->setSectionResizeMode(0, QHeaderView::Stretch);
   lheader->setSectionResizeMode(1, QHeaderView::ResizeToContents);

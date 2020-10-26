@@ -2,6 +2,9 @@
 
 #include <QJsonArray>
 #include <QPainter>
+#include <QSettings>
+#include <QApplication>
+#include <QStyle>
 
 #include "recipedata.h"
 #include "unitsmodel.h"
@@ -11,10 +14,20 @@
 
 namespace db {
 
-static constexpr int icons = 4;
-static constexpr int margin = 1;
-const int ICON_SIZE = 15;
-const int RECIPE_ICONS_SIZE = icons*ICON_SIZE + (icons-1)*margin;
+int iconSize (void) {
+  QSettings settings;
+  auto s = settings.value("iconSize", 15).toInt();
+  qDebug() << "using" << s << "as icon size";
+  return s;
+}
+
+void fontChanged (const QFont &font) {
+  QSettings settings;
+  settings.setValue("font", font);
+  QFontMetrics metrics (font);
+  settings.setValue("iconSize", metrics.height());
+  qDebug() << font << "is" << metrics.height() << "pixels high";
+}
 
 QPixmap iconFromFile (const QString &filepath) {
   QPixmap p (filepath);
@@ -23,19 +36,19 @@ QPixmap iconFromFile (const QString &filepath) {
 }
 
 QPixmap rectangularIconFromColor (const QColor &d) {
-  QPixmap p (ICON_SIZE, ICON_SIZE);
+  QPixmap p (iconSize(), iconSize());
   p.fill(d);
   return p;
 }
 
 QPixmap circularIconFromColor (const QColor &d) {
-  QPixmap p (ICON_SIZE, ICON_SIZE);
+  QPixmap p (iconSize(), iconSize());
   p.fill(Qt::transparent);
   QPainter painter (&p);
   painter.setPen(Qt::NoPen);
   painter.setBrush(d);
   painter.setRenderHint(QPainter::Antialiasing, true);
-  painter.drawEllipse(0, 0, ICON_SIZE, ICON_SIZE);
+  painter.drawEllipse(0, 0, iconSize(), iconSize());
   return p;
 }
 

@@ -26,7 +26,7 @@ private:
   QSplitter *_splitter;
 
   struct {
-    QLabel *pull, *compile, *deploy;
+    QLabel *pull, *compile;
   } _labels;
 
   struct {

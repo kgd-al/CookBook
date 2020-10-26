@@ -30,27 +30,25 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
 
     _splitter = new QSplitter (Qt::Vertical);
       QWidget *lholder = new QWidget;
-      QGridLayout *llayout = new QGridLayout;
-        int r = 0, c = 0;
+      QHBoxLayout *llayout = new QHBoxLayout;
 
-        llayout->addWidget(_buttons.pull = new QPushButton("Pull"), r, c++);
-        _buttons.pull->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        llayout->addWidget(_labels.pull = new QLabel, r, c++);
+        llayout->addWidget(new QWidget, 1);
+        llayout->addWidget(_buttons.pull = new QPushButton("Pull"));
+//        _buttons.pull->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        llayout->addWidget(_labels.pull = new QLabel);
         _labels.pull->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        r++; c = 0;
+        llayout->addSpacing(10);
 
-        llayout->addWidget(_buttons.compile = new QPushButton("Compiler"), r, c++);
-        llayout->addWidget(_labels.compile = new QLabel, r, c++);
+        llayout->addWidget(_buttons.compile = new QPushButton("Compiler"));
+        llayout->addWidget(_labels.compile = new QLabel);
         _labels.compile->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        r++; c = 0;
+        llayout->addSpacing(10);
 
-        llayout->addWidget(_buttons.deploy = new QPushButton("Relancer"), r, c++);
-        llayout->addWidget(_labels.deploy = new QLabel, r, c++);
-        _labels.deploy->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        r++; c = 0;
+        llayout->addWidget(_buttons.deploy = new QPushButton("Relancer"));
+        llayout->addWidget(new QWidget, 1);
 
-        for (QLabel *l: {_labels.pull, _labels.compile, _labels.deploy})
-          l->setFixedSize(db::ICON_SIZE, db::ICON_SIZE);
+//        for (QLabel *l: {_labels.pull, _labels.compile, _labels.deploy})
+//          l->setFixedSize(db::iconSize(), db::iconSize());
 
       lholder->setLayout(llayout);
       lholder->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -97,14 +95,14 @@ bool ok (int exitCode, QProcess::ExitStatus exitStatus) {
 }
 
 void setStatus (QLabel *l, int s) {
-  QMap<int, QString> codes {
+  static QMap<int, const QPixmap*> codes {
 //    {  0, Qt::gray  },
-    {  0, "red"   },
-    {  1, "green" }
+    {  0, &db::at<db::StatusData>(db::ID(1)).decoration  },
+    {  1, &db::at<db::StatusData>(db::ID(3)).decoration  }
   };
-  if (s == -1) l->setStyleSheet("");
+  if (s == -1) l->setPixmap(QPixmap());
   else
-    l->setStyleSheet("QLabel { background-color : " + codes.value(s) + "; }");
+    l->setPixmap(*codes.value(s));
 }
 
 void UpdateManager::doPull(void) {
@@ -173,7 +171,7 @@ UpdateManager::process(QLabel *monitor,
     _output->append(s);
     s.clear();
 
-    setStatus(_labels.pull, _ok);
+    setStatus(monitor, _ok);
 
     _output->append(decoration);
     _output->append("");

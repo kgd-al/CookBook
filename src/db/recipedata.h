@@ -14,8 +14,8 @@ enum ID : int { INVALID = -1 };
 static constexpr int IDRole = Qt::UserRole+42;
 static constexpr int PtrRole = IDRole+42;
 
-extern const int ICON_SIZE;
-extern const int RECIPE_ICONS_SIZE;
+int iconSize (void);
+void fontChanged (const QFont &font);
 
 template <typename T>
 struct TransparentID_CMP {

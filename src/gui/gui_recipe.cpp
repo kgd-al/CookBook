@@ -93,6 +93,7 @@ struct ObstinateCB : public QComboBox {
     else
       switch (event->type()) {
       case QEvent::MouseButtonPress:
+      case QEvent::MouseButtonDblClick:
       case QEvent::Wheel:
       case QEvent::FocusIn:
       case QEvent::FocusOut:

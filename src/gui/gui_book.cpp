@@ -128,8 +128,7 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
         font = QFontDialog::getFont(&ok, font);
         if (ok) {
           QApplication::setFont(font);
-          QSettings settings;
-          settings.setValue("font", font);
+          db::fontChanged(font);
         }
 
       }, QKeySequence("Ctrl+Shift+F"));

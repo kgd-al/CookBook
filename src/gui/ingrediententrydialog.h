@@ -20,6 +20,7 @@ struct IngredientDialog : public QDialog {
   QLineEdit *amount;
   AutoFilterComboBox *unit, *type, *group;
   QDoubleValidator validator;
+  QLineEdit *qualif;
 
   AutoFilterComboBox *recipe;
 

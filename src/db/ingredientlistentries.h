@@ -34,11 +34,12 @@ struct IngredientEntry : public IngredientListEntry {
   double amount;
   UnitData *unit;
   IngredientData *idata;
+  QString qualif;
 
-  IngredientEntry (double a, UnitData *u, IngredientData *d)
+  IngredientEntry (double a, UnitData *u, IngredientData *d, const QString &q)
     : IngredientListEntry(EntryType::Ingredient),
-      amount(a), unit(u), idata(d) {}
-  IngredientEntry (void) : IngredientEntry(0, nullptr, nullptr) {}
+      amount(a), unit(u), idata(d), qualif(q) {}
+  IngredientEntry (void) : IngredientEntry(0, nullptr, nullptr, "") {}
   virtual ~IngredientEntry (void) {}
 
   QVariant data (int role, double r) const override;

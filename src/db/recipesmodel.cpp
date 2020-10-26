@@ -25,31 +25,6 @@ int RecipesModel::columnCount(const QModelIndex&) const {
   return 1;
 }
 
-QPixmap aggregatedIcons (const Recipe &r) {
-  QVector<QPixmap> icons {
-    r.regimen->decoration,
-//    r.status->decoration,
-//    r.type->decoration,
-//    r.duration->decoration
-  };
-
-  static constexpr int margin = 1;
-
-  QPixmap p (icons.size()*ICON_SIZE+(icons.size()-1) * margin, ICON_SIZE);
-  p.fill(Qt::transparent);
-  QPainter painter (&p);
-  painter.setRenderHint(QPainter::Antialiasing, true);
-  painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
-  auto q = qDebug().nospace();
-  for (int i=0, x=0; i<icons.size(); i++, x += ICON_SIZE+margin) {
-    QRect r (x, 0, ICON_SIZE, ICON_SIZE);
-    q << "Drawing pixmap " << i << " in " << r << "\n";
-    painter.drawPixmap(r, icons[i]);
-  }
-  q << p;
-  return p;
-}
-
 QVariant RecipesModel::data (const QModelIndex &index, int role) const {
   QVariant v;
   switch (role) {
