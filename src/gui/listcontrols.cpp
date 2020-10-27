@@ -9,8 +9,9 @@
 
 namespace gui {
 
-ListControls::ListControls (QAbstractItemView *view) : _view(nullptr) {
-  QHBoxLayout *layout = new QHBoxLayout;
+ListControls::ListControls (QAbstractItemView *view,
+                            QBoxLayout::Direction direction) : _view(nullptr) {
+  QBoxLayout *layout = new QBoxLayout (direction);
   layout->addWidget(_add = new QToolButton);
   _add->setIcon(QIcon::fromTheme("list-add"));
   layout->addWidget(_edit = new QToolButton);

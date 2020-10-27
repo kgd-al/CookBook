@@ -2,12 +2,16 @@
 #define GUI_BOOK_H
 
 #include <QMainWindow>
+#include <QSplitter>
+#include <QSortFilterProxyModel>
 
 #include "../db/book.h"
 #include "gui_recipe.h"
 
 namespace gui {
 
+struct FilterView;
+struct RecipeFilter;
 class Book : public QMainWindow {
   Q_OBJECT
 public:
@@ -27,7 +31,10 @@ public:
   void closeEvent(QCloseEvent *e) override;
 
 private:
+  QSplitter *_splitter;
   QListView *_recipes;
+  FilterView *_filter;
+  RecipeFilter *_proxy;
 
   void addRecipe (void);
 

@@ -86,28 +86,28 @@ void StatusData::loadDatabase (void) {
 RegimenData::Database RegimenData::_database;
 void RegimenData::loadDatabase (void) {
   _database = {
-    ENTRY(1, "Protéiné",   ":/icons/protein.svg"    ),
-    ENTRY(2, "Végétarien", ":/icons/vegetarian.svg" ),
-    ENTRY(3, "Vegan",      ":/icons/vegan.svg"      )
+    ENTRY(1, "Protéiné",   ":/icons/regimen-protein.png"    ),
+    ENTRY(2, "Végétarien", ":/icons/regimen-vegetarian.png" ),
+    ENTRY(3, "Vegan",      ":/icons/regimen-vegan.svg"      )
   };
 }
 
 DishTypeData::Database DishTypeData::_database;
 void DishTypeData::loadDatabase (void) {
   _database = {
-    ENTRY(1, "Neutre", ":/icons/neutral.svg"  ),
-    ENTRY(2, "Salé",   ":/icons/salt.svg"     ),
-    ENTRY(3, "Sucré",  ":/icons/sugar.svg"    ),
+    ENTRY(1, "Neutre", ":/icons/type-neutral.jpg"  ),
+    ENTRY(2, "Salé",   ":/icons/type-salted.png"   ),
+    ENTRY(3, "Sucré",  ":/icons/type-sugar.ico"    ),
   };
 }
 
 DurationData::Database DurationData::_database;
 void DurationData::loadDatabase (void) {
   _database = {
-    ENTRY(1, "Rapide",    ":/icons/time-short.svg"  ),
-    ENTRY(2, "Journée",   ":/icons/time-short.svg"  ),
-    ENTRY(3, "Lendemain", ":/icons/time-long.svg"   ),
-    ENTRY(4, "Très long", ":/icons/time-long.svg"   ),
+    ENTRY(1, "Rapide",    ":/icons/time-fast.png"       ),
+    ENTRY(2, "Journée",   ":/icons/time-medium.png"     ),
+    ENTRY(3, "Lendemain", ":/icons/time-long.png"       ),
+    ENTRY(4, "Très long", ":/icons/time-very-long.png"  ),
   };
 }
 #undef ENTRY

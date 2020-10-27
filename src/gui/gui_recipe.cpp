@@ -1,6 +1,5 @@
 #include <QVBoxLayout>
 #include <QStackedLayout>
-
 #include <QComboBox>
 #include <QDialogButtonBox>
 #include <QPushButton>
@@ -144,42 +143,54 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
 
     } mainLayout->addLayout(dlayout);
 
-    mainLayout->addWidget(spacer());
-    QHBoxLayout *midLayout = new QHBoxLayout;
-      QVBoxLayout *ilayout = new QVBoxLayout;
-        ilayout->addWidget(new QLabel ("Ingrédients:"));
-        QHBoxLayout *playout = new QHBoxLayout;
-          _portions = new QDoubleSpinBox;
-          _portions->setMinimum(0);
-          _portions->setSingleStep(.25);
-          playout->addWidget(_portions);
-          _portions->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-          playout->addWidget(_portionsLabel = new QLineEdit("?"));
-        ilayout->addLayout(playout);
-        _ingredients = new GUIList;
-        _ingredients->setAcceptDrops(true);
-        _ingredients->setDragDropMode(QAbstractItemView::InternalMove);
-        ilayout->addWidget(_ingredients);
-        ilayout->addWidget(_icontrols = new ListControls(_ingredients));
-      midLayout->addLayout(ilayout, 0);
+//    mainLayout->addWidget(spacer());
+    _vsplitter = new QSplitter (Qt::Vertical);
+      _hsplitter = new QSplitter;
+        QWidget *iholder = new QWidget;
+        QVBoxLayout *ilayout = new QVBoxLayout;
+          ilayout->addWidget(new QLabel ("Ingrédients:"));
+          QHBoxLayout *playout = new QHBoxLayout;
+            _portions = new QDoubleSpinBox;
+            _portions->setMinimum(0);
+            _portions->setSingleStep(.25);
+            playout->addWidget(_portions);
+            _portions->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+            playout->addWidget(_portionsLabel = new QLineEdit("?"));
+          ilayout->addLayout(playout);
+          _ingredients = new GUIList;
+          _ingredients->setAcceptDrops(true);
+          _ingredients->setDragDropMode(QAbstractItemView::InternalMove);
+          _ingredients->setWordWrap(true);
+          _ingredients->setMinimumWidth(100);
+          ilayout->addWidget(_ingredients);
+          ilayout->addWidget(_icontrols = new ListControls(_ingredients));
+        iholder->setLayout(ilayout);
+        _hsplitter->addWidget(iholder);
 
-      QVBoxLayout *nlayout = new QVBoxLayout;
-        nlayout->addWidget(new QLabel ("Notes:"));
-        _notes = new QTextEdit;
-        nlayout->addWidget(_notes);
-      midLayout->addLayout(nlayout, 1);
-    mainLayout->addLayout(midLayout);
+        QWidget *nholder = new QWidget;
+        QVBoxLayout *nlayout = new QVBoxLayout;
+          nlayout->addWidget(new QLabel ("Notes:"));
+          _notes = new QTextEdit;
+          _notes->setMinimumWidth(100);
+          nlayout->addWidget(_notes);
+        nholder->setLayout(nlayout);
+        _hsplitter->addWidget(nholder);
+      _vsplitter->addWidget(_hsplitter);
 
-    mainLayout->addWidget(spacer());
-    QVBoxLayout *slayout = new QVBoxLayout;
-      slayout->addWidget(new QLabel("Étapes:"));
-      _steps = new GUIList;
-      _steps->setAcceptDrops(true);
-      _steps->setDragDropMode(QAbstractItemView::InternalMove);
-      _steps->setWordWrap(true);
-      slayout->addWidget(_steps);
-      slayout->addWidget(_scontrols = new ListControls(_steps));
-    mainLayout->addLayout(slayout);
+      mainLayout->addWidget(spacer());
+      QWidget *sholder = new QWidget;
+      QVBoxLayout *slayout = new QVBoxLayout;
+        slayout->addWidget(new QLabel("Étapes:"));
+        _steps = new GUIList;
+        _steps->setAcceptDrops(true);
+        _steps->setDragDropMode(QAbstractItemView::InternalMove);
+        _steps->setMinimumWidth(100);
+        _steps->setWordWrap(true);
+        slayout->addWidget(_steps);
+        slayout->addWidget(_scontrols = new ListControls(_steps));
+      sholder->setLayout(slayout);
+      _vsplitter->addWidget(sholder);
+    mainLayout->addWidget(_vsplitter);
 
     QDialogButtonBox *buttons = new QDialogButtonBox;
       auto del = new QToolButton();
@@ -220,6 +231,9 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
   setReadOnly(false);
 
   gui::restoreGeometry(this);
+  auto &settings = localSettings(this);
+  _hsplitter->setSizes(settings.value("hsplitter").value<QList<int>>());
+  _vsplitter->setSizes(settings.value("vsplitter").value<QList<int>>());
 }
 
 int Recipe::show (db::Recipe *recipe, bool readOnly, double ratio) {
@@ -299,7 +313,7 @@ void Recipe::setReadOnly(bool ro) {
   static_cast<ObstinateCB*>(_type)->readOnly = ro;
   static_cast<ObstinateCB*>(_duration)->readOnly = ro;
 
-  _notes->setEnabled(!ro);
+  _notes->setReadOnly(ro);
 
   if (!ro) {
     _displayedPortions = _portions->value();
@@ -307,7 +321,7 @@ void Recipe::setReadOnly(bool ro) {
   } else {
     _portions->setValue(_displayedPortions);
   }
-  _portionsLabel->setEnabled(!ro);
+  _portionsLabel->setReadOnly(ro);
 
   _ingredients->setDragEnabled(!ro);
   _icontrols->setVisible(!ro);
@@ -421,6 +435,9 @@ void Recipe::closeEvent(QCloseEvent *e) {
 //  qDebug() << __PRETTY_FUNCTION__ << "(" << e << ");";
   safeQuit(e);
   gui::saveGeometry(this);
+  auto &settings = localSettings(this);
+  settings.setValue("vsplitter", QVariant::fromValue(_vsplitter->sizes()));
+  settings.setValue("hsplitter", QVariant::fromValue(_hsplitter->sizes()));
 }
 
 bool Recipe::safeQuit(QEvent *e) {

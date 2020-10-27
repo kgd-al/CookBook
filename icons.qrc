@@ -1,12 +1,14 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/neutral.svg</file>
-        <file>icons/protein.svg</file>
-        <file>icons/salt.svg</file>
-        <file>icons/sugar.svg</file>
-        <file>icons/time-long.svg</file>
-        <file>icons/time-short.svg</file>
-        <file>icons/vegan.svg</file>
-        <file>icons/vegetarian.svg</file>
+        <file>icons/regimen-protein.png</file>
+        <file>icons/regimen-vegan.svg</file>
+        <file>icons/regimen-vegetarian.png</file>
+        <file>icons/time-fast.png</file>
+        <file>icons/time-long.png</file>
+        <file>icons/time-medium.png</file>
+        <file>icons/time-very-long.png</file>
+        <file>icons/type-neutral.jpg</file>
+        <file>icons/type-salted.png</file>
+        <file>icons/type-sugar.ico</file>
     </qresource>
 </RCC>

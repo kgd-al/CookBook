@@ -2,6 +2,7 @@
 #define GUI_RECIPE_H
 
 #include <QDialog>
+#include <QSplitter>
 #include <QLineEdit>
 #include <QTextEdit>
 #include <QListWidget>
@@ -41,6 +42,8 @@ signals:
 private:
   db::Recipe *_data;
   bool _readOnly;
+
+  QSplitter *_vsplitter, *_hsplitter;
 
   QLineEdit *_title;
 

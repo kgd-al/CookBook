@@ -2,13 +2,15 @@
 #define LISTCONTROLS_H
 
 #include <QAbstractItemView>
+#include <QBoxLayout>
 #include <QToolButton>
 
 namespace gui {
 
 class ListControls : public QWidget {
 public:
-  ListControls (QAbstractItemView *view = nullptr);
+  ListControls (QAbstractItemView *view = nullptr,
+                QBoxLayout::Direction direction = QBoxLayout::LeftToRight);
 
   QToolButton* addButton (void)   { return _add;  }
   QToolButton* editButton (void)  { return _edit; }
