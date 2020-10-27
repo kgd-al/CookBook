@@ -15,7 +15,8 @@ class AutoFilterComboBox : public QComboBox {
 
 public:
   AutoFilterComboBox (QComboBox::InsertPolicy policy
-                      = QComboBox::InsertAtBottom) {
+                      = QComboBox::InsertAtBottom,
+                      QWidget *parent = nullptr) : QComboBox(parent) {
     setEditable(true);
     setInsertPolicy(policy);
 

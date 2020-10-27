@@ -16,6 +16,7 @@
 #include <QGroupBox>
 
 #include "gui_book.h"
+#include "autofiltercombobox.hpp"
 #include "ingredientsmanager.h"
 #include "updatemanager.h"
 #include "common.h"
@@ -79,6 +80,72 @@ struct RecipeListDelegate : public QStyledItemDelegate {
   }
 };
 
+struct RecipeReference {
+  QString _data;
+
+  const QString& data (int) const {
+    return _data;
+  }
+
+  bool setData (int, const QVariant &value) {
+    _data = value.toString();
+    return true;
+  }
+};
+
+struct IngredientReference {
+  QStringList _data;
+
+  const QString& data (int c) const {
+    static const QString error = "ERROR";
+    if (c >= _data.size()) return error;
+    return _data[c];
+  }
+
+  bool setData (int c, const QVariant &value) {
+    if (c >= _data.size())  return false;
+    _data[c] = value.toString();
+    return true;
+  }
+};
+
+template <typename T>
+struct EditableModel : public QAbstractTableModel {
+  int rowCount(const QModelIndex& = QModelIndex()) const override {
+    return _data.size();
+  }
+
+  int columnCount(const QModelIndex& = QModelIndex()) const override {
+    return 1;
+  }
+
+  QVariant data (const QModelIndex &index, int role) const override {
+    switch (role) {
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+      return _data.at(index.row()).data(index.column());
+    default:
+      return QVariant();
+    }
+  }
+
+  Qt::ItemFlags flags (const QModelIndex &index) const override {
+    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+  }
+
+  bool setData (const QModelIndex &index, const QVariant &value) {
+    return _data[index.row()].setData(index.column(), value);
+  }
+
+  void append (void) {
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    _data.append(T());
+    endInsertRows();
+  }
+
+  QList<T> _data;
+};
+
 struct RecipeFilter : public QSortFilterProxyModel {
   template <typename T>
   struct Data {
@@ -89,7 +156,12 @@ struct RecipeFilter : public QSortFilterProxyModel {
   Data<QString> title;
   Data<db::ID> regimen, status, type, duration;
   Data<bool> basic;
-  // ingredients, subrecipes
+
+  using IngredientsModel = EditableModel<IngredientReference>;
+  IngredientsModel ingredients;
+
+  using RecipesModel = EditableModel<RecipeReference>;
+  RecipesModel subrecipes;
 
   bool filterAcceptsRow(int source_row,
                         const QModelIndex &source_parent) const override {
@@ -101,26 +173,71 @@ struct RecipeFilter : public QSortFilterProxyModel {
 
 //    auto q = qDebug().nospace();
 
-//    q << "title" << " [" << (title? "on " : "off") << "]: " << title.data
-//      << " C " << r.title << "? " << r.title.contains(title.data) << "\n";
+#define TEST(NAME) \
+  q << #NAME << " [" << (NAME? "on " : "off") << "]: " << NAME.data
+
+
+//    TEST(title) << " !C " << r.title << "? " << !r.title.contains(title.data)
+//                << "\n";
     if (title && !title.data.isEmpty()
         && !r.title.contains(title.data)) return false;
 
-//    q << #NAME << " [" << (NAME? "on " : "off") << "]: " << r.NAME->id \
-//      << " != " << NAME.data << "? " << (r.NAME->id != NAME.data) << "\n"; \
+//    TEST(NAME) << NAME.data << " != " << r.NAME->id << "? " \
+//               << (r.NAME->id != NAME.data) << "\n"; \
 
-#define TEST(NAME) \
+#define TEST_CB(NAME) \
   if (NAME && r.NAME->id != NAME.data) return false;
 
-    TEST(regimen)
-    TEST(status)
-    TEST(type)
-    TEST(duration)
-#undef TEST
+    TEST_CB(regimen)
+    TEST_CB(status)
+    TEST_CB(type)
+    TEST_CB(duration)
+#undef TEST_CB
 
+//    TEST(basic) << " != " << r.used << "? " << (r.used != basic.data) << "\n";
     if (basic && r.used != basic.data)  return false;
 
+#undef TEST
+//    q << "Accepting row\n";
     return true;
+  }
+};
+
+struct RecipeReferenceDelegate : public QStyledItemDelegate {
+  RecipeReferenceDelegate (void) {}
+
+//  void paint(QPainter *painter, const QStyleOptionViewItem &option,
+//             const QModelIndex &index) const override {
+
+//  }
+
+  QWidget* createEditor(QWidget *parent,
+                        const QStyleOptionViewItem &/*option*/,
+                        const QModelIndex &/*index*/) const override {
+    auto cbox = new AutoFilterComboBox(QComboBox::NoInsert, parent);
+    cbox->setModel(&db::Book::current().recipes);
+    return cbox;
+  }
+
+  void setEditorData(QWidget *editor,
+                     const QModelIndex &index) const override {
+    auto *cbox = static_cast<AutoFilterComboBox*>(editor);
+    cbox->setCurrentIndex(cbox->findData(index.data(db::IDRole), db::IDRole));
+    cbox->lineEdit()->selectAll();
+  }
+
+//  void updateEditorGeometry(QWidget */*editor*/,
+//                            const QStyleOptionViewItem &/*option*/,
+//                            const QModelIndex &index) const override {
+
+//  }
+
+  void setModelData(QWidget *editor,
+                    QAbstractItemModel *model,
+                    const QModelIndex &index) const override {
+    auto *rmodel = static_cast<RecipeFilter::RecipesModel*>(model);
+    auto *cbox = static_cast<AutoFilterComboBox*>(editor);
+    rmodel->setData(index, cbox->currentData(db::IDRole));
   }
 };
 
@@ -153,7 +270,7 @@ struct FilterView : public QWidget {
   Entry<QComboBox> *regimen, *status, *type, *duration;
   Entry<QGroupBox> *basic;
   QRadioButton *basic_yes;
-  Entry<QListWidget> *ingredients, *subrecipes;
+  Entry<QListView> *ingredients, *subrecipes;
   ListControls *icontrols, *scontrols;
 
   FilterView (RecipeFilter *filter, QWidget *parent)
@@ -167,11 +284,13 @@ struct FilterView : public QWidget {
     type = new Entry<QComboBox> ("Type", layout);
     duration = new Entry<QComboBox> ("Durée", layout);
     basic = new Entry<QGroupBox> ("Basique", layout);
-    ingredients = new Entry<QListWidget> ("Ingrédients", layout);
+    ingredients = new Entry<QListView> ("Ingrédients", layout);
+    ingredients->widget->setModel(&filter->ingredients);
     layout->addWidget(icontrols = new ListControls (ingredients->widget,
                                                     QBoxLayout::TopToBottom),
                       layout->rowCount()-1, 3);
-    subrecipes = new Entry<QListWidget> ("Recettes", layout);
+    subrecipes = new Entry<QListView> ("Recettes", layout);
+    subrecipes->widget->setModel(&filter->subrecipes);
     layout->addWidget(scontrols = new ListControls (subrecipes->widget,
                                                     QBoxLayout::TopToBottom),
                       layout->rowCount()-1, 3);
@@ -197,6 +316,20 @@ struct FilterView : public QWidget {
       connectMany(cb, qOverload<int>(&QComboBox::currentIndexChanged));
     connectMany(basic);
     connect(basic_yes, &QRadioButton::toggled, this, &FilterView::filterChanged);
+
+//    ingredients->widget->setModel(filter->ingredients);
+    connect(icontrols->addButton(), &QToolButton::clicked,
+            [this] {
+//      ingredients->widget->model()->in
+//      QListWidgetItem *item = new QListWidgetItem;
+//      item->setSizeHint(iholder->sizeHint());
+//      ingredients->widget->setItemWidget(item, iholder);
+//      ingredients->widget->addItem(item);
+    });
+
+    subrecipes->widget->setItemDelegate(new RecipeReferenceDelegate);
+    connect(scontrols->addButton(), &QToolButton::clicked,
+            &filter->subrecipes, &RecipeFilter::RecipesModel::append);
 
     setLayout(layout);
   }
@@ -230,7 +363,7 @@ struct FilterView : public QWidget {
     UPDATE_CB(duration)
 #undef UPDATE_CB
 
-  filter->basic.active = basic->cb->isCheckable();
+  filter->basic.active = basic->cb->isChecked();
   filter->basic.data = basic_yes->isChecked();
 
     filter->invalidate();

@@ -13,7 +13,7 @@
 #include "gui/gui_book.h"
 #include "gui/common.h"
 
-QFile logfile ("log");
+QFile logfile;
 void logger (QtMsgType type, const QMessageLogContext &context,
              const QString &message) {
 
@@ -67,12 +67,20 @@ void simulateKey (const QString &kstr) {
 int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
 
+  QCoreApplication::setOrganizationName("almann");
+  QCoreApplication::setApplicationName("cookbook");
+  QSettings settings;
+
+  QString logFilePath;
+  QTextStream qss (&logFilePath);
+  qss << settings.fileName().left(settings.fileName().lastIndexOf('.')) << "."
+      << QDateTime::currentDateTime().toString("yyyy-MM-dd.hh-mm-ss")
+      << ".log";
+  qDebug() << "logfilepath: " << logFilePath;
+  logfile.setFileName(logFilePath);
   if (!logfile.open(QIODevice::WriteOnly))
     qWarning("Failed to open log file");
   qInstallMessageHandler(logger);
-
-  QCoreApplication::setOrganizationName("almann");
-  QCoreApplication::setApplicationName("cookbook");
 
   // Register icons
   db::AlimentaryGroupData::loadDatabase();
@@ -81,7 +89,6 @@ int main(int argc, char *argv[]) {
   db::DishTypeData::loadDatabase();
   db::DurationData::loadDatabase();
 
-  QSettings settings;
   {
     auto q = qDebug();
     q << "Current settings:\n";
