@@ -60,10 +60,11 @@ private:
 
   QTextEdit *_notes;
 
-  QPushButton *_toggle;
+  QPushButton *_toggle, *_apply;
 
   void toggleReadOnly (void);
   bool confirmed(void);
+  void apply (void);
 
   void writeThrough (void);
 

@@ -120,9 +120,10 @@ void UpdateManager::doCompile(void) {
 }
 
 void UpdateManager::doDeploy(void) {
-  qApp->exit(RebootCode);
-//  qApp->quit();
-  QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+  if (parentWidget()->close()) {
+    qApp->exit(RebootCode);
+    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+  }
 }
 
 void UpdateManager::logOutput (void) {

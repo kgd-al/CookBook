@@ -456,6 +456,8 @@ void Book::addRecipe(void) {
     qDebug() << "Inserting: " << db::Recipe::toJson(recipe);
     db::Book::current().addRecipe(std::move(recipe));
     setModified(true);
+    if (db::Book::current().modified)
+      saveRecipes();
   }
 }
 
@@ -465,6 +467,8 @@ void Book::showRecipe(const QModelIndex &index) {
   recipe.show(&db::Book::current()
               .recipes.at(db::ID(index.data(db::IDRole).toInt())),
               true);
+  if (db::Book::current().modified)
+    saveRecipes();
 }
 
 bool Book::saveRecipes(void) {

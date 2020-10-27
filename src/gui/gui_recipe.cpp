@@ -192,17 +192,24 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
       _vsplitter->addWidget(sholder);
     mainLayout->addWidget(_vsplitter);
 
-    QDialogButtonBox *buttons = new QDialogButtonBox;
+    QHBoxLayout *blayout = new QHBoxLayout;
       auto del = new QToolButton();
-      buttons->addButton(del, QDialogButtonBox::DestructiveRole);
+      del->setIcon(QIcon::fromTheme("edit-delete"));
+      blayout->addWidget(del);
       connect(del, &QToolButton::clicked, this, &Recipe::deleteRequested);
 
-      auto close = buttons->addButton("Quitter", QDialogButtonBox::RejectRole);
-      connect(close, &QPushButton::clicked, this, &Recipe::close);
+      QDialogButtonBox *buttons = new QDialogButtonBox;
 
-      _toggle = buttons->addButton("", QDialogButtonBox::ActionRole);
-      connect(_toggle, &QPushButton::clicked, this, &Recipe::toggleReadOnly);
-    mainLayout->addWidget(buttons);
+        _apply = buttons->addButton("Appliquer", QDialogButtonBox::AcceptRole);
+        connect(_apply, &QPushButton::clicked, this, &Recipe::apply);
+
+        auto close = buttons->addButton("Quitter", QDialogButtonBox::RejectRole);
+        connect(close, &QPushButton::clicked, this, &Recipe::close);
+
+        _toggle = buttons->addButton("", QDialogButtonBox::ActionRole);
+        connect(_toggle, &QPushButton::clicked, this, &Recipe::toggleReadOnly);
+      blayout->addWidget(buttons);
+    mainLayout->addLayout(blayout);
 
   _icontrols->addButton()->setShortcut(QKeySequence("Ctrl+I"));
   connect(_icontrols->addButton(), &QToolButton::clicked,
@@ -328,8 +335,9 @@ void Recipe::setReadOnly(bool ro) {
   _steps->setDragEnabled(!ro);
   _scontrols->setVisible(!ro);
 
-  if (isReadOnly()) _toggle->setText("Modifier");
-  else              _toggle->setText("Valider");
+  if (ro) _toggle->setText("Modifier");
+  else    _toggle->setText("Valider");
+  _apply->setVisible(!ro);
 
   setWindowTitle(ro ? "Consultation" : "Édition");
 }
@@ -338,6 +346,10 @@ void Recipe::toggleReadOnly(void) {
   if (!isReadOnly() && !confirmed()) return;
   setReadOnly(!isReadOnly());
   updateDisplayedPortions(false);
+}
+
+void Recipe::apply(void) {
+  if (confirmed())  accept();
 }
 
 bool Recipe::confirmed(void) {

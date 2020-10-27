@@ -118,7 +118,6 @@ QJsonValue SubRecipeEntry::toJsonInternal (void) const {
 }
 
 void SubRecipeEntry::fromJsonInternal (const QJsonValue &j) {
-//  recipe = fromID(Recipe::ID(j.toInt()));
   recipe = (db::Recipe*)(uintptr_t)j.toInt();
 }
 
@@ -131,7 +130,7 @@ void SubRecipeEntry::setRecipeFromHackedPointer(void) {
 
 QVariant DecorationEntry::data (int role, double) const {
   if (role == Qt::DisplayRole)
-    return text;
+    return "\n" + text;
   else
     return QVariant();
 }
