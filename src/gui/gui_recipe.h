@@ -10,7 +10,7 @@
 #include <QComboBox>
 #include <QSpinBox>
 #include <QLabel>
-#include <QDateTimeEdit>
+#include <QCheckBox>
 
 #include <QJsonObject>
 
@@ -20,6 +20,7 @@
 namespace gui {
 
 using GUIList = QListWidget;
+struct LabelEdit;
 
 class Recipe : public QDialog {
   Q_OBJECT
@@ -45,15 +46,23 @@ private:
 
   QSplitter *_vsplitter, *_hsplitter;
 
-  QLineEdit *_title;
-
-  QLabel *_references;
+  LabelEdit *_title;
 
   double _displayedPortions;
   QDoubleSpinBox *_portions;
-  QLineEdit *_portionsLabel;
+  LabelEdit *_portionsLabel;
 
-  QComboBox *_regimen, *_status, *_type, *_duration;
+  struct {
+    QLabel *subrecipe, *basic, *regimen, *status, *type, *duration;
+    QWidget *holder;
+  } _consult;
+
+  struct {
+    QLabel *subrecipe;
+    QCheckBox *basic;
+    QComboBox *regimen, *status, *type, *duration;
+    QWidget *holder;
+  } _edit;
 
   GUIList *_ingredients, *_steps;
   ListControls *_icontrols, *_scontrols;

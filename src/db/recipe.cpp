@@ -130,6 +130,7 @@ Recipe Recipe::fromJson(const QJsonValue &j) {
   r.status = &at<StatusData>(db::ID(jo["status"].toInt()));
   r.type = &at<DishTypeData>(db::ID(jo["type"].toInt()));
   r.duration = &at<DurationData>(db::ID(jo["duration"].toInt()));
+  r.basic = jo["basic"].toBool();
 
   r.portions = jo["d-portions"].toDouble();
   r.portionsLabel = jo["t-portions"].toString();
@@ -156,6 +157,7 @@ QJsonValue Recipe::toJson(const Recipe &r) {
   j["status"] = r.status->id;
   j["type"] = r.type->id;
   j["duration"] = r.duration->id;
+  j["basic"] = r.basic;
 
   j["d-portions"] = r.portions;
   j["t-portions"] = r.portionsLabel;

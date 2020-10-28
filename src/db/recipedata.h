@@ -100,6 +100,11 @@ BasicModel* getStaticModel (void) {
   return &m;
 }
 
+struct MiscIcons {
+  static const QIcon& sub_recipe (void);
+  static const QIcon& basic_recipe (void);
+};
+
 struct UnitData {
   using ID = db::ID;
   ID id = ID::INVALID;
@@ -117,7 +122,7 @@ struct AlimentaryGroupData {
   using ID = db::ID;
   ID id = ID::INVALID;
   QString text = "N/A";
-  QPixmap decoration;
+  QIcon decoration;
 
   using Database = transparent_set<AlimentaryGroupData>;
   static const Database& database (void) {
@@ -133,7 +138,7 @@ struct RegimenData {
   using ID = db::ID;
   ID id = ID::INVALID;
   QString text = "N/A";
-  QPixmap decoration;
+  QIcon decoration;
 
   using Database = transparent_set<RegimenData>;
   static const Database& database (void) {
@@ -148,7 +153,7 @@ struct StatusData {
   using ID = db::ID;
   ID id = ID::INVALID;
   QString text = "N/A";
-  QPixmap decoration;
+  QIcon decoration;
 
   using Database = transparent_set<StatusData>;
   static const Database& database (void) {
@@ -163,7 +168,7 @@ struct DishTypeData {
   using ID = db::ID;
   ID id = ID::INVALID;
   QString text = "N/A";
-  QPixmap decoration;
+  QIcon decoration;
 
   using Database = transparent_set<DishTypeData>;
   static const Database& database (void) {
@@ -178,7 +183,7 @@ struct DurationData {
   using ID = db::ID;
   ID id = ID::INVALID;
   QString text = "N/A";
-  QPixmap decoration;
+  QIcon decoration;
 
   using Database = transparent_set<DurationData>;
   static const Database& database (void) {

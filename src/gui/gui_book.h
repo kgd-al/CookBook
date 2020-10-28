@@ -4,14 +4,17 @@
 #include <QMainWindow>
 #include <QSplitter>
 #include <QSortFilterProxyModel>
+#include <QStyledItemDelegate>
 
 #include "../db/book.h"
 #include "gui_recipe.h"
+#include "autofiltercombobox.hpp"
 
 namespace gui {
 
 struct FilterView;
 struct RecipeFilter;
+
 class Book : public QMainWindow {
   Q_OBJECT
 public:

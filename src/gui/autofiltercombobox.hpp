@@ -12,6 +12,7 @@ namespace gui {
 
 class AutoFilterComboBox : public QComboBox {
   QString emptyAlias;
+  bool forceCompletion;
 
 public:
   AutoFilterComboBox (QComboBox::InsertPolicy policy
@@ -24,10 +25,16 @@ public:
     c->setCompletionMode(QCompleter::PopupCompletion);
     c->setCompletionRole(Qt::DisplayRole);
     c->setFilterMode(Qt::MatchContains);
+
+    forceCompletion = true;
   }
 
   void setEmptyAlias (const QString &alias = QString()) {
     emptyAlias = alias;
+  }
+
+  void setForceCompletion (bool f) {
+    forceCompletion = f;
   }
 
   void focusOutEvent(QFocusEvent *e) {
@@ -37,7 +44,8 @@ public:
 
   void insertionOnFocusOut (void) {
     if (QComboBox::NoInsert == insertPolicy()) {
-      setCurrentText(completer()->currentCompletion());
+      if (forceCompletion)
+        setCurrentText(completer()->currentCompletion());
       return;
     }
 

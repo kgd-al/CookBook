@@ -29,18 +29,56 @@ QWidget* spacer (void) {
 }
 
 /// TODO Make it work and make it pretty
-struct StrangeWidget : public QLineEdit {
+struct LabelEdit : public QWidget {
   bool edit = false;
-  StrangeWidget (const QString &s) : QLineEdit(s) {}
+  QLabel *label;
+  QLineEdit *ledit;
+  LabelEdit (const QString &text, bool edit = false) {
+    QGridLayout *layout = new QGridLayout;
+    layout->addWidget(label = new QLabel, 0, 0);
+    layout->addWidget(ledit = new QLineEdit, 0, 0);
+    setLayout(layout);
+    setText(text);
+    setEdit(edit);
+  }
+
+  void setFontRelativeSize (double r) {
+    QFont f = font();
+    auto q = qDebug();
+    q << r << "*" << f.pointSizeF();
+    f.setPointSizeF(r * f.pointSizeF());
+    q << " >> " << f.pointSizeF();
+    label->setFont(f);
+    ledit->setFont(f);
+  }
+
+  void setAlignment (Qt::AlignmentFlag flag) {
+    label->setAlignment(flag);
+    ledit->setAlignment(flag);
+  }
+
   void setEdit (bool e) {
     edit = e;
-//    setFrame(edit);
-    setReadOnly(!edit);
-//    setSizePolicy(edit ? QSizePolicy::MinimumExpanding : QSizePolicy::Fixed,
-//                  QSizePolicy::Fixed);
-//    setAutoFillBackground(edit);
-    updateGeometry();
-    update();
+    label->setVisible(!edit);
+    ledit->setVisible(edit);
+    if (e)
+      ledit->setText(label->text());
+    else
+      label->setText(ledit->text());
+  }
+
+  void setText (const QString &text) {
+    if (edit)
+      ledit->setText(text);
+    else
+      label->setText(text);
+  }
+
+  QString text (void) const {
+    if (edit)
+      return ledit->text();
+    else
+      return label->text();
   }
 };
 
@@ -85,63 +123,72 @@ struct StepListItem : public QListWidgetItem {
   }
 };
 
-struct ObstinateCB : public QComboBox {
-  bool readOnly;
-  bool event (QEvent *event) {
-    if (!readOnly)  return QComboBox::event(event);
-    else
-      switch (event->type()) {
-      case QEvent::MouseButtonPress:
-      case QEvent::MouseButtonDblClick:
-      case QEvent::Wheel:
-      case QEvent::FocusIn:
-      case QEvent::FocusOut:
-      case QEvent::HoverEnter:
-      case QEvent::HoverLeave:
-      case QEvent::HoverMove:
-        return false;
-      default:
-        return QComboBox::event(event);
-      }
-    return false;
-  }
-};
-
 Recipe::Recipe(QWidget *parent) : QDialog(parent) {
+  static constexpr auto C = Qt::AlignCenter;
   QVBoxLayout *mainLayout = new QVBoxLayout;
   mainLayout->setSizeConstraint(QLayout::SetNoConstraint);
 
-    _title = new StrangeWidget ("Sans titre");
-    _title->setAlignment(Qt::AlignCenter);
-    mainLayout->addWidget(_title, 0, Qt::AlignCenter);
+    _title = new LabelEdit ("Sans titre");
+    _title->setAlignment(C);
+    _title->setFontRelativeSize(1.5);
+    mainLayout->addWidget(_title);
 
-    QGridLayout *dlayout = new QGridLayout; {
-      dlayout->addWidget(_references = new QLabel(""));
+    _consult.holder = new QWidget;
+    QGridLayout *clayout = new QGridLayout; {
+
+      bool tightIcons = false;
+      int r = 0, c = 0;
+      if (tightIcons) {
+        clayout->addWidget(new QWidget, r, c++);
+        clayout->setColumnStretch(0, 1);
+      }
+      for (QLabel ** l: { &_consult.subrecipe, &_consult.basic,
+                          &_consult.regimen, &_consult.status, &_consult.type,
+                          &_consult.duration })
+        clayout->addWidget(*l = new QLabel, r, c++, C);
+      if (tightIcons) {
+        clayout->addWidget(new QWidget, r, c);
+        clayout->setColumnStretch(c, 1);
+      }
+
+    }
+    _consult.holder->setLayout(clayout);
+    mainLayout->addWidget(_consult.holder);
+
+    _edit.holder = new QWidget;
+    QGridLayout *elayout = new QGridLayout; {
 
       int r = 0, c = 0;
-      dlayout->addWidget(new QLabel (tr("Régime")),
-                         r, c++, 1, 1, Qt::AlignCenter);
-      dlayout->addWidget(new QLabel (tr("Status")),
-                         r, c++, 1, 1, Qt::AlignCenter);
-      dlayout->addWidget(new QLabel (tr("Type")),
-                         r, c++, 1, 1, Qt::AlignCenter);
-      dlayout->addWidget(new QLabel (tr("Durée")),
-                         r, c++, 1, 1, Qt::AlignCenter);
+      elayout->addWidget(new QLabel (tr("Références")),
+                         r, c++, 1, 1, C);
+      elayout->addWidget(new QLabel (tr("Basique")),
+                         r, c++, 1, 1, C);
+      elayout->addWidget(new QLabel (tr("Régime")),
+                         r, c++, 1, 1, C);
+      elayout->addWidget(new QLabel (tr("Status")),
+                         r, c++, 1, 1, C);
+      elayout->addWidget(new QLabel (tr("Type")),
+                         r, c++, 1, 1, C);
+      elayout->addWidget(new QLabel (tr("Durée")),
+                         r, c++, 1, 1, C);
       r++; c = 0;
-      dlayout->addWidget(_regimen = new ObstinateCB, r, c++, Qt::AlignCenter);
-      _regimen->setModel(db::getStaticModel<db::RegimenData>());
-      dlayout->addWidget(_status = new ObstinateCB, r, c++, Qt::AlignCenter);
-      _status->setModel(db::getStaticModel<db::StatusData>());
-      _status->setStyleSheet(":disabled {background-color:#ff0000;}");
-      dlayout->addWidget(_type = new ObstinateCB, r, c++, Qt::AlignCenter);
-      _type->setModel(db::getStaticModel<db::DishTypeData>());
-      dlayout->addWidget(_duration = new ObstinateCB, r, c++, Qt::AlignCenter);
-      _duration->setModel(db::getStaticModel<db::DurationData>());
+      elayout->addWidget(_edit.subrecipe = new QLabel, r, c++, C);
+      elayout->addWidget(_edit.basic = new QCheckBox, r, c++, C);
+      elayout->addWidget(_edit.regimen = new QComboBox, r, c++, C);
+      _edit.regimen->setModel(db::getStaticModel<db::RegimenData>());
+      elayout->addWidget(_edit.status = new QComboBox, r, c++, C);
+      _edit.status->setModel(db::getStaticModel<db::StatusData>());
+      elayout->addWidget(_edit.type = new QComboBox, r, c++, C);
+      _edit.type->setModel(db::getStaticModel<db::DishTypeData>());
+      elayout->addWidget(_edit.duration = new QComboBox, r, c++, C);
+      _edit.duration->setModel(db::getStaticModel<db::DurationData>());
 
       r++; c = 0;
-      dlayout->addWidget(spacer(), r, c, 1, 3);
+      elayout->addWidget(spacer(), r, c, 1, 3);
 
-    } mainLayout->addLayout(dlayout);
+    }
+    _edit.holder->setLayout(elayout);
+    mainLayout->addWidget(_edit.holder);
 
 //    mainLayout->addWidget(spacer());
     _vsplitter = new QSplitter (Qt::Vertical);
@@ -155,7 +202,7 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
             _portions->setSingleStep(.25);
             playout->addWidget(_portions);
             _portions->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-            playout->addWidget(_portionsLabel = new QLineEdit("?"));
+            playout->addWidget(_portionsLabel = new LabelEdit("?"));
           ilayout->addLayout(playout);
           _ingredients = new GUIList;
           _ingredients->setAcceptDrops(true);
@@ -248,20 +295,7 @@ int Recipe::show (db::Recipe *recipe, bool readOnly, double ratio) {
 
   _title->setText(_data->title);
 
-  if (_data->used > 0) {
-    QString t = QString::number(_data->used) + " reference";
-    if (_data->used > 1)  t += "s";
-    _references->setText(t);
-  } else
-    _references->setText("");
-  _references->setVisible(_data->used > 0);
-
-  _regimen->setCurrentIndex(_data->regimen->id-1);
-  _status->setCurrentIndex(_data->status->id-1);
-  _type->setCurrentIndex(_data->type->id-1);
-  _duration->setCurrentIndex(_data->duration->id-1);
-
-  for (const db::Recipe::Ingredient_ptr &i: recipe->ingredients) addIngredient(i);
+  for (const auto &i: recipe->ingredients) addIngredient(i);
   for (const QString &s: recipe->steps)  addStep(s);
 
   _displayedPortions = ratio * _data->portions;
@@ -283,10 +317,11 @@ const T* getData (const QComboBox *cb) {
 void Recipe::writeThrough(void) {
   _data->title = _title->text();
 
-  _data->regimen = getData<db::RegimenData>(_regimen);
-  _data->status = getData<db::StatusData>(_status);
-  _data->type = getData<db::DishTypeData>(_type);
-  _data->duration = getData<db::DurationData>(_duration);
+  _data->regimen = getData<db::RegimenData>(_edit.regimen);
+  _data->status = getData<db::StatusData>(_edit.status);
+  _data->type = getData<db::DishTypeData>(_edit.type);
+  _data->duration = getData<db::DurationData>(_edit.duration);
+  _data->basic = _edit.basic->isChecked();
 
   // Make a copy for usage comparison
   decltype(_data->ingredients) newIngredients;
@@ -309,16 +344,40 @@ void Recipe::writeThrough(void) {
   emit validated();
 }
 
+void pixmap (QLabel *l, const QIcon &icon) {
+  l->setPixmap(icon.pixmap(2*db::iconSize(), 2*db::iconSize()));
+}
+
+void maybePixmap (QLabel *l, bool yes, const QIcon &icon) {
+  pixmap(l, yes ? icon : QIcon());
+}
+
 void Recipe::setReadOnly(bool ro) {
   _readOnly = ro;
 
-//  _title->setEnabled(!ro);
-  static_cast<StrangeWidget*>(_title)->setEdit(!ro);
+  _title->setEdit(!ro);
 
-  static_cast<ObstinateCB*>(_regimen)->readOnly = ro;
-  static_cast<ObstinateCB*>(_status)->readOnly = ro;
-  static_cast<ObstinateCB*>(_type)->readOnly = ro;
-  static_cast<ObstinateCB*>(_duration)->readOnly = ro;
+  if (_data) {
+    if (ro) { // copy from edit to consult
+      maybePixmap(_consult.subrecipe, _data->used, db::MiscIcons::sub_recipe());
+      maybePixmap(_consult.basic, _data->basic, db::MiscIcons::basic_recipe());
+      pixmap(_consult.regimen, _data->regimen->decoration);
+      pixmap(_consult.status, _data->status->decoration);
+      pixmap(_consult.type, _data->type->decoration);
+      pixmap(_consult.duration, _data->duration->decoration);
+
+    } else {  // copy from consult to edit
+      _edit.subrecipe->setText(QString::number(_data->used));
+      _edit.basic->setChecked(_data->basic);
+      _edit.regimen->setCurrentIndex(_data->regimen->id-1);
+      _edit.status->setCurrentIndex(_data->status->id-1);
+      _edit.type->setCurrentIndex(_data->type->id-1);
+      _edit.duration->setCurrentIndex(_data->duration->id-1);
+    }
+  }
+
+  _consult.holder->setVisible(ro);
+  _edit.holder->setVisible(!ro);
 
   _notes->setReadOnly(ro);
 
@@ -328,7 +387,7 @@ void Recipe::setReadOnly(bool ro) {
   } else {
     _portions->setValue(_displayedPortions);
   }
-  _portionsLabel->setReadOnly(ro);
+  _portionsLabel->setEdit(!ro);
 
   _ingredients->setDragEnabled(!ro);
   _icontrols->setVisible(!ro);

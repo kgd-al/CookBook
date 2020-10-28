@@ -95,14 +95,14 @@ bool ok (int exitCode, QProcess::ExitStatus exitStatus) {
 }
 
 void setStatus (QLabel *l, int s) {
-  static QMap<int, const QPixmap*> codes {
+  static QMap<int, const QIcon*> codes {
 //    {  0, Qt::gray  },
     {  0, &db::at<db::StatusData>(db::ID(1)).decoration  },
     {  1, &db::at<db::StatusData>(db::ID(3)).decoration  }
   };
   if (s == -1) l->setPixmap(QPixmap());
   else
-    l->setPixmap(*codes.value(s));
+    l->setPixmap(codes.value(s)->pixmap(l->size()));
 }
 
 void UpdateManager::doPull(void) {

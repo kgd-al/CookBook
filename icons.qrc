@@ -3,12 +3,16 @@
         <file>icons/regimen-protein.png</file>
         <file>icons/regimen-vegan.svg</file>
         <file>icons/regimen-vegetarian.png</file>
-        <file>icons/time-fast.png</file>
         <file>icons/time-long.png</file>
         <file>icons/time-medium.png</file>
         <file>icons/time-very-long.png</file>
-        <file>icons/type-neutral.jpg</file>
         <file>icons/type-salted.png</file>
         <file>icons/type-sugar.ico</file>
+        <file>icons/basic-recipe.png</file>
+        <file>icons/sub-recipe.png</file>
+        <file>icons/time-medium-2.png</file>
+        <file>icons/time-short-2.png</file>
+        <file>icons/time-short.png</file>
+        <file>icons/type-neutral.png</file>
     </qresource>
 </RCC>

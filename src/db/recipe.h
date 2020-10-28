@@ -24,6 +24,7 @@ struct Recipe {
   const StatusData *status;
   const DishTypeData *type;
   const DurationData *duration;
+  bool basic;
 
   using Ingredient_ptr = IngredientListEntry::ptr;
   using IngredientList = QList<Ingredient_ptr>;

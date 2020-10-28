@@ -105,7 +105,8 @@ QVariant SubRecipeEntry::data (int role, double r) const {
   case Qt::DisplayRole:
     return recipe->title;
   case Qt::DecorationRole:
-    return QIcon::fromTheme("accessories-text-editor");
+//    return QIcon::fromTheme("accessories-text-editor");
+    return db::MiscIcons::sub_recipe();
   case Qt::ToolTipRole:
     return recipe->ingredientList(r).join("\n");
   default:

@@ -20,6 +20,9 @@ int iconSize (void) {
   qDebug() << "using" << s << "as icon size";
   return s;
 }
+int iconDrawSize (void) {
+  return 4 * iconSize();
+}
 
 void fontChanged (const QFont &font) {
   QSettings settings;
@@ -29,27 +32,36 @@ void fontChanged (const QFont &font) {
   qDebug() << font << "is" << metrics.height() << "pixels high";
 }
 
-QPixmap iconFromFile (const QString &filepath) {
-  QPixmap p (filepath);
-  qDebug() << "Loaded" << p << "from" << filepath;
-  return p;
+QIcon iconFromFile (const QString &filepath) {
+  QIcon i (filepath);
+  qDebug() << "Loaded" << i << "from" << filepath;
+  return i;
 }
 
 QPixmap rectangularIconFromColor (const QColor &d) {
-  QPixmap p (iconSize(), iconSize());
+  QPixmap p (iconDrawSize(), iconDrawSize());
   p.fill(d);
   return p;
 }
 
 QPixmap circularIconFromColor (const QColor &d) {
-  QPixmap p (iconSize(), iconSize());
+  QPixmap p (iconDrawSize(), iconDrawSize());
   p.fill(Qt::transparent);
   QPainter painter (&p);
   painter.setPen(Qt::NoPen);
   painter.setBrush(d);
   painter.setRenderHint(QPainter::Antialiasing, true);
-  painter.drawEllipse(0, 0, iconSize(), iconSize());
+  painter.drawEllipse(0, 0, iconDrawSize(), iconDrawSize());
   return p;
+}
+
+const QIcon& MiscIcons::sub_recipe (void) {
+  static const auto i = iconFromFile(":/icons/sub-recipe.png");
+  return i;
+}
+const QIcon& MiscIcons::basic_recipe (void) {
+  static const auto i = iconFromFile(":/icons/basic-recipe.png");
+  return i;
 }
 
 #define ENTRY(I, N, R, G, B) \
@@ -95,7 +107,7 @@ void RegimenData::loadDatabase (void) {
 DishTypeData::Database DishTypeData::_database;
 void DishTypeData::loadDatabase (void) {
   _database = {
-    ENTRY(1, "Neutre", ":/icons/type-neutral.jpg"  ),
+    ENTRY(1, "Neutre", ":/icons/type-neutral.png"  ),
     ENTRY(2, "Salé",   ":/icons/type-salted.png"   ),
     ENTRY(3, "Sucré",  ":/icons/type-sugar.ico"    ),
   };
@@ -104,8 +116,8 @@ void DishTypeData::loadDatabase (void) {
 DurationData::Database DurationData::_database;
 void DurationData::loadDatabase (void) {
   _database = {
-    ENTRY(1, "Rapide",    ":/icons/time-fast.png"       ),
-    ENTRY(2, "Journée",   ":/icons/time-medium.png"     ),
+    ENTRY(1, "Rapide",    ":/icons/time-short-2.png"    ),
+    ENTRY(2, "Journée",   ":/icons/time-medium-2.png"   ),
     ENTRY(3, "Lendemain", ":/icons/time-long.png"       ),
     ENTRY(4, "Très long", ":/icons/time-very-long.png"  ),
   };

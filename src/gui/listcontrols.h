@@ -18,9 +18,14 @@ public:
 
   void setView (QAbstractItemView *view);
 
+  void setNeedsConfirmation (bool c) {
+    _needsConfirmation = c;
+  }
+
 private:
   const QAbstractItemView *_view;
   QToolButton *_add, *_edit, *_del;
+  bool _needsConfirmation;
 
   void setState (void);
   void deleteSelection (void);

@@ -10,7 +10,8 @@
 namespace gui {
 
 ListControls::ListControls (QAbstractItemView *view,
-                            QBoxLayout::Direction direction) : _view(nullptr) {
+                            QBoxLayout::Direction direction) {
+
   QBoxLayout *layout = new QBoxLayout (direction);
   layout->addWidget(_add = new QToolButton);
   _add->setIcon(QIcon::fromTheme("list-add"));
@@ -26,6 +27,8 @@ ListControls::ListControls (QAbstractItemView *view,
 
   connect(_del, &QToolButton::clicked, this, &ListControls::deleteSelection);
 
+  _view = nullptr;
+  _needsConfirmation = true;
   if (view)  setView(view);
 
   setState();
@@ -47,8 +50,9 @@ void ListControls::setState(void) {
 }
 
 void ListControls::deleteSelection(void) {
-  if (QMessageBox::question(this, "Confirmez", "Supprimer?")
-      != QMessageBox::Yes)  return;
+  if (_needsConfirmation
+      && QMessageBox::question(this, "Confirmez", "Supprimer?")
+         != QMessageBox::Yes)  return;
 
 //  qDeleteAll(_view->selectedItems());
   std::set<int> selectedRows;
