@@ -17,7 +17,7 @@ namespace db {
 int iconSize (void) {
   QSettings settings;
   auto s = settings.value("iconSize", 15).toInt();
-  qDebug() << "using" << s << "as icon size";
+//  qDebug() << "using" << s << "as icon size";
   return s;
 }
 int iconDrawSize (void) {

@@ -8,13 +8,19 @@ namespace db {
 
 class RecipesModel : public BaseModel<Recipe> {
 public:
+  static constexpr auto SortRole = PtrRole+42;
+
   RecipesModel(void);
 
-  void addRecipe (Recipe &&r);
+  QModelIndex addRecipe(Recipe &&r);
   void delRecipe (Recipe *r);
 
-  // Model Qt interface
-  int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+  static int columnCount (void);
+  static int titleColumn (void);
+  int columnCount(const QModelIndex &parent) const override;
+
+  QVariant headerData(int section, Qt::Orientation orientation,
+                      int role) const override;
   QVariant data (const QModelIndex &index, int role) const override;
 
   void valueModified(ID id) override;

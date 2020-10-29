@@ -108,6 +108,14 @@ void Recipe::updateUsageCounts(void) {
   }
 }
 
+QIcon Recipe::basicIcon(void) const {
+  return basic ? MiscIcons::basic_recipe() : QIcon();
+}
+
+QIcon Recipe::subrecipeIcon(void) const {
+  return used > 0 ? MiscIcons::sub_recipe() : QIcon();
+}
+
 QStringList Recipe::ingredientList(double r) const {
   QStringList l;
   l.append("Pour " + QString::number(r * portions) + " " + portionsLabel + ":");

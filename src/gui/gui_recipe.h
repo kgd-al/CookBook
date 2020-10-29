@@ -29,18 +29,23 @@ public:
 
   Recipe(QWidget *parent);
 
-  int show(db::Recipe *recipe, bool readOnly, double ratio = 1);
+  int show(db::Recipe *recipe, bool readOnly,
+           QModelIndex index = QModelIndex(),
+           double ratio = 1);
 
   void setReadOnly (bool ro);
   bool isReadOnly (void) {
     return _readOnly;
   }
 
+  void setIndex (QModelIndex index);
+
 signals:
   void validated (void);  // Confirm button has been clicked
   void deleted (void);  // Delete button has been cliked (and deletion is legal)
 
 private:
+  QModelIndex _index;
   db::Recipe *_data;
   bool _readOnly;
 
@@ -53,14 +58,14 @@ private:
   LabelEdit *_portionsLabel;
 
   struct {
-    QLabel *subrecipe, *basic, *regimen, *status, *type, *duration;
+    QLabel *subrecipe, *basic, *regimen, *type, *duration, *status;
     QWidget *holder;
   } _consult;
 
   struct {
     QLabel *subrecipe;
     QCheckBox *basic;
-    QComboBox *regimen, *status, *type, *duration;
+    QComboBox *regimen, *type, *duration, *status;
     QWidget *holder;
   } _edit;
 
@@ -69,7 +74,12 @@ private:
 
   QTextEdit *_notes;
 
+  QToolButton *_prev, *_next;
   QPushButton *_toggle, *_apply;
+
+  void update (db::Recipe *recipe, bool readOnly, QModelIndex index,
+               double ratio);
+  void updateNavigation (void);
 
   void toggleReadOnly (void);
   bool confirmed(void);
@@ -90,6 +100,9 @@ private:
   void updateDisplayedPortions (void) {
     return updateDisplayedPortions(true);
   }
+
+  void showPrevious (void);
+  void showNext (void);
 
   void showSubRecipe (QListWidgetItem *li);
 

@@ -79,6 +79,7 @@ IngredientDialog::IngredientDialog (QWidget *parent, const QString &title)
   rlayout->addWidget(new QLabel ("Sélectionnez une recette"));
   rlayout->addWidget(recipe = new AutoFilterComboBox);
   recipe->setModel(&db::Book::current().recipes);
+  recipe->setModelColumn(db::RecipesModel::titleColumn());
   recipe->setCurrentIndex(-1);
   rholder->setLayout(rlayout);
   entryLayout->addWidget(rholder);

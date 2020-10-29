@@ -16,8 +16,8 @@ Book& Book::current (void) {
   return b;
 }
 
-void Book::addRecipe(Recipe &&r) {
-  recipes.addRecipe(std::move(r));
+QModelIndex Book::addRecipe(Recipe &&r) {
+  return recipes.addRecipe(std::move(r));
 }
 
 //#define FAKE_SAVE 1

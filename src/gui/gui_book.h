@@ -5,6 +5,7 @@
 #include <QSplitter>
 #include <QSortFilterProxyModel>
 #include <QStyledItemDelegate>
+#include <QTableView>
 
 #include "../db/book.h"
 #include "gui_recipe.h"
@@ -35,7 +36,7 @@ public:
 
 private:
   QSplitter *_splitter;
-  QListView *_recipes;
+  QTableView *_recipes;
   FilterView *_filter;
   RecipeFilter *_proxy;
 

@@ -20,17 +20,20 @@ struct Recipe {
   double portions;
   QString portionsLabel;
 
+  bool basic;
   const RegimenData *regimen;
-  const StatusData *status;
   const DishTypeData *type;
   const DurationData *duration;
-  bool basic;
+  const StatusData *status;
 
   using Ingredient_ptr = IngredientListEntry::ptr;
   using IngredientList = QList<Ingredient_ptr>;
   IngredientList ingredients;
   QStringList steps;
   QString notes;
+
+  QIcon basicIcon (void) const;
+  QIcon subrecipeIcon (void) const;
 
   QStringList ingredientList (double r) const;
 

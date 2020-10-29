@@ -61,9 +61,9 @@ struct RecipeListDelegate : public QStyledItemDelegate {
       painter->translate(option.rect.x(), option.rect.y());
 
       int x = 0;
-      for (const QIcon &i: { /*r->*/
-                             r->regimen->decoration, r->status->decoration,
-                             r->type->decoration, r->duration->decoration }) {
+      for (const QIcon &i: { r->basicIcon(), r->subrecipeIcon(),
+                             r->regimen->decoration, r->type->decoration,
+                             r->duration->decoration, r->status->decoration }) {
         int w = h;
         i.paint(painter, x, S, w, h);
         x += w + M;
@@ -176,8 +176,8 @@ struct RecipeFilter : public QSortFilterProxyModel {
     operator bool (void) const { return active; }
   };
   Data<QString> title;
-  Data<db::ID> regimen, status, type, duration;
-  Data<bool> basic;
+  Data<bool> basic, subrecipe;
+  Data<db::ID> regimen, type, duration, status;
 
   using IngredientsModel = EditableModel<IngredientReference>;
   Data<IngredientsModel> ingredients;
@@ -207,6 +207,12 @@ struct RecipeFilter : public QSortFilterProxyModel {
 //    TEST(NAME) << NAME.data << " != " << r.NAME->id << "? " \
 //               << (r.NAME->id != NAME.data) << "\n"; \
 
+//    TEST(basic) << " != " << r.used << "? " << (r.used != subrecipe.data) << "\n";
+    if (basic && r.basic != subrecipe.data)  return false;
+
+//    TEST(basic) << " != " << r.used << "? " << (r.used != subrecipe.data) << "\n";
+    if (subrecipe && r.used != subrecipe.data)  return false;
+
 #define TEST_CB(NAME) \
   if (NAME && r.NAME->id != NAME.data) return false;
 
@@ -215,9 +221,6 @@ struct RecipeFilter : public QSortFilterProxyModel {
     TEST_CB(type)
     TEST_CB(duration)
 #undef TEST_CB
-
-//    TEST(basic) << " != " << r.used << "? " << (r.used != basic.data) << "\n";
-    if (basic && r.used != basic.data)  return false;
 
     if (ingredients) {
       int found = 0;
@@ -352,6 +355,7 @@ struct RecipeReferenceDelegate : public QStyledItemDelegate {
     cbox = new AutoFilterComboBox(QComboBox::NoInsert);
     cbox->setForceCompletion(false);
     cbox->setModel(&db::Book::current().recipes);
+    cbox->setModelColumn(db::RecipesModel::titleColumn());
     cbox->setAutoFillBackground(true);
     cbox->lineEdit()->setPlaceholderText("Sous-Recette");
     connect(cbox->lineEdit(), &QLineEdit::textChanged,
@@ -436,9 +440,9 @@ struct FilterView : public QWidget {
     }
   };
   Entry<QLineEdit> *title;
+  Entry<QGroupBox> *basic, *subrecipe;
+  QRadioButton *basic_yes, *subrecipe_yes;
   Entry<QComboBox> *regimen, *status, *type, *duration;
-  Entry<QGroupBox> *basic;
-  QRadioButton *basic_yes;
   Entry<QTableView> *ingredients;
   Entry<QListView> *subrecipes;
   ListControls *icontrols, *scontrols;
@@ -449,11 +453,12 @@ struct FilterView : public QWidget {
     QGridLayout *layout = new QGridLayout;
 
     title = new Entry<QLineEdit> ("Titre", layout);
+    basic = new Entry<QGroupBox> ("Basique", layout);
+    subrecipe = new Entry<QGroupBox> ("Sous-Recette", layout);
     regimen = new Entry<QComboBox> ("Régime", layout);
-    status = new Entry<QComboBox> ("Status", layout);
     type = new Entry<QComboBox> ("Type", layout);
     duration = new Entry<QComboBox> ("Durée", layout);
-    basic = new Entry<QGroupBox> ("Basique", layout);
+    status = new Entry<QComboBox> ("Status", layout);
     ingredients = new Entry<QTableView> ("Ingrédients", layout);
     ingredients->widget->setModel(&filter->ingredients.data);
     {
@@ -503,11 +508,21 @@ struct FilterView : public QWidget {
     basic->widget->setLayout(basic_layout);
     basic_yes->setChecked(true);
 
+    QHBoxLayout *subrecipe_layout = new QHBoxLayout;
+    subrecipe_layout->addWidget(subrecipe_yes = new QRadioButton("oui"));
+    subrecipe_layout->addWidget(new QRadioButton("non"));
+    subrecipe->widget->setLayout(subrecipe_layout);
+    subrecipe_yes->setChecked(true);
+
     connectMany(title, &QLineEdit::textChanged);
+    connectMany(basic);
+    connect(basic_yes, &QRadioButton::toggled,
+            this, &FilterView::filterChanged);
+    connectMany(subrecipe);
+    connect(subrecipe_yes, &QRadioButton::toggled,
+            this, &FilterView::filterChanged);
     for (const auto &cb: {regimen, status, type, duration})
       connectMany(cb, qOverload<int>(&QComboBox::currentIndexChanged));
-    connectMany(basic);
-    connect(basic_yes, &QRadioButton::toggled, this, &FilterView::filterChanged);
     connectMany(ingredients);
     connectMany(subrecipes);
 
@@ -537,7 +552,7 @@ struct FilterView : public QWidget {
     connect(scontrols->delButton(), &QToolButton::clicked,
             this, &FilterView::filterChanged);    
 
-    /// TODO Remove
+    /// TODO Remove (?)
     ingredients->cb->setChecked(true);
     subrecipes->cb->setChecked(true);
   }
@@ -561,6 +576,12 @@ struct FilterView : public QWidget {
     filter->title.active = title->cb->isChecked();
     filter->title.data = title->widget->text();
 
+    filter->basic.active = basic->cb->isChecked();
+    filter->basic.data = basic_yes->isChecked();
+
+    filter->subrecipe.active = subrecipe->cb->isChecked();
+    filter->subrecipe.data = subrecipe_yes->isChecked();
+
 #define UPDATE_CB(NAME) \
   filter->NAME.active = NAME->cb->isChecked(); \
   filter->NAME.data = db::ID(NAME->widget->currentData(db::IDRole).toInt());
@@ -570,9 +591,6 @@ struct FilterView : public QWidget {
     UPDATE_CB(type)
     UPDATE_CB(duration)
 #undef UPDATE_CB
-
-    filter->basic.active = basic->cb->isChecked();
-    filter->basic.data = basic_yes->isChecked();
 
     auto q = qDebug().nospace();
 
@@ -611,22 +629,34 @@ struct FilterView : public QWidget {
 Book::Book(QWidget *parent) : QMainWindow(parent) {
     _splitter = new QSplitter;
 
-      _recipes = new QListView;
+      _recipes = new QTableView;
       _recipes->setEditTriggers(QAbstractItemView::NoEditTriggers);
       _recipes->setModel(_proxy = new RecipeFilter);
-      _recipes->setItemDelegate(new RecipeListDelegate (this));
+      _splitter->addWidget(_recipes);
+      auto rheader = _recipes->horizontalHeader();
+      Q_ASSERT(rheader);
+      rheader->setSectionResizeMode(QHeaderView::ResizeToContents);
+      rheader->setStretchLastSection(true);
+      _recipes->verticalHeader()->hide();
+      _recipes->setSelectionBehavior(QTableView::SelectRows);
+      _recipes->setSelectionMode(QTableView::SingleSelection);
+      _recipes->setShowGrid(false);
+//      rheader->setSectionResizeMode(_recipes->model()->columnCount()-1,
+//                                    QHeaderView::Stretch);
+//      _recipes->setItemDelegate(new RecipeListDelegate (this));
+      _recipes->setSortingEnabled(true);
+      _proxy->setSortRole(db::RecipesModel::SortRole);
       _proxy->setSortCaseSensitivity(Qt::CaseInsensitive);
       _proxy->setDynamicSortFilter(true);
-      _proxy->sort(0);
-      _splitter->addWidget(_recipes);
+      _recipes->sortByColumn(db::RecipesModel::titleColumn(),
+                             Qt::AscendingOrder);
 
       _splitter->addWidget(_filter = new FilterView (_proxy, this));
 
   setCentralWidget(_splitter);
 
 
-  connect(_recipes, &QListView::activated,
-          this, &Book::showRecipe);
+  connect(_recipes, &QTableView::activated, this, &Book::showRecipe);
 
   QMenuBar *bar = menuBar();
     QMenu *m_book = bar->addMenu("Book");
@@ -687,16 +717,18 @@ void Book::addRecipe(void) {
   Recipe drecipe (this);
   db::Recipe recipe = db::Recipe::defaultRecipe();
   bool validated = false;
-  connect(&drecipe, &Recipe::validated, [&validated] { validated = true; });
+  connect(&drecipe, &Recipe::validated,
+          [this,&validated,&drecipe,&recipe] {
+    validated = true;
+    qDebug() << "Inserting: " << db::Recipe::toJson(recipe);
+    QModelIndex source_index = db::Book::current().addRecipe(std::move(recipe));
+    drecipe.setIndex(_proxy->mapFromSource(source_index));
+    setModified(true);
+  });
   drecipe.show(&recipe, false);
 
-  if (validated) {
-    qDebug() << "Inserting: " << db::Recipe::toJson(recipe);
-    db::Book::current().addRecipe(std::move(recipe));
-    setModified(true);
-    if (db::Book::current().modified)
-      overwriteRecipes();
-  }
+  if (validated && db::Book::current().modified)
+    overwriteRecipes();
 }
 
 void Book::showRecipe(const QModelIndex &index) {
@@ -704,7 +736,7 @@ void Book::showRecipe(const QModelIndex &index) {
   connect(&recipe, &Recipe::validated, [this] { setModified(true); });
   recipe.show(&db::Book::current()
               .recipes.at(db::ID(index.data(db::IDRole).toInt())),
-              true);
+              true, index);
   if (db::Book::current().modified)
     overwriteRecipes();
 }

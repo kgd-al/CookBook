@@ -19,7 +19,7 @@ struct Book {
 
   Book(void);
 
-  void addRecipe (Recipe &&r);
+  QModelIndex addRecipe (Recipe &&r);
 
   bool save (const QString &path);
   bool load (const QString &path);

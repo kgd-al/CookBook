@@ -22,6 +22,10 @@
 
 namespace gui {
 
+QModelIndex nextRow (const QModelIndex &i, int direction) {
+  return i.sibling(i.row()+direction, i.column());
+}
+
 QWidget* spacer (void) {
   auto w = new QWidget;
   w->setMinimumHeight(10);
@@ -35,8 +39,8 @@ struct LabelEdit : public QWidget {
   QLineEdit *ledit;
   LabelEdit (const QString &text, bool edit = false) {
     QGridLayout *layout = new QGridLayout;
-    layout->addWidget(label = new QLabel, 0, 0);
     layout->addWidget(ledit = new QLineEdit, 0, 0);
+    layout->addWidget(label = new QLabel, 0, 0);
     setLayout(layout);
     setText(text);
     setEdit(edit);
@@ -58,13 +62,17 @@ struct LabelEdit : public QWidget {
   }
 
   void setEdit (bool e) {
+    if (e == edit)  return;
     edit = e;
     label->setVisible(!edit);
     ledit->setVisible(edit);
-    if (e)
+    if (e) {
       ledit->setText(label->text());
-    else
+      label->setText("");
+    } else {
       label->setText(ledit->text());
+      ledit->setText("");
+    }
   }
 
   void setText (const QString &text) {
@@ -143,8 +151,8 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
         clayout->setColumnStretch(0, 1);
       }
       for (QLabel ** l: { &_consult.subrecipe, &_consult.basic,
-                          &_consult.regimen, &_consult.status, &_consult.type,
-                          &_consult.duration })
+                          &_consult.regimen, &_consult.type, &_consult.duration,
+                          &_consult.status })
         clayout->addWidget(*l = new QLabel, r, c++, C);
       if (tightIcons) {
         clayout->addWidget(new QWidget, r, c);
@@ -165,23 +173,23 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
                          r, c++, 1, 1, C);
       elayout->addWidget(new QLabel (tr("Régime")),
                          r, c++, 1, 1, C);
-      elayout->addWidget(new QLabel (tr("Status")),
-                         r, c++, 1, 1, C);
       elayout->addWidget(new QLabel (tr("Type")),
                          r, c++, 1, 1, C);
       elayout->addWidget(new QLabel (tr("Durée")),
+                         r, c++, 1, 1, C);
+      elayout->addWidget(new QLabel (tr("Status")),
                          r, c++, 1, 1, C);
       r++; c = 0;
       elayout->addWidget(_edit.subrecipe = new QLabel, r, c++, C);
       elayout->addWidget(_edit.basic = new QCheckBox, r, c++, C);
       elayout->addWidget(_edit.regimen = new QComboBox, r, c++, C);
       _edit.regimen->setModel(db::getStaticModel<db::RegimenData>());
-      elayout->addWidget(_edit.status = new QComboBox, r, c++, C);
-      _edit.status->setModel(db::getStaticModel<db::StatusData>());
       elayout->addWidget(_edit.type = new QComboBox, r, c++, C);
       _edit.type->setModel(db::getStaticModel<db::DishTypeData>());
       elayout->addWidget(_edit.duration = new QComboBox, r, c++, C);
       _edit.duration->setModel(db::getStaticModel<db::DurationData>());
+      elayout->addWidget(_edit.status = new QComboBox, r, c++, C);
+      _edit.status->setModel(db::getStaticModel<db::StatusData>());
 
       r++; c = 0;
       elayout->addWidget(spacer(), r, c, 1, 3);
@@ -246,6 +254,17 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
       connect(del, &QToolButton::clicked, this, &Recipe::deleteRequested);
 
       QDialogButtonBox *buttons = new QDialogButtonBox;
+        _prev = new QToolButton;
+        _prev->setIcon(QIcon::fromTheme("go-previous"));
+        _prev->setShortcut(QKeySequence(Qt::Key_Left));
+        connect(_prev, &QToolButton::clicked, this, &Recipe::showPrevious);
+        buttons->addButton(_prev, QDialogButtonBox::ActionRole);
+
+        _next = new QToolButton;
+        _next->setIcon(QIcon::fromTheme("go-next"));
+        _next->setShortcut(QKeySequence(Qt::Key_Right));
+        connect(_next, &QToolButton::clicked, this, &Recipe::showNext);
+        buttons->addButton(_next, QDialogButtonBox::ActionRole);
 
         _apply = buttons->addButton("Appliquer", QDialogButtonBox::AcceptRole);
         connect(_apply, &QPushButton::clicked, this, &Recipe::apply);
@@ -284,18 +303,31 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
   setLayout(mainLayout);
   setReadOnly(false);
 
+  _ingredients->setFocus();
+
   gui::restoreGeometry(this);
   auto &settings = localSettings(this);
   _hsplitter->setSizes(settings.value("hsplitter").value<QList<int>>());
   _vsplitter->setSizes(settings.value("vsplitter").value<QList<int>>());
 }
 
-int Recipe::show (db::Recipe *recipe, bool readOnly, double ratio) {
+int Recipe::show (db::Recipe *recipe, bool readOnly,
+                  QModelIndex index, double ratio) {
+  update(recipe, readOnly, index, ratio);
+  return exec();
+}
+
+void Recipe::update(db::Recipe *recipe, bool readOnly, QModelIndex index,
+                    double ratio) {
+  _index = index;
   _data = recipe;
 
   _title->setText(_data->title);
 
+  _ingredients->clear();
   for (const auto &i: recipe->ingredients) addIngredient(i);
+
+  _steps->clear();
   for (const QString &s: recipe->steps)  addStep(s);
 
   _displayedPortions = ratio * _data->portions;
@@ -305,8 +337,6 @@ int Recipe::show (db::Recipe *recipe, bool readOnly, double ratio) {
   _notes->setText(_data->notes);
 
   setReadOnly(readOnly);
-
-  return exec();
 }
 
 template <typename T>
@@ -317,11 +347,11 @@ const T* getData (const QComboBox *cb) {
 void Recipe::writeThrough(void) {
   _data->title = _title->text();
 
+  _data->basic = _edit.basic->isChecked();
   _data->regimen = getData<db::RegimenData>(_edit.regimen);
   _data->status = getData<db::StatusData>(_edit.status);
   _data->type = getData<db::DishTypeData>(_edit.type);
   _data->duration = getData<db::DurationData>(_edit.duration);
-  _data->basic = _edit.basic->isChecked();
 
   // Make a copy for usage comparison
   decltype(_data->ingredients) newIngredients;
@@ -348,10 +378,6 @@ void pixmap (QLabel *l, const QIcon &icon) {
   l->setPixmap(icon.pixmap(2*db::iconSize(), 2*db::iconSize()));
 }
 
-void maybePixmap (QLabel *l, bool yes, const QIcon &icon) {
-  pixmap(l, yes ? icon : QIcon());
-}
-
 void Recipe::setReadOnly(bool ro) {
   _readOnly = ro;
 
@@ -359,20 +385,20 @@ void Recipe::setReadOnly(bool ro) {
 
   if (_data) {
     if (ro) { // copy from edit to consult
-      maybePixmap(_consult.subrecipe, _data->used, db::MiscIcons::sub_recipe());
-      maybePixmap(_consult.basic, _data->basic, db::MiscIcons::basic_recipe());
+      pixmap(_consult.basic, _data->basicIcon());
+      pixmap(_consult.subrecipe, _data->subrecipeIcon());
       pixmap(_consult.regimen, _data->regimen->decoration);
-      pixmap(_consult.status, _data->status->decoration);
       pixmap(_consult.type, _data->type->decoration);
       pixmap(_consult.duration, _data->duration->decoration);
+      pixmap(_consult.status, _data->status->decoration);
 
     } else {  // copy from consult to edit
-      _edit.subrecipe->setText(QString::number(_data->used));
       _edit.basic->setChecked(_data->basic);
+      _edit.subrecipe->setText(QString::number(_data->used));
       _edit.regimen->setCurrentIndex(_data->regimen->id-1);
-      _edit.status->setCurrentIndex(_data->status->id-1);
       _edit.type->setCurrentIndex(_data->type->id-1);
       _edit.duration->setCurrentIndex(_data->duration->id-1);
+      _edit.status->setCurrentIndex(_data->status->id-1);
     }
   }
 
@@ -394,6 +420,8 @@ void Recipe::setReadOnly(bool ro) {
   _steps->setDragEnabled(!ro);
   _scontrols->setVisible(!ro);
 
+  updateNavigation();
+
   if (ro) _toggle->setText("Modifier");
   else    _toggle->setText("Valider");
   _apply->setVisible(!ro);
@@ -401,10 +429,22 @@ void Recipe::setReadOnly(bool ro) {
   setWindowTitle(ro ? "Consultation" : "Édition");
 }
 
+void Recipe::updateNavigation (void) {
+  _prev->setEnabled(_readOnly && _index.isValid()
+                    && nextRow(_index, -1).isValid());
+  _next->setEnabled(_readOnly && _index.isValid()
+                    && nextRow(_index, +1).isValid());
+}
+
 void Recipe::toggleReadOnly(void) {
   if (!isReadOnly() && !confirmed()) return;
   setReadOnly(!isReadOnly());
   updateDisplayedPortions(false);
+}
+
+void Recipe::setIndex(QModelIndex index) {
+  _index = index;
+  updateNavigation();
 }
 
 void Recipe::apply(void) {
@@ -482,13 +522,33 @@ void Recipe::updateDisplayedPortions(bool spontaneous) {
   /// TODO Kind of ugly (but functional)
 }
 
+void Recipe::showPrevious(void) {
+  QModelIndex newIndex = nextRow(_index, -1);
+  qDebug() << "next sibling of" << _index << "is" << newIndex
+           << " (" << newIndex.data() << newIndex.data(db::IDRole) << ")";
+  db::Recipe *r = &db::Book::current()
+                  .recipes.at(db::ID(newIndex.data(db::IDRole).toInt()));
+  Q_ASSERT(r);
+  update(r, true, newIndex, 1);
+}
+
+void Recipe::showNext(void) {
+  QModelIndex newIndex = nextRow(_index, +1);
+  qDebug() << "next sibling of" << _index << "is" << newIndex
+           << " (" << newIndex.data() << newIndex.data(db::IDRole) << ")";
+  db::Recipe *r = &db::Book::current()
+                  .recipes.at(db::ID(newIndex.data(db::IDRole).toInt()));
+  Q_ASSERT(r);
+  update(r, true, newIndex, 1);
+}
+
 void Recipe::showSubRecipe(QListWidgetItem *li) {
   auto item = static_cast<IngredientListItem*>(li);
   if (item->ing->etype == db::EntryType::SubRecipe) {
     Recipe dsubrecipe (this);
     db::Recipe *subrecipe =
       static_cast<db::SubRecipeEntry*>(item->ing.data())->recipe;
-    dsubrecipe.show(subrecipe, true, currentRatio());
+    dsubrecipe.show(subrecipe, true, QModelIndex(), currentRatio());
     /// FIXME ugly const cast
   }
 }
