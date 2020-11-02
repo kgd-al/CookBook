@@ -112,7 +112,7 @@ void UpdateManager::doPull(void) {
 void UpdateManager::doCompile(void) {
   auto *p = process(_labels.compile, "qmake",
                     "CookBook.pro -spec linux-g++ CONFIG+=release -- -j 3");
-  connect(p, qOverload<int,QProcess::ExitStatus>(&QProcess::finished),
+  connect(p, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
           [this] (int exitCode, QProcess::ExitStatus exitStatus) {
     if (ok(exitCode, exitStatus))
       process(_labels.compile, "make", "", "build_debug");
@@ -155,7 +155,7 @@ UpdateManager::process(QLabel *monitor,
   process->start(program, arguments);
   working(program);
 
-  connect(process, qOverload<int,QProcess::ExitStatus>(&QProcess::finished),
+  connect(process, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
           [this, monitor, process]
           (int exitCode, QProcess::ExitStatus exitStatus){
 
@@ -177,10 +177,10 @@ UpdateManager::process(QLabel *monitor,
     _output->append(decoration);
     _output->append("");
   });
-  connect(process, qOverload<int,QProcess::ExitStatus>(&QProcess::finished),
+  connect(process, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
           process, &QProcess::deleteLater);
 
-  connect(process, qOverload<int,QProcess::ExitStatus>(&QProcess::finished),
+  connect(process, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
           this, &UpdateManager::stoppedWorking);
 
   return process;

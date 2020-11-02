@@ -10,7 +10,7 @@ namespace db {
 
 struct Recipe {
   using ID = db::ID;
-  using Database = transparent_set<Recipe>;
+  using Database = cb_container<Recipe>;
 
   ID id = ID::INVALID;
   int used;
@@ -43,13 +43,8 @@ struct Recipe {
   // On deletion
   void updateUsageCounts(void);
 
-  static Recipe defaultRecipe (void);
-
   static QJsonValue toJson (const Recipe &r);
   static Recipe fromJson (const QJsonValue &j);
-
-private:
-  Recipe();
 };
 
 } // end of namespace db

@@ -9,6 +9,7 @@
 
 #include <QMenuBar>
 #include <QMenu>
+#include <QStatusBar>
 
 #include <QGridLayout>
 #include <QTableView>
@@ -17,6 +18,11 @@
 #include <QRadioButton>
 #include <QGroupBox>
 #include <QPushButton>
+
+#ifdef Q_OS_ANDROID
+#include <QScreen>
+#include "androidspecifics.hpp"
+#endif
 
 #include "gui_book.h"
 #include "autofiltercombobox.hpp"
@@ -108,6 +114,8 @@ struct IngredientReference {
 
 template <typename T>
 struct EditableModel : public QAbstractTableModel {
+  using database_t = QList<T>;
+
   int rowCount(const QModelIndex& = QModelIndex()) const override {
     return _data.size();
   }
@@ -154,7 +162,7 @@ struct EditableModel : public QAbstractTableModel {
     return true;
   }
 
-  const auto& operator() (void) const {
+  const database_t& operator() (void) const {
     return _data;
   }
 
@@ -165,7 +173,7 @@ struct EditableModel : public QAbstractTableModel {
   }
 
 private:
-  QList<T> _data;
+  database_t _data;
 };
 
 struct RecipeFilter : public QSortFilterProxyModel {
@@ -443,9 +451,12 @@ struct FilterView : public QWidget {
   Entry<QGroupBox> *basic, *subrecipe;
   QRadioButton *basic_yes, *subrecipe_yes;
   Entry<QComboBox> *regimen, *status, *type, *duration;
+
+#ifndef Q_OS_ANDROID
   Entry<QTableView> *ingredients;
   Entry<QListView> *subrecipes;
   ListControls *icontrols, *scontrols;
+#endif
 
   FilterView (RecipeFilter *f, QWidget *parent)
     : QWidget(parent), filter(f) {
@@ -459,6 +470,8 @@ struct FilterView : public QWidget {
     type = new Entry<QComboBox> ("Type", layout);
     duration = new Entry<QComboBox> ("Durée", layout);
     status = new Entry<QComboBox> ("Status", layout);
+
+#ifndef Q_OS_ANDROID
     ingredients = new Entry<QTableView> ("Ingrédients", layout);
     ingredients->widget->setModel(&filter->ingredients.data);
     {
@@ -486,6 +499,7 @@ struct FilterView : public QWidget {
     scontrols->setNeedsConfirmation(false);
     connect(subrecipes->cb, &QCheckBox::toggled,
             scontrols, &ListControls::setEnabled);
+#endif
 
     QPushButton *clear = new QPushButton ("Clear");
     layout->addWidget(clear, layout->rowCount(), 0, 1, 4, Qt::AlignRight);
@@ -522,7 +536,9 @@ struct FilterView : public QWidget {
     connect(subrecipe_yes, &QRadioButton::toggled,
             this, &FilterView::filterChanged);
     for (const auto &cb: {regimen, status, type, duration})
-      connectMany(cb, qOverload<int>(&QComboBox::currentIndexChanged));
+      connectMany(cb, QOverload<int>::of(&QComboBox::currentIndexChanged));
+
+#ifndef Q_OS_ANDROID
     connectMany(ingredients);
     connectMany(subrecipes);
 
@@ -555,6 +571,10 @@ struct FilterView : public QWidget {
     /// TODO Remove (?)
     ingredients->cb->setChecked(true);
     subrecipes->cb->setChecked(true);
+#else
+    title->widget->setInputMethodHints(Qt::ImhNoPredictiveText);
+    title->cb->setChecked(true);
+#endif
   }
 
   template <typename T, typename... SRC>
@@ -573,16 +593,27 @@ struct FilterView : public QWidget {
   }
 
   void filterChanged (void) {
+    auto q = qDebug().nospace();
+    q << __PRETTY_FUNCTION__ << "\n";
+
+#define TEST(NAME, FUNC) \
+    q << "[" << (NAME->cb->isChecked() ? "on " : "off") << "] " \
+      << #NAME << ": " << NAME->widget->FUNC() << "\n";
+
+    TEST(title, text)
     filter->title.active = title->cb->isChecked();
     filter->title.data = title->widget->text();
 
+    TEST(basic, isChecked)
     filter->basic.active = basic->cb->isChecked();
     filter->basic.data = basic_yes->isChecked();
 
+    TEST(subrecipe, isChecked)
     filter->subrecipe.active = subrecipe->cb->isChecked();
     filter->subrecipe.data = subrecipe_yes->isChecked();
 
 #define UPDATE_CB(NAME) \
+  TEST(NAME, currentText) \
   filter->NAME.active = NAME->cb->isChecked(); \
   filter->NAME.data = db::ID(NAME->widget->currentData(db::IDRole).toInt());
 
@@ -592,8 +623,7 @@ struct FilterView : public QWidget {
     UPDATE_CB(duration)
 #undef UPDATE_CB
 
-    auto q = qDebug().nospace();
-
+#ifndef Q_OS_ANDROID
     q << "ingredients: " << ingredients->widget->model()->rowCount()
       << " items:\n";
     for (const auto &i: filter->ingredients.data())
@@ -606,14 +636,28 @@ struct FilterView : public QWidget {
       q << "\t" << i._data << "\n";
     filter->subrecipes.active = subrecipes->cb->isChecked();
 //    subrecipes->widget->
+#endif
 
     filter->invalidate();
+
+    if (filter->sourceModel()) {
+      QString msg;
+      QTextStream qts (&msg);
+      qts << "Showing " << filter->rowCount();
+      if (filter->rowCount() != filter->sourceModel()->rowCount())
+        qts << " out of " << filter->sourceModel()->rowCount();
+      static_cast<QMainWindow*>(this->topLevelWidget())
+          ->statusBar()->showMessage(msg);
+    }
   }
 
   void clear (void) {
     for (QCheckBox *cb: { title->cb, regimen->cb, status->cb, type->cb,
-                          duration->cb, basic->cb, ingredients->cb,
-                          subrecipes->cb }) {
+                          duration->cb, basic->cb,
+#ifndef Q_OS_ANDROID
+                          ingredients->cb, subrecipes->cb
+#endif
+                        }) {
 
       cb->blockSignals(true);
       cb->setChecked(false);
@@ -627,7 +671,12 @@ struct FilterView : public QWidget {
 };
 
 Book::Book(QWidget *parent) : QMainWindow(parent) {
-    _splitter = new QSplitter;
+#ifndef Q_OS_ANDROID
+  auto sorientation = Qt::Horizontal;
+#else
+  auto sorientation = Qt::Vertical;
+#endif
+    _splitter = new QSplitter (sorientation);
 
       _recipes = new QTableView;
       _recipes->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -635,6 +684,9 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
       _splitter->addWidget(_recipes);
       auto rheader = _recipes->horizontalHeader();
       Q_ASSERT(rheader);
+#ifdef Q_OS_ANDROID
+      rheader->setMinimumSectionSize(2*db::iconSize());
+#endif
       rheader->setSectionResizeMode(QHeaderView::ResizeToContents);
       rheader->setStretchLastSection(true);
       _recipes->verticalHeader()->hide();
@@ -655,21 +707,24 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 
   setCentralWidget(_splitter);
 
-
   connect(_recipes, &QTableView::activated, this, &Book::showRecipe);
 
   QMenuBar *bar = menuBar();
     QMenu *m_book = bar->addMenu("Book");
+#ifndef Q_OS_ANDROID
       m_book->addAction(QIcon::fromTheme(""), "New",
                         [this] {
                           db::Book::current().clear();
                           setModified(false);
                         },
                         QKeySequence("Ctrl+Shift+N"));
+#endif
 
       m_book->addAction(QIcon::fromTheme(""), "Load",
-                        this, qOverload<>(&Book::loadRecipes),
+                        this, QOverload<>::of(&Book::loadRecipes),
                         QKeySequence("Ctrl+O"));
+
+#ifndef Q_OS_ANDROID
       m_book->addAction(QIcon::fromTheme(""), "Save",
                         [this] { overwriteRecipes(); },
                         QKeySequence("Ctrl+S"));
@@ -703,19 +758,26 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
         QDesktopServices::openUrl(QUrl("https://github.com/kgd-al/CookBook/issues"));
       });
 
+#else
+  grabGesture(android::SingleFingerSwipeRecognizer::type());
+#endif
+
   auto &settings = localSettings(this);
   QString lastBook = settings.value("lastBook").toString();
   if (!lastBook.isEmpty())  loadRecipes(lastBook);
-  _splitter->setSizes(settings.value("splitter").value<QList<int>>());
+  QVariant defaultSizes = QVariant::fromValue(QList<int>{100,100});
+  _splitter->setSizes(
+    settings.value("splitter", defaultSizes).value<QList<int>>());
 
   gui::restoreGeometry(this, settings);
 }
 
 Book::~Book(void) {}
 
+#ifndef Q_OS_ANDROID
 void Book::addRecipe(void) {
   Recipe drecipe (this);
-  db::Recipe recipe = db::Recipe::defaultRecipe();
+  db::Recipe recipe;
   bool validated = false;
   connect(&drecipe, &Recipe::validated,
           [this,&validated,&drecipe,&recipe] {
@@ -730,6 +792,7 @@ void Book::addRecipe(void) {
   if (validated && db::Book::current().modified)
     overwriteRecipes();
 }
+#endif
 
 void Book::showRecipe(const QModelIndex &index) {
   Recipe recipe (this);
@@ -737,10 +800,13 @@ void Book::showRecipe(const QModelIndex &index) {
   recipe.show(&db::Book::current()
               .recipes.at(db::ID(index.data(db::IDRole).toInt())),
               true, index);
+#ifndef Q_OS_ANDROID
   if (db::Book::current().modified)
     overwriteRecipes();
+#endif
 }
 
+#ifndef Q_OS_ANDROID
 bool Book::saveRecipes(void) {
   QString path = QFileDialog::getSaveFileName(
     this, "Define where to save the book", ".", fileFilter);
@@ -758,6 +824,7 @@ bool Book::saveRecipes(const QString &path) {
 bool Book::overwriteRecipes(void) {
   return saveRecipes(db::Book::current().path);
 }
+#endif
 
 bool Book::loadRecipes(void) {
   return loadRecipes(
@@ -775,6 +842,7 @@ bool Book::loadRecipes(const QString &path) {
   return ret;
 }
 
+#ifndef Q_OS_ANDROID
 void Book::showIngredientsManager(void) {
   auto &settings = localSettings(this);
   if (settings.value("modal").toBool()) {
@@ -789,6 +857,7 @@ void Book::showUpdateManager(void) {
   UpdateManager manager (this);
   manager.exec();
 }
+#endif
 
 void Book::setAutoTitle(void) {
   db::Book &book = db::Book::current();
@@ -815,6 +884,8 @@ void Book::setModified(bool m) {
 
 void Book::closeEvent(QCloseEvent *e) {
   auto &book = db::Book::current();
+
+#ifndef Q_OS_ANDROID
   if (book.modified) {
     auto ret = QMessageBox::warning(this, "Confirm closing",
                                     "Saving before closing?",
@@ -833,11 +904,39 @@ void Book::closeEvent(QCloseEvent *e) {
       e->ignore();
     }
   }
+#else
+  (void)e;
+#endif
 
   auto &settings = localSettings(this);
   settings.setValue("lastBook", book.path);
   settings.setValue("splitter", QVariant::fromValue(_splitter->sizes()));
   gui::saveGeometry(this, settings);
 }
+
+#ifdef Q_OS_ANDROID
+bool Book::event(QEvent *event) {
+  if (event->type() == QEvent::Gesture) {
+    auto *ge = dynamic_cast<QGestureEvent*>(event);
+    auto q = qDebug().nospace();
+    q << ge << "\n";
+    if (auto *g = ge->gesture(android::SingleFingerSwipeRecognizer::type())) {
+      auto sg = static_cast<android::ExtendedSwipeGesture*>(g);
+      q << "\tExtendedSwipeGesture: " << sg->dx() << ", " << sg->dy() << "\n";
+      if (sg->state() == Qt::GestureFinished) {
+        int maxHeight = QGuiApplication::primaryScreen()->size().height();
+        if (sg->dy() > 100) {
+          _splitter->setSizes(QList<int>({maxHeight, 0}));
+        } else if (sg->dy() < -100) {
+          _splitter->setSizes(QList<int>({maxHeight, maxHeight}));
+        }
+      }
+    }
+    return true;
+
+  } else
+    return QMainWindow::event(event);
+}
+#endif
 
 } // end of namespace gui

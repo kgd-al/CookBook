@@ -19,6 +19,7 @@ struct IngredientListEntry {
   EntryType etype;
 
   IngredientListEntry (EntryType t) : etype(t) {}
+  virtual ~IngredientListEntry (void) {}
 
   virtual QVariant data (int role, double r = 1) const = 0;
 
@@ -51,11 +52,11 @@ struct IngredientEntry : public IngredientListEntry {
     return unit && idata;
   }
 
-  const auto& type (void) const {
+  const QString& type (void) const {
     return idata->text;
   }
 
-  const auto& group (void) const {
+  const QString& group (void) const {
     return idata->group->text;
   }
 };

@@ -53,23 +53,6 @@ QVariant UnitsModel::data (const QModelIndex &index, int role) const {
   return QVariant();
 }
 
-bool UnitsModel::insertRows(int row, int count, const QModelIndex &) {
-  QDebug q = qDebug().nospace();
-  q << "Inserting rows [" << row << "," << row+count-1 << "] out of "
-    << rowCount() << " in " << this;
-  auto rows = rowCount();
-  if (row < rows) return false;
-  q << ": ok";
-
-  beginInsertRows(QModelIndex(), rows, rows);
-    UnitData d;
-    d.id = nextID();
-    _data.insert(d);
-  endInsertRows();
-
-  return true;
-}
-
 bool UnitsModel::setData(const QModelIndex &index, const QVariant &value,
                          int role) {
 
@@ -98,19 +81,19 @@ void UnitsModel::fromJson(const QJsonArray &j) {
   beginResetModel();
   for (const QJsonValue &v: j) {
     auto d = UnitData::fromJson(v.toArray());
-    _data.insert(d);
+    _data.insert({d.id, d});
     _nextID = std::max(_nextID, d.id);
   }
+
+  UnitData::ID i = nextID();
   if (_data.empty())
-    _data.insert({nextID(), IngredientData::NoUnit, 0});
-  else
-    nextID();
+    _data[i] = UnitData(i, IngredientData::NoUnit);
   endResetModel();
 }
 
 QJsonArray UnitsModel::toJson(void) const {
   QJsonArray j;
-  for (const UnitData &d: _data)  j.append(UnitData::toJson(d));
+  for (const auto &p: _data)  j.append(UnitData::toJson(p.second));
   return j;
 }
 

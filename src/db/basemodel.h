@@ -8,7 +8,7 @@
 template <typename T>
 struct BaseModel : public QAbstractTableModel {
   using ID = typename T::ID;
-  using set_t = typename T::Database;
+  using map_t = typename T::Database;
 
   int rowCount(const QModelIndex& = QModelIndex()) const override {
     return _data.size();
@@ -28,7 +28,7 @@ struct BaseModel : public QAbstractTableModel {
       throw std::invalid_argument(oss.str());
     }
 
-    return *it;
+    return it->second;
   }
 
   T& at (ID id) {
@@ -39,7 +39,7 @@ struct BaseModel : public QAbstractTableModel {
   const T& atIndex (int i) const {
     auto it = _data.begin();
     std::advance(it, i);
-    return *it;
+    return it->second;
   }
 
   T& atIndex (int i) {
@@ -60,6 +60,20 @@ struct BaseModel : public QAbstractTableModel {
 
   ID nextIDNoIncrement (void) const {
     return _nextID;
+  }
+
+  bool insertRows(int row, int count, const QModelIndex &/*parent*/) override {
+    Q_ASSERT(count == 1);
+    auto rows = rowCount();
+    if (row < rows) return false;
+
+    beginInsertRows(QModelIndex(), rows, rows);
+      T d;
+      d.id = nextID();
+      _data.insert({d.id,d});
+    endInsertRows();
+
+    return true;
   }
 
   bool removeItem (ID id) {
@@ -93,7 +107,7 @@ struct BaseModel : public QAbstractTableModel {
   virtual void valueModified (ID id) = 0;
 
 protected:
-  set_t _data;
+  map_t _data;
 
   ID _nextID = ID(1);
   ID nextID (void) {

@@ -1,5 +1,3 @@
-#include <type_traits>
-
 #include <QJsonArray>
 #include <QPainter>
 #include <QSettings>
@@ -15,10 +13,7 @@
 namespace db {
 
 int iconSize (void) {
-  QSettings settings;
-  auto s = settings.value("iconSize", 15).toInt();
-//  qDebug() << "using" << s << "as icon size";
-  return s;
+  return 15;
 }
 int iconDrawSize (void) {
   return 4 * iconSize();
@@ -65,10 +60,10 @@ const QIcon& MiscIcons::basic_recipe (void) {
 }
 
 #define ENTRY(I, N, R, G, B) \
-  { ID(I), N, rectangularIconFromColor(QColor::fromRgb(R,G,B)) }
-AlimentaryGroupData::Database AlimentaryGroupData::_database;
-void AlimentaryGroupData::loadDatabase(void) {
-  _database = {
+{ ID(I), { ID(I), N, rectangularIconFromColor(QColor::fromRgb(R,G,B)) } }
+template <>
+AlimentaryGroupData::Database AlimentaryGroupData::loadDatabase(void) {
+  return AlimentaryGroupData::Database {
     ENTRY( 1, "Protéines", 255,   0,   0),
     ENTRY( 2,   "Verdure",   0, 255,   0),
     ENTRY( 3,  "Céréales", 255, 165,   0),
@@ -83,10 +78,10 @@ void AlimentaryGroupData::loadDatabase(void) {
 }
 #undef ENTRY
 
-#define ENTRY(I, C) { ID(I), "", circularIconFromColor(C) }
-StatusData::Database StatusData::_database;
-void StatusData::loadDatabase (void) {
-  _database = {
+#define ENTRY(I, C) { ID(I), { ID(I), "", circularIconFromColor(C) } }
+template <>
+StatusData::Database StatusData::loadDatabase (void) {
+  return StatusData::Database {
     ENTRY(1, QColor(Qt::red)   ),
     ENTRY(2, QColor("#ffb000") ),
     ENTRY(3, QColor(Qt::green) )
@@ -94,28 +89,28 @@ void StatusData::loadDatabase (void) {
 }
 #undef ENTRY
 
-#define ENTRY(I, N, F) { ID(I), N, iconFromFile(F) }
-RegimenData::Database RegimenData::_database;
-void RegimenData::loadDatabase (void) {
-  _database = {
+#define ENTRY(I, N, F) { ID(I), { ID(I), N, iconFromFile(F) } }
+template <>
+RegimenData::Database RegimenData::loadDatabase (void) {
+  return RegimenData::Database {
     ENTRY(1, "Protéiné",   ":/icons/regimen-protein.png"    ),
     ENTRY(2, "Végétarien", ":/icons/regimen-vegetarian.png" ),
     ENTRY(3, "Vegan",      ":/icons/regimen-vegan.svg"      )
   };
 }
 
-DishTypeData::Database DishTypeData::_database;
-void DishTypeData::loadDatabase (void) {
-  _database = {
+template <>
+DishTypeData::Database DishTypeData::loadDatabase (void) {
+  return DishTypeData::Database {
     ENTRY(1, "Neutre", ":/icons/type-neutral.png"  ),
     ENTRY(2, "Salé",   ":/icons/type-salted.png"   ),
     ENTRY(3, "Sucré",  ":/icons/type-sugar.ico"    ),
   };
 }
 
-DurationData::Database DurationData::_database;
-void DurationData::loadDatabase (void) {
-  _database = {
+template <>
+DurationData::Database DurationData::loadDatabase (void) {
+  return DurationData::Database {
     ENTRY(1, "Rapide",    ":/icons/time-short-2.png"    ),
     ENTRY(2, "Journée",   ":/icons/time-medium-2.png"   ),
     ENTRY(3, "Lendemain", ":/icons/time-long.png"       ),

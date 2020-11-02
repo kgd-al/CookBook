@@ -67,7 +67,7 @@ IngredientDialog::IngredientDialog (QWidget *parent, const QString &title)
   typeModel->sort(1, Qt::DescendingOrder);
   type->setModel(typeModel);
   type->setCurrentIndex(NoIndex);
-  connect(type, qOverload<int>(&QComboBox::currentIndexChanged),
+  connect(type, QOverload<int>::of(&QComboBox::currentIndexChanged),
           this, &IngredientDialog::typeChanged);
 
   group->setModel(db::getStaticModel<db::AlimentaryGroupData>());
@@ -97,9 +97,9 @@ IngredientDialog::IngredientDialog (QWidget *parent, const QString &title)
   auto *decoy = buttons->addButton("", QDialogButtonBox::ActionRole);
   decoy->setDefault(true);
   decoy->hide();
-//  buttons->button(QDialogButtonBox::Ok)->setDefault(false);
-//  buttons->button(QDialogButtonBox::Ok)->setAutoDefault(false);
-  connect(buttons, &QDialogButtonBox::accepted, this, &IngredientDialog::validate);
+
+  connect(buttons, &QDialogButtonBox::accepted,
+          this, &IngredientDialog::validate);
   connect(buttons, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
   validator.setBottom(0);
@@ -112,7 +112,8 @@ IngredientDialog::IngredientDialog (QWidget *parent, const QString &title)
 
   setLayout(layout);
 
-  connect(entryTypeSelection, qOverload<int>(&QComboBox::currentIndexChanged),
+  connect(entryTypeSelection,
+          QOverload<int>::of(&QComboBox::currentIndexChanged),
           this, &IngredientDialog::updateLayout);
 
   gui::restoreGeometry(this);

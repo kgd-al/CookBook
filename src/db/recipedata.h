@@ -39,23 +39,23 @@ struct TransparentID_CMP {
 };
 
 template <typename T>
-using transparent_set = std::set<T, TransparentID_CMP<T>>;
+using cb_container = std::map<ID, T>;
 
 template <typename T>
-const T& at (const transparent_set<T> &set, ID id) {
+const T& at (const cb_container<T> &map, ID id) {
   if (id <= 0)
     throw std::invalid_argument("ID <= 0 is not a valid key!");
-  auto it = set.find(id);
-  if (it == set.end()) {
+  auto it = map.find(id);
+  if (it == map.end()) {
     std::ostringstream oss;
     oss << "Key " << int(id) << " was not found in the database";
     throw std::invalid_argument(oss.str());
   }
-  return *it;
+  return it->second;
 }
 
 template <typename T>
-const auto& at (ID id) {  return at(T::database(), id);  }
+const T& at (ID id) {  return at(T::database(), id);  }
 
 namespace _details { // (private)
 
@@ -69,28 +69,16 @@ struct HasDecoration <T, decltype((void) T::decoration, 0)> : std::true_type {};
 
 struct BasicModel : public QStandardItemModel {
   template <typename T>
-  BasicModel (const transparent_set<T> &database) {
-    for (const T& value: database)  appendRow(buildItemWithID(value));
+  BasicModel (const cb_container<T> &database) {
+    for (const auto &p: database)  appendRow(buildItemWithID(p.second));
   }
 
 private:
   template <typename T>
   QStandardItem* buildItemWithID (const T &v) {
-    QStandardItem *item = buildItem(v);
+    QStandardItem *item = new QStandardItem(v.decoration, v.text);
     item->setData(v.id, IDRole);
     return item;
-  }
-
-  template <typename T>
-  std::enable_if_t<_details::HasDecoration<T>::value, QStandardItem*>
-  buildItem (const T &v) {
-    return new QStandardItem(v.decoration, v.text);
-  }
-
-  template <typename T>
-  std::enable_if_t<!_details::HasDecoration<T>::value, QStandardItem*>
-  buildItem (const T &v) {
-    return new QStandardItem(v.text);
   }
 };
 
@@ -107,92 +95,54 @@ struct MiscIcons {
 
 struct UnitData {
   using ID = db::ID;
-  ID id = ID::INVALID;
-  QString text = "N/A";
-  int used = 0;
+  ID id;
+  QString text;
+  int used;
+
+  UnitData (ID i, const QString &t) : id(i), text(t), used(0) {}
+  UnitData (void) : UnitData(ID::INVALID, "Invalid unit") {}
 
   static QJsonArray toJson (const UnitData &d);
   static UnitData fromJson (QJsonArray j);
 
-  using Database = transparent_set<UnitData>;
+  using Database = cb_container<UnitData>;
 };
 using UnitDatabase = UnitData::Database;
 
-struct AlimentaryGroupData {
+enum class StaticDataType : int {
+  AlimentaryGroup, Regimen, DishType, Duration, Status
+};
+
+template <StaticDataType T>
+struct StaticData {
+  static constexpr auto TYPE = T;
   using ID = db::ID;
   ID id = ID::INVALID;
   QString text = "N/A";
   QIcon decoration;
 
-  using Database = transparent_set<AlimentaryGroupData>;
+  StaticData (ID i, const QString &t, const QIcon &d)
+    : id(i), text(t), decoration(d) {}
+  StaticData (void)
+    : StaticData(ID::INVALID, "Invalid data", QIcon()) {}
+
+  using Database = cb_container<StaticData<T>>;
   static const Database& database (void) {
-    return _database;
+    static const Database db = loadDatabase();
+    return db;
   }
-  static void loadDatabase (void);
+
 private:
-  static Database _database;
+  static Database loadDatabase (void);
 };
+
+using AlimentaryGroupData = StaticData<StaticDataType::AlimentaryGroup>;
 using AlimentaryGroupsDatabase = AlimentaryGroupData::Database;
 
-struct RegimenData {
-  using ID = db::ID;
-  ID id = ID::INVALID;
-  QString text = "N/A";
-  QIcon decoration;
-
-  using Database = transparent_set<RegimenData>;
-  static const Database& database (void) {
-    return _database;
-  }
-  static void loadDatabase (void);
-private:
-  static Database _database;
-};
-
-struct StatusData {
-  using ID = db::ID;
-  ID id = ID::INVALID;
-  QString text = "N/A";
-  QIcon decoration;
-
-  using Database = transparent_set<StatusData>;
-  static const Database& database (void) {
-    return _database;
-  }
-  static void loadDatabase (void);
-private:
-  static Database _database;
-};
-
-struct DishTypeData {
-  using ID = db::ID;
-  ID id = ID::INVALID;
-  QString text = "N/A";
-  QIcon decoration;
-
-  using Database = transparent_set<DishTypeData>;
-  static const Database& database (void) {
-    return _database;
-  }
-  static void loadDatabase (void);
-private:
-  static Database _database;
-};
-
-struct DurationData {
-  using ID = db::ID;
-  ID id = ID::INVALID;
-  QString text = "N/A";
-  QIcon decoration;
-
-  using Database = transparent_set<DurationData>;
-  static const Database& database (void) {
-    return _database;
-  }
-  static void loadDatabase (void);
-private:
-  static Database _database;
-};
+using RegimenData = StaticData<StaticDataType::Regimen>;
+using DishTypeData = StaticData<StaticDataType::DishType>;
+using DurationData = StaticData<StaticDataType::Duration>;
+using StatusData = StaticData<StaticDataType::Status>;
 
 struct IngredientData {
   using ID = db::ID;
@@ -205,7 +155,7 @@ struct IngredientData {
   static IngredientData fromJson (QJsonArray j);
 
   static const QString NoUnit;
-  using Database = transparent_set<IngredientData>;
+  using Database = cb_container<IngredientData>;
 };
 using IngredientsDatabase = IngredientData::Database;
 

@@ -9,29 +9,6 @@
 
 namespace db {
 
-Recipe Recipe::defaultRecipe (void) {
-  return Recipe::fromJson(
-    QJsonDocument::fromJson(R"(
-      {
-        "title": "Sans titre",
-
-        "d-portions": 2,
-        "t-portions": "personnes",
-
-        "regimen": 1,
-        "status": 1,
-        "type": 1,
-        "duration": 1,
-
-        "ing": [],
-        "steps": [],
-        "notes": ""
-      }
-    )").object());
-}
-
-Recipe::Recipe() {}
-
 // On update
 void Recipe::updateUsageCounts (const IngredientList &newList) {
 
@@ -39,7 +16,7 @@ void Recipe::updateUsageCounts (const IngredientList &newList) {
   QMap<db::IngredientData*, int> i_counts;
   QMap<db::Recipe*, int> r_counts;
   const auto process =
-    [&u_counts, &i_counts, &r_counts] (const auto &in, int sign) {
+    [&u_counts, &i_counts, &r_counts] (const IngredientList &in, int sign) {
     for (auto &i: in) {
       switch (i->etype) {
       case db::EntryType::Ingredient: {

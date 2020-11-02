@@ -25,6 +25,7 @@ DEFINES += BASE_DIR=\\\"$$system(pwd)\\\"
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 #CONFIG += object_parallel_to_source
+CONFIG += c++11
 
 SOURCES += \
     src/db/recipe.cpp \
@@ -59,7 +60,19 @@ HEADERS += \
     src/db/recipesmodel.h \
     src/db/basemodel.h \
     src/gui/listcontrols.h \
-    src/db/recipedata.h
+    src/db/recipedata.h \
+    src/gui/androidspecifics.hpp
 
 RESOURCES += \
     icons.qrc
+
+DISTFILES += \
+    android/AndroidManifest.xml \
+    android/gradle/wrapper/gradle-wrapper.jar \
+    android/gradlew \
+    android/res/values/libs.xml \
+    android/build.gradle \
+    android/gradle/wrapper/gradle-wrapper.properties \
+    android/gradlew.bat
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android

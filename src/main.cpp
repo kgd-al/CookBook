@@ -13,6 +13,12 @@
 #include "gui/gui_book.h"
 #include "gui/common.h"
 
+#ifdef Q_OS_ANDROID
+#include <android/log.h>
+#endif
+
+static constexpr auto appName = "cookbook";
+
 QFile logfile;
 void logger (QtMsgType type, const QMessageLogContext &context,
              const QString &message) {
@@ -28,15 +34,31 @@ void logger (QtMsgType type, const QMessageLogContext &context,
 
   QString typeStr = types.value(type);
 
+  QString formattedMessage;
+  QTextStream qts (&formattedMessage);
+  qts << "##" << typeStr << " (" << context.file << ":"
+      << context.line << ", " << context.function << "):\n"
+      << message << "\n";
+
   if (logfile.isOpen()) {
     QTextStream qts (&logfile);
-    qts << "##" << typeStr << " (" << context.file << ":"
-        << context.line << ", " << context.function << "):\n"
-        << message << "\n";
+    qts << formattedMessage;
   }
-  std::cerr << "##" << typeStr.toStdString() << " (" << context.file << ":"
-            << context.line << ", " << context.function << "):\n"
-            << message.toStdString() << "\n";
+
+#ifndef Q_OS_ANDROID
+  std::cerr << formattedMessage.toStdString();
+#else
+  static const QMap<QtMsgType, android_LogPriority> qt2androidMsgType {
+    {    QtDebugMsg, ANDROID_LOG_DEBUG  },
+    {     QtInfoMsg, ANDROID_LOG_INFO   },
+    {  QtWarningMsg, ANDROID_LOG_WARN   },
+    { QtCriticalMsg, ANDROID_LOG_ERROR  },
+    {    QtFatalMsg, ANDROID_LOG_FATAL  },
+  };
+  __android_log_write(qt2androidMsgType.value(type),
+                      appName,
+                      formattedMessage.toStdString().c_str());
+#endif
 }
 
 void simulateKey (const QString &kstr) {
@@ -65,10 +87,10 @@ void simulateKey (const QString &kstr) {
 }
 
 int main(int argc, char *argv[]) {
-  QApplication a(argc, argv);
+  QApplication app (argc, argv);
 
   QCoreApplication::setOrganizationName("almann");
-  QCoreApplication::setApplicationName("cookbook");
+  QCoreApplication::setApplicationName(appName);
   QSettings settings;
 
   QString logFilePath;
@@ -82,22 +104,16 @@ int main(int argc, char *argv[]) {
     qWarning("Failed to open log file");
   qInstallMessageHandler(logger);
 
-  // Register icons
-  db::AlimentaryGroupData::loadDatabase();
-  db::RegimenData::loadDatabase();
-  db::StatusData::loadDatabase();
-  db::DishTypeData::loadDatabase();
-  db::DurationData::loadDatabase();
-
   {
     auto q = qDebug();
-    q << "Current settings:\n";
+    q << "Current settings (@" << settings.fileName() << "):\n";
     for (QString k: settings.allKeys())
       q << "\t" << k << ": " << settings.value(k) << "\n";
     q << "************************\n";
   }
 
   QApplication::setFont(settings.value("font").value<QFont>());
+  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
   QLocale fr_locale (QLocale::French);
 //  QLocale fr_locale = QLocale::system();
@@ -110,7 +126,7 @@ int main(int argc, char *argv[]) {
               "qt", "_",
               QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
     qDebug() << ">> ok";
-    a.installTranslator(&qtTranslator);
+    app .installTranslator(&qtTranslator);
   }
 
   QTranslator qtBaseTranslator;
@@ -120,7 +136,7 @@ int main(int argc, char *argv[]) {
               QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
     qDebug() << ">> ok";
     qDebug() << "Installed qtbase translator:"
-             << a.installTranslator(&qtBaseTranslator);
+             << app .installTranslator(&qtBaseTranslator);
   }
   qDebug() << "************************\n";
 
@@ -129,6 +145,30 @@ int main(int argc, char *argv[]) {
   //  loc.setNumberOptions(QLocale::c().numberOptions()); // borrow number options from the "C" locale
   //  QLocale::setDefault(loc); // set as default
     QLocale::setDefault(QLocale::c());
+
+#ifdef Q_OS_ANDROID
+  // Force the style
+  app.setStyle("Fusion");
+
+  // Now use a palette to switch to dark colors:
+  auto palette = QPalette();
+  palette.setColor(QPalette::Window, QColor(53, 53, 53));
+  palette.setColor(QPalette::WindowText, Qt::white);
+  palette.setColor(QPalette::Base, QColor(25, 25, 25));
+  palette.setColor(QPalette::AlternateBase, QColor(53, 53, 53));
+  palette.setColor(QPalette::ToolTipBase, Qt::black);
+  palette.setColor(QPalette::ToolTipText, Qt::white);
+  palette.setColor(QPalette::Text, Qt::white);
+  palette.setColor(QPalette::Button, QColor(53, 53, 53));
+  palette.setColor(QPalette::ButtonText, Qt::white);
+  palette.setColor(QPalette::BrightText, Qt::red);
+  palette.setColor(QPalette::Link, QColor(42, 130, 218));
+  palette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+  palette.setColor(QPalette::HighlightedText, Qt::black);
+  app.setPalette(palette);
+
+  app.setStyleSheet("QCheckBox::indicator {width: 91px; height: 91px; } ");
+#endif
 
   gui::Book w;
   w.show();
@@ -192,5 +232,5 @@ int main(int argc, char *argv[]) {
       timeline.start();
     });
 
-  return a.exec();
+  return app .exec();
 }

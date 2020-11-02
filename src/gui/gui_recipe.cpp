@@ -11,7 +11,9 @@
 #include <QInputDialog>
 #include <QMessageBox>
 
-#include <QDebug>
+#ifdef Q_OS_ANDROID
+#include "androidspecifics.hpp"
+#endif
 
 #include "gui_recipe.h"
 #include "ingrediententrydialog.h"
@@ -32,7 +34,6 @@ QWidget* spacer (void) {
   return w;
 }
 
-/// TODO Make it work and make it pretty
 struct LabelEdit : public QWidget {
   bool edit = false;
   QLabel *label;
@@ -41,6 +42,7 @@ struct LabelEdit : public QWidget {
     QGridLayout *layout = new QGridLayout;
     layout->addWidget(ledit = new QLineEdit, 0, 0);
     layout->addWidget(label = new QLabel, 0, 0);
+    label->setWordWrap(true);
     setLayout(layout);
     setText(text);
     setEdit(edit);
@@ -49,9 +51,15 @@ struct LabelEdit : public QWidget {
   void setFontRelativeSize (double r) {
     QFont f = font();
     auto q = qDebug();
+#ifndef Q_OS_ANDROID
     q << r << "*" << f.pointSizeF();
     f.setPointSizeF(r * f.pointSizeF());
     q << " >> " << f.pointSizeF();
+#else
+    q << r << "*" << f.pixelSize();
+    f.setPixelSize(r * f.pixelSize());
+    q << " >> " << f.pixelSize();
+#endif
     label->setFont(f);
     ledit->setFont(f);
   }
@@ -163,6 +171,7 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
     _consult.holder->setLayout(clayout);
     mainLayout->addWidget(_consult.holder);
 
+#ifndef Q_OS_ANDROID
     _edit.holder = new QWidget;
     QGridLayout *elayout = new QGridLayout; {
 
@@ -197,70 +206,72 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
     }
     _edit.holder->setLayout(elayout);
     mainLayout->addWidget(_edit.holder);
+#endif
 
-//    mainLayout->addWidget(spacer());
-    _vsplitter = new QSplitter (Qt::Vertical);
-      _hsplitter = new QSplitter;
-        QWidget *iholder = new QWidget;
-        QVBoxLayout *ilayout = new QVBoxLayout;
-          ilayout->addWidget(new QLabel ("Ingrédients:"));
-          QHBoxLayout *playout = new QHBoxLayout;
-            _portions = new QDoubleSpinBox;
-            _portions->setMinimum(0);
-            _portions->setSingleStep(.25);
-            playout->addWidget(_portions);
-            _portions->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-            playout->addWidget(_portionsLabel = new LabelEdit("?"));
-          ilayout->addLayout(playout);
-          _ingredients = new GUIList;
-          _ingredients->setAcceptDrops(true);
-          _ingredients->setDragDropMode(QAbstractItemView::InternalMove);
-          _ingredients->setWordWrap(true);
-          _ingredients->setMinimumWidth(100);
-          ilayout->addWidget(_ingredients);
-          ilayout->addWidget(_icontrols = new ListControls(_ingredients));
-        iholder->setLayout(ilayout);
-        _hsplitter->addWidget(iholder);
+    QWidget *iholder = new QWidget;
+    QVBoxLayout *ilayout = new QVBoxLayout;
+      ilayout->addWidget(new QLabel ("Ingrédients:"));
+      QHBoxLayout *playout = new QHBoxLayout;
+        _portions = new QDoubleSpinBox;
+        _portions->setMinimum(0);
+        _portions->setSingleStep(.25);
+        playout->addWidget(_portions);
+        _portions->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        playout->addWidget(_portionsLabel = new LabelEdit("?"));
+      ilayout->addLayout(playout);
+      _ingredients = new GUIList;
+      _ingredients->setAcceptDrops(true);
+      _ingredients->setDragDropMode(QAbstractItemView::InternalMove);
+      _ingredients->setWordWrap(true);
+      _ingredients->setMinimumWidth(100);
+      ilayout->addWidget(_ingredients);
+      ilayout->addWidget(_icontrols = new ListControls(_ingredients));
+    iholder->setLayout(ilayout);
 
-        QWidget *nholder = new QWidget;
-        QVBoxLayout *nlayout = new QVBoxLayout;
-          nlayout->addWidget(new QLabel ("Notes:"));
-          _notes = new QTextEdit;
-          _notes->setMinimumWidth(100);
-          nlayout->addWidget(_notes);
-        nholder->setLayout(nlayout);
-        _hsplitter->addWidget(nholder);
-      _vsplitter->addWidget(_hsplitter);
+    QWidget *nholder = new QWidget;
+    QVBoxLayout *nlayout = new QVBoxLayout;
+      nlayout->addWidget(new QLabel ("Notes:"));
+      _notes = new QTextEdit;
+      _notes->setMinimumWidth(100);
+      nlayout->addWidget(_notes);
+    nholder->setLayout(nlayout);
 
-      mainLayout->addWidget(spacer());
-      QWidget *sholder = new QWidget;
-      QVBoxLayout *slayout = new QVBoxLayout;
-        slayout->addWidget(new QLabel("Étapes:"));
-        _steps = new GUIList;
-        _steps->setAcceptDrops(true);
-        _steps->setDragDropMode(QAbstractItemView::InternalMove);
-        _steps->setMinimumWidth(100);
-        _steps->setWordWrap(true);
-        slayout->addWidget(_steps);
-        slayout->addWidget(_scontrols = new ListControls(_steps));
-      sholder->setLayout(slayout);
-      _vsplitter->addWidget(sholder);
-    mainLayout->addWidget(_vsplitter);
+    QWidget *sholder = new QWidget;
+    QVBoxLayout *slayout = new QVBoxLayout;
+      slayout->addWidget(new QLabel("Étapes:"));
+      _steps = new GUIList;
+      _steps->setAcceptDrops(true);
+      _steps->setDragDropMode(QAbstractItemView::InternalMove);
+      _steps->setMinimumWidth(100);
+      _steps->setWordWrap(true);
+      slayout->addWidget(_steps);
+      slayout->addWidget(_scontrols = new ListControls(_steps));
+    sholder->setLayout(slayout);
+
+    makeLayout(mainLayout, {
+      { "ingredients", iholder },
+      {       "steps", sholder },
+      {       "notes", nholder },
+    });
 
     QHBoxLayout *blayout = new QHBoxLayout;
+#ifndef Q_OS_ANDROID
       auto del = new QToolButton();
       del->setIcon(QIcon::fromTheme("edit-delete"));
       blayout->addWidget(del);
       connect(del, &QToolButton::clicked, this, &Recipe::deleteRequested);
+#endif
 
       QDialogButtonBox *buttons = new QDialogButtonBox;
-        _prev = new QToolButton;
+
+#ifndef Q_OS_ANDROID
+        _prev = new QPushButton;
         _prev->setIcon(QIcon::fromTheme("go-previous"));
         _prev->setShortcut(QKeySequence(Qt::Key_Left));
         connect(_prev, &QToolButton::clicked, this, &Recipe::showPrevious);
         buttons->addButton(_prev, QDialogButtonBox::ActionRole);
 
-        _next = new QToolButton;
+        _next = new QPushButton;
         _next->setIcon(QIcon::fromTheme("go-next"));
         _next->setShortcut(QKeySequence(Qt::Key_Right));
         connect(_next, &QToolButton::clicked, this, &Recipe::showNext);
@@ -268,18 +279,28 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
 
         _apply = buttons->addButton("Appliquer", QDialogButtonBox::AcceptRole);
         connect(_apply, &QPushButton::clicked, this, &Recipe::apply);
+#else
+        grabGesture(android::SingleFingerSwipeRecognizer::type());
+#endif
 
         auto close = buttons->addButton("Quitter", QDialogButtonBox::RejectRole);
         connect(close, &QPushButton::clicked, this, &Recipe::close);
 
+#ifndef Q_OS_ANDROID
         _toggle = buttons->addButton("", QDialogButtonBox::ActionRole);
         connect(_toggle, &QPushButton::clicked, this, &Recipe::toggleReadOnly);
+#else
+        auto *decoy = buttons->addButton("", QDialogButtonBox::ActionRole);
+        decoy->setDefault(true);
+        decoy->hide();
+#endif
       blayout->addWidget(buttons);
     mainLayout->addLayout(blayout);
 
+#ifndef Q_OS_ANDROID
   _icontrols->addButton()->setShortcut(QKeySequence("Ctrl+I"));
   connect(_icontrols->addButton(), &QToolButton::clicked,
-          this, qOverload<>(&Recipe::addIngredient));
+          this, QOverload<>::of(&Recipe::addIngredient));
 
   _icontrols->editButton()->setShortcut(QKeySequence("Ctrl+Shift+I"));
   connect(_icontrols->editButton(), &QToolButton::clicked,
@@ -287,14 +308,15 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
 
   _scontrols->addButton()->setShortcut(QKeySequence("Ctrl+E"));
   connect(_scontrols->addButton(), &QToolButton::clicked,
-          this, qOverload<>(&Recipe::addStep));
+          this, QOverload<>::of(&Recipe::addStep));
 
   _scontrols->editButton()->setShortcut(QKeySequence("Ctrl+Shift+E"));
   connect(_scontrols->editButton(), &QToolButton::clicked,
           this, &Recipe::editStep);
+#endif
 
-  connect(_portions, qOverload<double>(&QDoubleSpinBox::valueChanged),
-          this, qOverload<>(&Recipe::updateDisplayedPortions));
+  connect(_portions, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+          this, QOverload<>::of(&Recipe::updateDisplayedPortions));
 
   connect(_ingredients, &QListWidget::itemActivated,
           this, &Recipe::showSubRecipe);
@@ -305,15 +327,45 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
 
   _ingredients->setFocus();
 
+#ifndef Q_OS_ANDROID
   gui::restoreGeometry(this);
   auto &settings = localSettings(this);
-  _hsplitter->setSizes(settings.value("hsplitter").value<QList<int>>());
-  _vsplitter->setSizes(settings.value("vsplitter").value<QList<int>>());
+  QVariant defaultSizes = QVariant::fromValue(QList<int>{100,100});
+  _hsplitter->setSizes(
+    settings.value("hsplitter", defaultSizes).value<QList<int>>());
+  _vsplitter->setSizes(
+    settings.value("vsplitter", defaultSizes).value<QList<int>>());
+#endif
+}
+
+void Recipe::makeLayout(QLayout *mainLayout,
+                        const QMap<QString, QWidget *> &widgets) {
+#ifndef Q_OS_ANDROID
+  _vsplitter = new QSplitter (Qt::Vertical);
+    _hsplitter = new QSplitter;
+      _hsplitter->addWidget(widgets["ingredients"]);
+      _hsplitter->addWidget(widgets["notes"]);
+    _vsplitter->addWidget(_hsplitter);
+    mainLayout->addWidget(spacer());
+    _vsplitter->addWidget(widgets["steps"]);
+  mainLayout->addWidget(_vsplitter);
+#else
+  QTabWidget *tabs = new QTabWidget;
+  tabs->addTab(widgets["ingredients"], "Ingrédients");
+  tabs->addTab(widgets["notes"], "Notes");
+  tabs->addTab(widgets["steps"], "Étapes");
+  tabs->setTabPosition(QTabWidget::South);
+  tabs->setTabShape(QTabWidget::Triangular);
+  mainLayout->addWidget(tabs);
+#endif
 }
 
 int Recipe::show (db::Recipe *recipe, bool readOnly,
                   QModelIndex index, double ratio) {
   update(recipe, readOnly, index, ratio);
+#ifdef Q_OS_ANDROID
+  setWindowState(windowState() | Qt::WindowMaximized);
+#endif
   return exec();
 }
 
@@ -344,6 +396,7 @@ const T* getData (const QComboBox *cb) {
   return &db::at<T>(db::ID(cb->currentData(db::IDRole).toInt()));
 }
 
+#ifndef Q_OS_ANDROID
 void Recipe::writeThrough(void) {
   _data->title = _title->text();
 
@@ -373,6 +426,7 @@ void Recipe::writeThrough(void) {
 
   emit validated();
 }
+#endif
 
 void pixmap (QLabel *l, const QIcon &icon) {
   l->setPixmap(icon.pixmap(2*db::iconSize(), 2*db::iconSize()));
@@ -393,17 +447,21 @@ void Recipe::setReadOnly(bool ro) {
       pixmap(_consult.status, _data->status->decoration);
 
     } else {  // copy from consult to edit
+#ifndef Q_OS_ANDROID
       _edit.basic->setChecked(_data->basic);
       _edit.subrecipe->setText(QString::number(_data->used));
       _edit.regimen->setCurrentIndex(_data->regimen->id-1);
       _edit.type->setCurrentIndex(_data->type->id-1);
       _edit.duration->setCurrentIndex(_data->duration->id-1);
       _edit.status->setCurrentIndex(_data->status->id-1);
+#endif
     }
   }
 
   _consult.holder->setVisible(ro);
+#ifndef Q_OS_ANDROID
   _edit.holder->setVisible(!ro);
+#endif
 
   _notes->setReadOnly(ro);
 
@@ -420,6 +478,7 @@ void Recipe::setReadOnly(bool ro) {
   _steps->setDragEnabled(!ro);
   _scontrols->setVisible(!ro);
 
+#ifndef Q_OS_ANDROID
   updateNavigation();
 
   if (ro) _toggle->setText("Modifier");
@@ -427,24 +486,30 @@ void Recipe::setReadOnly(bool ro) {
   _apply->setVisible(!ro);
 
   setWindowTitle(ro ? "Consultation" : "Édition");
+#endif
 }
 
+bool Recipe::hasSibling (int dir) {
+  return _index.isValid() && nextRow(_index, dir).isValid();
+}
+
+void Recipe::setIndex(QModelIndex index) {
+  _index = index;
+#ifndef Q_OS_ANDROID
+  updateNavigation();
+#endif
+}
+
+#ifndef Q_OS_ANDROID
 void Recipe::updateNavigation (void) {
-  _prev->setEnabled(_readOnly && _index.isValid()
-                    && nextRow(_index, -1).isValid());
-  _next->setEnabled(_readOnly && _index.isValid()
-                    && nextRow(_index, +1).isValid());
+  _prev->setEnabled(_readOnly && hasSibling(-1));
+  _next->setEnabled(_readOnly && hasSibling(+1));
 }
 
 void Recipe::toggleReadOnly(void) {
   if (!isReadOnly() && !confirmed()) return;
   setReadOnly(!isReadOnly());
   updateDisplayedPortions(false);
-}
-
-void Recipe::setIndex(QModelIndex index) {
-  _index = index;
-  updateNavigation();
 }
 
 void Recipe::apply(void) {
@@ -460,12 +525,15 @@ bool Recipe::confirmed(void) {
   }
   return false;
 }
+#endif
 
+#ifndef Q_OS_ANDROID
 void Recipe::addIngredient(void) {
   IngredientDialog d (this, "Nouvel ingrédient");
   if (QDialog::Accepted == d.exec())
     addIngredient(d.ingredient());
 }
+#endif
 
 void Recipe::addIngredient(Ingredient_ptr i) {
   auto item = new IngredientListItem(i);
@@ -474,6 +542,7 @@ void Recipe::addIngredient(Ingredient_ptr i) {
     _ingredients->setCurrentItem(item);
 }
 
+#ifndef Q_OS_ANDROID
 void Recipe::editIngredient(void) {
   auto item = static_cast<IngredientListItem*>(_ingredients->currentItem());
   auto ing = item->ing;
@@ -491,6 +560,7 @@ void Recipe::addStep(void) {
     _steps, "Saisissez", "Nouvelle étape", "", &ok);
   if (ok && !string.isEmpty())  addStep(string);
 }
+#endif
 
 void Recipe::addStep(const QString &text) {
   auto item = new StepListItem(text);
@@ -498,6 +568,7 @@ void Recipe::addStep(const QString &text) {
   if (_steps->currentItem() == nullptr) _steps->setCurrentItem(item);
 }
 
+#ifndef Q_OS_ANDROID
 void Recipe::editStep(void) {
   auto item = static_cast<StepListItem*>(_steps->currentItem());
   QString step = item->step();
@@ -506,6 +577,7 @@ void Recipe::editStep(void) {
         _steps, "Saisissez", "Mise à jour", step, &ok);
   if (ok && !step.isEmpty())  item->setStep(step);
 }
+#endif
 
 double Recipe::currentRatio(void) const {
   return _portions->value() / _data->portions;
@@ -566,15 +638,17 @@ void Recipe::closeEvent(QCloseEvent *e) {
 //  qDebug() << __PRETTY_FUNCTION__ << "(" << e << ");";
   safeQuit(e);
   gui::saveGeometry(this);
+#ifndef Q_OS_ANDROID
   auto &settings = localSettings(this);
   settings.setValue("vsplitter", QVariant::fromValue(_vsplitter->sizes()));
   settings.setValue("hsplitter", QVariant::fromValue(_hsplitter->sizes()));
+#endif
 }
 
 bool Recipe::safeQuit(QEvent *e) {
 //  qDebug() << __PRETTY_FUNCTION__ << "(" << e << ");";
+#ifndef Q_OS_ANDROID
   if (isReadOnly()) return true;
-
   auto ret = QMessageBox::warning(this, "Confirmation",
                                   "Voulez vous sauvegarder?",
                                   QMessageBox::Yes,
@@ -593,8 +667,14 @@ bool Recipe::safeQuit(QEvent *e) {
     e->ignore();
     return false;
   }
+
+#else
+  (void)e;
+  return true;
+#endif
 }
 
+#ifndef Q_OS_ANDROID
 void Recipe::deleteRequested(void) {
   if (_data->used > 0) {
     QMessageBox::warning(this, "Illégal",
@@ -620,5 +700,31 @@ void Recipe::deleteRequested(void) {
 
   reject();
 }
+#endif
+
+#ifdef Q_OS_ANDROID
+bool Recipe::event(QEvent *event) {
+  if (event->type() == QEvent::Gesture) {
+    using namespace android;
+    auto *ge = dynamic_cast<QGestureEvent*>(event);
+    auto q = qDebug().nospace();
+    q << ge << "\n";
+    if (auto *g = ge->gesture(SingleFingerSwipeRecognizer::type())) {
+      auto sg = static_cast<ExtendedSwipeGesture*>(g);
+      q << "\tExtendedSwipeGesture: " << sg->dx() << ", " << sg->dy() << "\n";
+      if (sg->state() == Qt::GestureFinished) {
+        if (sg->dx() > 100) {
+          if (hasSibling(-1)) showPrevious();
+        } else if (sg->dx() < -100) {
+          if (hasSibling(+1)) showNext();
+        }
+      }
+    }
+    return true;
+
+  } else
+    return QDialog::event(event);
+}
+#endif
 
 } // end of namespace gui

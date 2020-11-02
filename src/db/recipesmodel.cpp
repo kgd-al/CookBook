@@ -13,7 +13,7 @@ QModelIndex RecipesModel::addRecipe(Recipe &&r) {
   int i = rowCount();
   beginInsertRows(QModelIndex(), i, i);
   r.id = nextID();
-  auto p = _data.emplace(r);
+  auto p = _data.emplace(r.id, r);
   endInsertRows();
 
   Q_ASSERT(p.second);
@@ -64,7 +64,7 @@ QVariant RecipesModel::data (const QModelIndex &index, int role) const {
     }
 
   case Qt::SizeHintRole:
-    return (index.column() < titleColumn()) ? QSize(iconSize(), iconSize())
+    return (index.column() < titleColumn()) ? QSize(0, 0)
                                             : QVariant();
 
   case IDRole:
@@ -96,12 +96,12 @@ void RecipesModel::valueModified(ID id) {
 void RecipesModel::fromJson(const QJsonArray &a) {
   for (const QJsonValue &v: a) {
     Recipe r = Recipe::fromJson(v);
-    _data.emplace(r);
+    _data.insert({r.id, r});
     _nextID = std::max(r.id, _nextID);
   }
 
-  for (const Recipe &r: _data)
-    for (auto &i: r.ingredients)
+  for (const auto &p: _data)
+    for (auto &i: p.second.ingredients)
       if (i->etype == EntryType::SubRecipe)
         static_cast<SubRecipeEntry*>(i.data())->setRecipeFromHackedPointer();
 
@@ -111,7 +111,7 @@ void RecipesModel::fromJson(const QJsonArray &a) {
 QJsonArray RecipesModel::toJson(void) {
   QJsonArray a;
   for (const auto &p: _data)
-    a.append(Recipe::toJson(p));
+    a.append(Recipe::toJson(p.second));
   return a;
 }
 

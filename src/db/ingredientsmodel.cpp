@@ -93,25 +93,6 @@ Qt::ItemFlags IngredientsModel::flags(const QModelIndex &index) const {
   return flg;
 }
 
-bool IngredientsModel::insertRows(int row, int count, const QModelIndex &) {
-  auto q = qDebug().nospace();
-  q << "Inserting rows [" << row << "," << row+count-1 << "] in " << this;
-
-  auto rows = rowCount();
-  if (row < rows)  return false;
-
-  q << ": ok";
-
-  beginInsertRows(QModelIndex(), rows, rows);
-    IngredientData d;
-    d.id = nextID();
-    _data.insert(d);
-    _tmpData.insert(d.id);
-  endInsertRows();
-
-  return true;
-}
-
 int IngredientsModel::validateTemporaryData(const IDList &ids) {
   for (auto id: ids)  _tmpData.erase(id);
 
@@ -162,7 +143,7 @@ void IngredientsModel::fromJson(const QJsonArray &j) {
   beginResetModel();
   for (const QJsonValue &v: j) {
     auto d = IngredientData::fromJson(v.toArray());
-    _data.insert(d);
+    _data.insert({d.id,d});
     _nextID = std::max(_nextID, d.id);
   }
   nextID();
@@ -171,9 +152,9 @@ void IngredientsModel::fromJson(const QJsonArray &j) {
 
 QJsonArray IngredientsModel::toJson(void) const {
   QJsonArray j;
-  for (const IngredientData &d: _data) {
-    Q_ASSERT(d.group);
-    j.append(IngredientData::toJson(d));
+  for (const auto &p: _data) {
+    Q_ASSERT(p.second.group);
+    j.append(IngredientData::toJson(p.second));
   }
   return j;
 }
