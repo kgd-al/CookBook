@@ -254,17 +254,15 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
       {       "notes", nholder },
     });
 
-    QHBoxLayout *blayout = new QHBoxLayout;
 #ifndef Q_OS_ANDROID
+    QHBoxLayout *blayout = new QHBoxLayout;
       auto del = new QToolButton();
       del->setIcon(QIcon::fromTheme("edit-delete"));
       blayout->addWidget(del);
       connect(del, &QToolButton::clicked, this, &Recipe::deleteRequested);
-#endif
 
       QDialogButtonBox *buttons = new QDialogButtonBox;
 
-#ifndef Q_OS_ANDROID
         _prev = new QPushButton;
         _prev->setIcon(QIcon::fromTheme("go-previous"));
         _prev->setShortcut(QKeySequence(Qt::Key_Left));
@@ -279,23 +277,17 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
 
         _apply = buttons->addButton("Appliquer", QDialogButtonBox::AcceptRole);
         connect(_apply, &QPushButton::clicked, this, &Recipe::apply);
-#else
-        grabGesture(android::SingleFingerSwipeRecognizer::type());
-#endif
 
         auto close = buttons->addButton("Quitter", QDialogButtonBox::RejectRole);
         connect(close, &QPushButton::clicked, this, &Recipe::close);
 
-#ifndef Q_OS_ANDROID
         _toggle = buttons->addButton("", QDialogButtonBox::ActionRole);
         connect(_toggle, &QPushButton::clicked, this, &Recipe::toggleReadOnly);
-#else
-        auto *decoy = buttons->addButton("", QDialogButtonBox::ActionRole);
-        decoy->setDefault(true);
-        decoy->hide();
-#endif
       blayout->addWidget(buttons);
     mainLayout->addLayout(blayout);
+#else
+        grabGesture(android::SingleFingerSwipeRecognizer::type());
+#endif
 
 #ifndef Q_OS_ANDROID
   _icontrols->addButton()->setShortcut(QKeySequence("Ctrl+I"));

@@ -3,6 +3,8 @@
 #include <QFontDialog>
 #include <QMessageBox>
 #include <QDesktopServices>
+#include <QShortcut>
+#include <QScreen>
 
 #include <QStyledItemDelegate>
 #include <QPainter>
@@ -16,11 +18,10 @@
 #include <QHeaderView>
 #include <QCheckBox>
 #include <QRadioButton>
-#include <QGroupBox>
+#include <QButtonGroup>
 #include <QPushButton>
 
 #ifdef Q_OS_ANDROID
-#include <QScreen>
 #include "androidspecifics.hpp"
 #endif
 
@@ -203,23 +204,19 @@ struct RecipeFilter : public QSortFilterProxyModel {
 
 //    auto q = qDebug().nospace();
 
-#define TEST(NAME) \
-  q << #NAME << " [" << (NAME? "on " : "off") << "]: " << NAME.data
-
+//#define TEST(NAME) \
+//  q << #NAME << " [" << (NAME? "on " : "off") << "]: " << NAME.data
 
 //    TEST(title) << " !C " << r.title << "? " << !r.title.contains(title.data)
 //                << "\n";
     if (title && !title.data.isEmpty()
         && !r.title.contains(title.data, Qt::CaseInsensitive)) return false;
 
-//    TEST(NAME) << NAME.data << " != " << r.NAME->id << "? " \
-//               << (r.NAME->id != NAME.data) << "\n"; \
+//    TEST(basic) << " != " << r.basic << "? " << (r.basic != basic.data) << "\n";
+    if (basic && r.basic != basic.data)  return false;
 
-//    TEST(basic) << " != " << r.used << "? " << (r.used != subrecipe.data) << "\n";
-    if (basic && r.basic != subrecipe.data)  return false;
-
-//    TEST(basic) << " != " << r.used << "? " << (r.used != subrecipe.data) << "\n";
-    if (subrecipe && r.used != subrecipe.data)  return false;
+//    TEST(subrecipe) << " != " << r.used << "? " << (bool(r.used) != subrecipe.data) << "\n";
+    if (subrecipe && bool(r.used) != subrecipe.data)  return false;
 
 #define TEST_CB(NAME) \
   if (NAME && r.NAME->id != NAME.data) return false;
@@ -422,6 +419,27 @@ private:
 
 // =============================================================================
 
+struct YesNoGroupBox : public QWidget {
+  std::array<QRadioButton*, 2> buttons;
+  YesNoGroupBox (void) {
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->addWidget(buttons[0] = new QRadioButton("non"));
+    layout->addWidget(buttons[1] = new QRadioButton("oui"));
+    buttons[0]->setChecked(true);
+    setLayout(layout);
+
+    QButtonGroup *group = new QButtonGroup (this);
+    group->addButton(buttons[0], 0);
+    group->addButton(buttons[1], 1);
+  }
+
+  bool isYes (void) const {
+    return buttons[1]->isChecked();
+  }
+};
+
+// =============================================================================
+
 struct FilterView : public QWidget {
   RecipeFilter *filter;
 
@@ -448,7 +466,7 @@ struct FilterView : public QWidget {
     }
   };
   Entry<QLineEdit> *title;
-  Entry<QGroupBox> *basic, *subrecipe;
+  Entry<YesNoGroupBox> *basic, *subrecipe;
   QRadioButton *basic_yes, *subrecipe_yes;
   Entry<QComboBox> *regimen, *status, *type, *duration;
 
@@ -464,8 +482,8 @@ struct FilterView : public QWidget {
     QGridLayout *layout = new QGridLayout;
 
     title = new Entry<QLineEdit> ("Titre", layout);
-    basic = new Entry<QGroupBox> ("Basique", layout);
-    subrecipe = new Entry<QGroupBox> ("Sous-Recette", layout);
+    basic = new Entry<YesNoGroupBox> ("Basique", layout);
+    subrecipe = new Entry<YesNoGroupBox> ("Sous-Recette", layout);
     regimen = new Entry<QComboBox> ("Régime", layout);
     type = new Entry<QComboBox> ("Type", layout);
     duration = new Entry<QComboBox> ("Durée", layout);
@@ -516,24 +534,12 @@ struct FilterView : public QWidget {
     type->widget->setModel(db::getStaticModel<db::DishTypeData>());
     duration->widget->setModel(db::getStaticModel<db::DurationData>());
 
-    QHBoxLayout *basic_layout = new QHBoxLayout;
-    basic_layout->addWidget(basic_yes = new QRadioButton("oui"));
-    basic_layout->addWidget(new QRadioButton("non"));
-    basic->widget->setLayout(basic_layout);
-    basic_yes->setChecked(true);
-
-    QHBoxLayout *subrecipe_layout = new QHBoxLayout;
-    subrecipe_layout->addWidget(subrecipe_yes = new QRadioButton("oui"));
-    subrecipe_layout->addWidget(new QRadioButton("non"));
-    subrecipe->widget->setLayout(subrecipe_layout);
-    subrecipe_yes->setChecked(true);
-
     connectMany(title, &QLineEdit::textChanged);
     connectMany(basic);
-    connect(basic_yes, &QRadioButton::toggled,
+    connect(basic->widget->buttons[1], &QRadioButton::toggled,
             this, &FilterView::filterChanged);
     connectMany(subrecipe);
-    connect(subrecipe_yes, &QRadioButton::toggled,
+    connect(subrecipe->widget->buttons[1], &QRadioButton::toggled,
             this, &FilterView::filterChanged);
     for (const auto &cb: {regimen, status, type, duration})
       connectMany(cb, QOverload<int>::of(&QComboBox::currentIndexChanged));
@@ -593,24 +599,28 @@ struct FilterView : public QWidget {
   }
 
   void filterChanged (void) {
+#if 0
     auto q = qDebug().nospace();
     q << __PRETTY_FUNCTION__ << "\n";
 
 #define TEST(NAME, FUNC) \
     q << "[" << (NAME->cb->isChecked() ? "on " : "off") << "] " \
       << #NAME << ": " << NAME->widget->FUNC() << "\n";
+#else
+#define TEST(X,Y)
+#endif
 
     TEST(title, text)
     filter->title.active = title->cb->isChecked();
     filter->title.data = title->widget->text();
 
-    TEST(basic, isChecked)
+    TEST(basic, isYes)
     filter->basic.active = basic->cb->isChecked();
-    filter->basic.data = basic_yes->isChecked();
+    filter->basic.data = basic->widget->isYes();
 
-    TEST(subrecipe, isChecked)
+    TEST(subrecipe, isYes)
     filter->subrecipe.active = subrecipe->cb->isChecked();
-    filter->subrecipe.data = subrecipe_yes->isChecked();
+    filter->subrecipe.data = subrecipe->widget->isYes();
 
 #define UPDATE_CB(NAME) \
   TEST(NAME, currentText) \
@@ -624,18 +634,17 @@ struct FilterView : public QWidget {
 #undef UPDATE_CB
 
 #ifndef Q_OS_ANDROID
-    q << "ingredients: " << ingredients->widget->model()->rowCount()
-      << " items:\n";
-    for (const auto &i: filter->ingredients.data())
-      q << "\t" << i._data[0] << " (" << i._data[1] << ")\n";
+//    q << "ingredients: " << ingredients->widget->model()->rowCount()
+//      << " items:\n";
+//    for (const auto &i: filter->ingredients.data())
+//      q << "\t" << i._data[0] << " (" << i._data[1] << ")\n";
     filter->ingredients.active = ingredients->cb->isChecked();
 
-    q << "subrecipes: " << subrecipes->widget->model()->rowCount()
-      << " items:\n";
-    for (const auto &i: filter->subrecipes.data())
-      q << "\t" << i._data << "\n";
+//    q << "subrecipes: " << subrecipes->widget->model()->rowCount()
+//      << " items:\n";
+//    for (const auto &i: filter->subrecipes.data())
+//      q << "\t" << i._data << "\n";
     filter->subrecipes.active = subrecipes->cb->isChecked();
-//    subrecipes->widget->
 #endif
 
     filter->invalidate();
@@ -643,17 +652,18 @@ struct FilterView : public QWidget {
     if (filter->sourceModel()) {
       QString msg;
       QTextStream qts (&msg);
-      qts << "Showing " << filter->rowCount();
+      qts << filter->rowCount() << " recettes";
       if (filter->rowCount() != filter->sourceModel()->rowCount())
-        qts << " out of " << filter->sourceModel()->rowCount();
+        qts << " (sur un total de " << filter->sourceModel()->rowCount() << ")";
       static_cast<QMainWindow*>(this->topLevelWidget())
-          ->statusBar()->showMessage(msg);
+          ->statusBar()->showMessage(msg, 5000);
     }
   }
 
   void clear (void) {
-    for (QCheckBox *cb: { title->cb, regimen->cb, status->cb, type->cb,
-                          duration->cb, basic->cb,
+    for (QCheckBox *cb: { title->cb,
+                          basic->cb, subrecipe->cb,
+                          regimen->cb, status->cb, type->cb, duration->cb,
 #ifndef Q_OS_ANDROID
                           ingredients->cb, subrecipes->cb
 #endif
@@ -663,7 +673,11 @@ struct FilterView : public QWidget {
       cb->setChecked(false);
       cb->blockSignals(false);
     }
+
+    title->widget->blockSignals(true);
     title->widget->clear();
+    title->widget->blockSignals(false);
+
     filter->ingredients.data.clear();
     filter->subrecipes.data.clear();
     filterChanged();
@@ -704,6 +718,10 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
                              Qt::AscendingOrder);
 
       _splitter->addWidget(_filter = new FilterView (_proxy, this));
+#ifndef Q_OS_ANDROID
+      auto ftoggle = new QShortcut(QKeySequence("Ctrl+F"), this);
+      connect(ftoggle, &QShortcut::activated, this, &Book::toggleFilterArea);
+#endif
 
   setCentralWidget(_splitter);
 
@@ -762,12 +780,21 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
   grabGesture(android::SingleFingerSwipeRecognizer::type());
 #endif
 
+  statusBar();  // Invoke now to make space
+
   auto &settings = localSettings(this);
   QString lastBook = settings.value("lastBook").toString();
   if (!lastBook.isEmpty())  loadRecipes(lastBook);
+
+#ifndef Q_OS_ANDROID
   QVariant defaultSizes = QVariant::fromValue(QList<int>{100,100});
   _splitter->setSizes(
     settings.value("splitter", defaultSizes).value<QList<int>>());
+#else
+  int maxHeight = QGuiApplication::primaryScreen()->size().height();
+  _splitter->setSizes({maxHeight,maxHeight});
+  _filter->hide();
+#endif
 
   gui::restoreGeometry(this, settings);
 }
@@ -924,12 +951,10 @@ bool Book::event(QEvent *event) {
       auto sg = static_cast<android::ExtendedSwipeGesture*>(g);
       q << "\tExtendedSwipeGesture: " << sg->dx() << ", " << sg->dy() << "\n";
       if (sg->state() == Qt::GestureFinished) {
-        int maxHeight = QGuiApplication::primaryScreen()->size().height();
-        if (sg->dy() > 100) {
-          _splitter->setSizes(QList<int>({maxHeight, 0}));
-        } else if (sg->dy() < -100) {
-          _splitter->setSizes(QList<int>({maxHeight, maxHeight}));
-        }
+        if (sg->dy() > 100)
+          showFilterArea(false);
+        else if (sg->dy() < -100)
+          showFilterArea(true);
       }
     }
     return true;
@@ -938,5 +963,22 @@ bool Book::event(QEvent *event) {
     return QMainWindow::event(event);
 }
 #endif
+
+void Book::toggleFilterArea(void) {
+  auto q = qDebug().nospace();
+  q << "filter visible? " << _filter->geometry().isValid();
+  showFilterArea(!_filter->geometry().isValid());
+  q << " >> " << _filter->geometry().isValid();
+}
+
+void Book::showFilterArea(bool show) {
+//  int maxHeight = QGuiApplication::primaryScreen()->size().height();
+//  _splitter->setSizes(QList<int>({maxHeight, maxHeight*show}));
+  if (show)
+    _filter->show();
+  else
+    _filter->hide();
+  qDebug() << _filter << _filter->geometry() << _filter->isVisible();
+}
 
 } // end of namespace gui

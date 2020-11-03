@@ -20,6 +20,10 @@ namespace gui {
 
 static const QString windowName = "Gestionnaire d'update";
 
+struct ProgressLabel : public QLabel {
+
+};
+
 UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
   QVBoxLayout *layout = new QVBoxLayout;
     QHBoxLayout *srclayout = new QHBoxLayout;

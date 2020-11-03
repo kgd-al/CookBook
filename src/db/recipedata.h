@@ -57,6 +57,9 @@ const T& at (const cb_container<T> &map, ID id) {
 template <typename T>
 const T& at (ID id) {  return at(T::database(), id);  }
 
+template <typename T>
+const T& first (void) { return T::database().begin()->second; }
+
 namespace _details { // (private)
 
 template <typename T, typename = int>

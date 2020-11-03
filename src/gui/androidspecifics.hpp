@@ -64,9 +64,9 @@ private:
         && !activeMonitors.contains(watched)) {
       static_cast<G*>(state)->setHotSpot(
         static_cast<QTouchEvent*>(event)->touchPoints().front().pos());
-      qDebug() << __PRETTY_FUNCTION__ << "(" << state << watched << event
-               << "):\n\tMay start at "
-               << static_cast<QTouchEvent*>(event)->touchPoints().front().pos();
+//      qDebug() << __PRETTY_FUNCTION__ << "(" << state << watched << event
+//               << "):\n\tMay start at "
+//               << static_cast<QTouchEvent*>(event)->touchPoints().front().pos();
       activeMonitors.insert(watched, MayBeGesture);
       return MayBeGesture;
 
@@ -76,10 +76,10 @@ private:
       sg->setEnd(static_cast<QTouchEvent*>(event)->touchPoints().front().pos());
       ResultFlag flag = CancelGesture;
       if (sg->magnitude() > 100) {
-        qDebug() << __PRETTY_FUNCTION__ << "(" << state << watched << event
-                 << "):\n\tSwipe end "
-                 << sg->hotSpot() << " + (" << sg->dx() << "," << sg->dy()
-                 << ")";
+//        qDebug() << __PRETTY_FUNCTION__ << "(" << state << watched << event
+//                 << "):\n\tSwipe end "
+//                 << sg->hotSpot() << " + (" << sg->dx() << "," << sg->dy()
+//                 << ")";
         flag = FinishGesture;
       }
 

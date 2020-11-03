@@ -9,6 +9,26 @@
 
 namespace db {
 
+Recipe::Recipe (void) {
+  used = 0;
+
+  title = "Poudre de pinrlinpinpin";
+
+  portions = 0;
+  portionsLabel = "";
+
+  basic = false;
+
+  regimen = &first<RegimenData>();
+  type = &first<DishTypeData>();
+  duration = &first<DurationData>();
+  status = &first<StatusData>();
+
+//  ingredients;
+//  steps;
+//  notes;
+}
+
 // On update
 void Recipe::updateUsageCounts (const IngredientList &newList) {
 

@@ -14,5 +14,6 @@
         <file>icons/time-short-2.png</file>
         <file>icons/time-short.png</file>
         <file>icons/type-neutral.png</file>
+        <file>icons/book.png</file>
     </qresource>
 </RCC>

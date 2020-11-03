@@ -32,6 +32,8 @@ struct Recipe {
   QStringList steps;
   QString notes;
 
+  Recipe (void);
+
   QIcon basicIcon (void) const;
   QIcon subrecipeIcon (void) const;
 

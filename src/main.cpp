@@ -167,10 +167,14 @@ int main(int argc, char *argv[]) {
   palette.setColor(QPalette::HighlightedText, Qt::black);
   app.setPalette(palette);
 
-  app.setStyleSheet("QCheckBox::indicator {width: 91px; height: 91px; } ");
+  app.setStyleSheet(
+    "QCheckBox::indicator { width: 64px; height: 64px; } "
+    "QRadioButton::indicator { width: 48px; height: 48px; } "
+  );
 #endif
 
   gui::Book w;
+  w.setWindowIcon(QIcon(":/icons/book.png"));
   w.show();
 
   QList<QString> data {

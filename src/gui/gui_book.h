@@ -59,6 +59,9 @@ private:
   void setAutoTitle (void);
   void setModified (bool m);
 
+  void toggleFilterArea (void);
+  void showFilterArea (bool show);
+
 #ifdef Q_OS_ANDROID
   bool event (QEvent *event) override;
 #endif
