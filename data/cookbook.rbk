@@ -1,0 +1,2369 @@
+{
+    "ingredients": [
+        [
+            1,
+            "farine",
+            3,
+            9
+        ],
+        [
+            2,
+            "oeuf",
+            1,
+            7
+        ],
+        [
+            3,
+            "lait",
+            8,
+            7
+        ],
+        [
+            4,
+            "yaourt",
+            8,
+            1
+        ],
+        [
+            5,
+            "bicarbonate alimentaire",
+            5,
+            2
+        ],
+        [
+            6,
+            "patate douce",
+            2,
+            1
+        ],
+        [
+            7,
+            "noix",
+            7,
+            1
+        ],
+        [
+            8,
+            "soba au sarrasin",
+            3,
+            1
+        ],
+        [
+            9,
+            "sauce soja",
+            5,
+            2
+        ],
+        [
+            10,
+            "eau",
+            6,
+            5
+        ],
+        [
+            11,
+            "sel",
+            5,
+            8
+        ],
+        [
+            13,
+            "chair à saucisse",
+            1,
+            1
+        ],
+        [
+            16,
+            "pain de mie",
+            3,
+            2
+        ],
+        [
+            17,
+            "oignon",
+            2,
+            19
+        ],
+        [
+            18,
+            "champignons",
+            2,
+            1
+        ],
+        [
+            19,
+            "citrouille",
+            2,
+            2
+        ],
+        [
+            24,
+            "viande",
+            1,
+            2
+        ],
+        [
+            26,
+            "mirin",
+            6,
+            1
+        ],
+        [
+            27,
+            "dashi",
+            5,
+            1
+        ],
+        [
+            28,
+            "poivron",
+            2,
+            2
+        ],
+        [
+            29,
+            "graine de courge",
+            7,
+            1
+        ],
+        [
+            30,
+            "riz",
+            3,
+            2
+        ],
+        [
+            31,
+            "sucre",
+            4,
+            6
+        ],
+        [
+            32,
+            "beurre",
+            9,
+            6
+        ],
+        [
+            33,
+            "citron",
+            2,
+            2
+        ],
+        [
+            34,
+            "levure",
+            5,
+            4
+        ],
+        [
+            36,
+            "avoine",
+            3,
+            2
+        ],
+        [
+            37,
+            "cacao",
+            5,
+            1
+        ],
+        [
+            38,
+            "noix de coco",
+            2,
+            1
+        ],
+        [
+            39,
+            "curcuma",
+            5,
+            2
+        ],
+        [
+            40,
+            "poireau",
+            2,
+            3
+        ],
+        [
+            41,
+            "bouillon",
+            6,
+            1
+        ],
+        [
+            42,
+            "fromage à tartiflette",
+            8,
+            1
+        ],
+        [
+            43,
+            "pomme de terre",
+            3,
+            2
+        ],
+        [
+            44,
+            "bacon",
+            1,
+            1
+        ],
+        [
+            45,
+            "canette",
+            1,
+            1
+        ],
+        [
+            46,
+            "carottes",
+            2,
+            1
+        ],
+        [
+            47,
+            "navet",
+            2,
+            1
+        ],
+        [
+            48,
+            "banane",
+            2,
+            1
+        ],
+        [
+            49,
+            "paprika",
+            5,
+            2
+        ],
+        [
+            50,
+            "ail",
+            2,
+            3
+        ],
+        [
+            51,
+            "piment",
+            5,
+            3
+        ],
+        [
+            52,
+            "miel",
+            4,
+            1
+        ],
+        [
+            53,
+            "vache qui rit",
+            8,
+            1
+        ],
+        [
+            54,
+            "semoule",
+            3,
+            1
+        ],
+        [
+            56,
+            "huile",
+            9,
+            9
+        ],
+        [
+            57,
+            "olive",
+            2,
+            1
+        ],
+        [
+            58,
+            "chou",
+            2,
+            1
+        ],
+        [
+            59,
+            "porc",
+            1,
+            1
+        ],
+        [
+            60,
+            "boeuf",
+            1,
+            2
+        ],
+        [
+            61,
+            "ras el hanout",
+            5,
+            1
+        ],
+        [
+            62,
+            "lentilles",
+            3,
+            1
+        ],
+        [
+            63,
+            "fromage de brebis",
+            8,
+            1
+        ],
+        [
+            64,
+            "tomate",
+            2,
+            1
+        ],
+        [
+            65,
+            "pomme",
+            2,
+            1
+        ],
+        [
+            66,
+            "concombre",
+            2,
+            1
+        ],
+        [
+            67,
+            "vinaigre",
+            5,
+            1
+        ],
+        [
+            68,
+            "thym",
+            2,
+            2
+        ],
+        [
+            69,
+            "laurier",
+            2,
+            2
+        ],
+        [
+            70,
+            "chou fleur",
+            2,
+            1
+        ],
+        [
+            71,
+            "courgette",
+            2,
+            1
+        ],
+        [
+            72,
+            "noix de muscade",
+            5,
+            1
+        ],
+        [
+            73,
+            "safran",
+            5,
+            1
+        ],
+        [
+            74,
+            "saumon",
+            1,
+            1
+        ],
+        [
+            75,
+            "mascarpone",
+            8,
+            1
+        ],
+        [
+            76,
+            "mascarpone",
+            8,
+            0
+        ],
+        [
+            77,
+            "café",
+            6,
+            0
+        ],
+        [
+            78,
+            "café",
+            10,
+            0
+        ],
+        [
+            79,
+            "café",
+            5,
+            0
+        ]
+    ],
+    "recipes": [
+        {
+            "basic": false,
+            "d-portions": 3,
+            "duration": 1,
+            "id": 1,
+            "ing": [
+                [
+                    0,
+                    [
+                        100,
+                        1,
+                        1,
+                        ""
+                    ]
+                ],
+                [
+                    1,
+                    11
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        3,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        5,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- Mettre les épices que l'on veut, la cannelle c'est bien.\n- Mettre un yaourt nature maison de 125g.",
+            "regimen": 2,
+            "status": 2,
+            "steps": [
+                "Tout mélanger sans faire de grumeau.",
+                "Cuire dans une poêle à feu moyen-vif."
+            ],
+            "t-portions": "pancakes",
+            "title": "Pancakes express",
+            "type": 1,
+            "used": 1
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 2,
+            "ing": [
+                [
+                    2,
+                    "Pour la purée"
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        6,
+                        "grosses, à chair orange"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        7,
+                        ""
+                    ]
+                ],
+                [
+                    2,
+                    "Pour les nouilles"
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        6,
+                        8,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        9,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- On peut rajouter de la crème fraîche dans la purée\n- On peut mettre des graines de courgette avec/à la place des noix",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Faire cuire les patates douces à la vapeur puis les écraser une fois qu'elles sont fondantes.",
+                "Les assaisonner et mettre des graines/noix par dessus.",
+                "Faire cuire les soba pendant 3 minutes dans de l'eau bouillante. Les égoutter puis les servir avec de la sauce soja."
+            ],
+            "t-portions": "personnes",
+            "title": "Purée de patates douces et soba au sarrasin",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 3,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        1,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        7,
+                        10,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Mélanger la farine et le sel.",
+                "Rajouter de l'eau petit à petit jusqu'à former une boule.",
+                "Former des rondins avec la pâtes puis couper des gnocchis avec des ciseaux.",
+                "Faire cuire dans un grand volume d'eau bouillante. Les gnocchis doivent cuire un peu une fois remontés à la surface."
+            ],
+            "t-portions": "personnes",
+            "title": "Gnocchis",
+            "type": 2,
+            "used": 2
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 4,
+            "ing": [
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        28,
+                        "moyen"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        1,
+                        13,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        2,
+                        60,
+                        "haché"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        17,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        8,
+                        16,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        3,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    2,
+                    "Accompagnement"
+                ],
+                [
+                    1,
+                    7
+                ]
+            ],
+            "notes": "- On peut rajouter un oeuf\n- On peut mettre du fromage ou du coulis de tomates sur les poivrons farcis\n- Servir avec des pâtes ou du riz",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Faire tremper le pain dans un peu de lait.",
+                "Couper l'oignon en cubes très fins.",
+                "Dans un saladier, mélanger le pain, l'oignon et la viande. ",
+                "Couper les poivrons en deux et fourrer chaque moitié de préparation.",
+                "Faire cuire une heure dans un four à 180°C."
+            ],
+            "t-portions": "personnes",
+            "title": "Poivrons farcis",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 5,
+            "ing": [
+                [
+                    1,
+                    3
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        18,
+                        "forestier"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        300,
+                        1,
+                        19,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        17,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        56,
+                        "olive"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        29,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- Remplacer la citrouille par de la patate douce ou du potimarron\n- Remplacer les graines de citrouille par des noix concassées",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Faire des gnocchis.",
+                "Dans une grande poêle, faire revenir l'oignon en lamelles et la citrouille.",
+                "Ajouter les champignons et les gnocchis en fin de cuisson.",
+                "Servir avec les graines de citrouille par dessus."
+            ],
+            "t-portions": "personnes",
+            "title": "Gnocchis d'automne",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 6,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        24,
+                        "poulet,porc,dinde"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        2,
+                        2,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        17,
+                        "moyen"
+                    ]
+                ],
+                [
+                    2,
+                    "Pour la sauce"
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        9,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        5,
+                        26,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        27,
+                        ""
+                    ]
+                ],
+                [
+                    2,
+                    "Accompagnement"
+                ],
+                [
+                    1,
+                    7
+                ]
+            ],
+            "notes": "- Décorer avec des herbes : oignons verts, persil, coriandre...\n- S'il manque le mirin mettre deux cuillères à soupe de sake\n",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Couper la viande et les oignons en lamelles.",
+                "Faire revenir dans la poêle avec la sauce.",
+                "Ajouter la moitié des oeufs et laisser cuire un peu.",
+                "Rajouter la fin des oeufs, couvrir la poêle et laisser reposer avec le feu éteint.",
+                "Servir sur du riz gluant"
+            ],
+            "t-portions": "personnes",
+            "title": "Oyakodon",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 7,
+            "ing": [
+                [
+                    0,
+                    [
+                        1,
+                        7,
+                        30,
+                        "gluant"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        7,
+                        10,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "gros"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Faire bouillir l'eau salée dans une casserole à feu vif.",
+                "Ajouter le riz et attendre que cela bout à nouveau.",
+                "Baisser le feu au minimum, couvrir la casserole et laisser cuire 10min.",
+                "A la fin de la cuisson, éteindre le feu et laisser reposer encore 10 min."
+            ],
+            "t-portions": "personnes",
+            "title": "Riz gluant",
+            "type": 2,
+            "used": 3
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 8,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        1,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        60,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        60,
+                        1,
+                        32,
+                        "salé, fondu"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        2,
+                        2,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        11,
+                        34,
+                        "chimique"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        33,
+                        "moyen, jus, zestes"
+                    ]
+                ]
+            ],
+            "notes": "- Mettre du sucre vanillé pour plus de goût.",
+            "regimen": 2,
+            "status": 2,
+            "steps": [
+                "Mélanger les ingrédients secs (farine, sucre, levure, sel) dans un saladier.",
+                "Ajouter et mélanger les oeufs et le beurre jusqu'à obtenir une pâte homogène.",
+                "Ajouter les zestes et le jus des citrons.",
+                "Enfourner à 180°C jusqu'à ce qu'il soit doré et que la pointe d'un couteau en ressorte sèche. 45 minutes pour un cake et 30 minutes pour des gâteaux individuels."
+            ],
+            "t-portions": "personnes",
+            "title": "Cake au citron",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 5,
+            "duration": 1,
+            "id": 9,
+            "ing": [
+                [
+                    0,
+                    [
+                        500,
+                        12,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        75,
+                        1,
+                        30,
+                        "rond"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2.5,
+                        5,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        11,
+                        31,
+                        "vanillé"
+                    ]
+                ]
+            ],
+            "notes": "- Ajouter des épices et des zestes d'agrumes.",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Faire bouillir le lait avec, éventuellement, les épices et les zestes dans une casserole.",
+                "Ajouter le riz, le sel et le sucre. Lorsque cela bout de nouveau, baisser le feu.",
+                "Laisser cuire à découvert à petit feu jusqu'à ce que le riz affleure le lait.",
+                "Laisser tiédir avant de déguster."
+            ],
+            "t-portions": "portions",
+            "title": "Riz au lait",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 12,
+            "duration": 3,
+            "id": 10,
+            "ing": [
+                [
+                    0,
+                    [
+                        135,
+                        1,
+                        36,
+                        "flocons"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        2,
+                        32,
+                        "salé"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        75,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1.5,
+                        5,
+                        37,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        25,
+                        1,
+                        38,
+                        "poudre"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Effriter le beurre et le sucre à la main comme pour un crumble.",
+                "Ajouter le cacao, l'avoine et le lait. Former une belle pâte.",
+                "Faire des boules de la taille de Ferrero Rochers et les rouler dans la noix de coco.",
+                "Laisser reposer toute la nuit au réfrégirateur avant de consommer."
+            ],
+            "t-portions": "boules",
+            "title": "Boules au chocolat et à l'avoine",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 8,
+            "duration": 3,
+            "id": 11,
+            "ing": [
+                [
+                    0,
+                    [
+                        1,
+                        13,
+                        3,
+                        "entier"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        4,
+                        "nature, entier"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Mélanger au fouet les deux ingrédients.",
+                "Mettre en pots et laisser chauffer dans la yaourtière pendant au moins douze heures."
+            ],
+            "t-portions": "yaourts",
+            "title": "Yaourts natures",
+            "type": 1,
+            "used": 1
+        },
+        {
+            "basic": true,
+            "d-portions": 1,
+            "duration": 2,
+            "id": 12,
+            "ing": [
+                [
+                    0,
+                    [
+                        150,
+                        1,
+                        1,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        35,
+                        1,
+                        32,
+                        "salé, fondu"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        1,
+                        39,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        7,
+                        10,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Mélanger la farine, le sel et le curcuma.",
+                "Ajouter le beurre fondu et effriter comme pour un crumble.",
+                "Ajouter de l'eau petit à petit afin de former une belle boule.",
+                "Etaler et laisser reposer au moins deux heures au réfrégirateur."
+            ],
+            "t-portions": "pâte",
+            "title": "Pâte à tarte",
+            "type": 1,
+            "used": 1
+        },
+        {
+            "basic": true,
+            "d-portions": 1,
+            "duration": 2,
+            "id": 13,
+            "ing": [
+                [
+                    1,
+                    12
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        2,
+                        "gros"
+                    ]
+                ],
+                [
+                    1,
+                    11
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        40,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        6,
+                        2,
+                        18,
+                        "paris, frais, gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        56,
+                        "olive"
+                    ]
+                ]
+            ],
+            "notes": "- Mettre deux yaourts natures de 125g faits maison",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Faire revenir les poireaux et les champignons dans un poêle à feu vif avec l'huile d'olive. Réserver.",
+                "Mélanger les oeufs et les yaourts et ajouter le mélange précédemment mentionné (il ne doit pas être chaud).",
+                "Mettre le tout dans la pâte à tarte et enfourner à 180°C pendant 45 minutes."
+            ],
+            "t-portions": "tarte",
+            "title": "Tarte au poireaux et aux champignons",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 14,
+            "ing": [
+                [
+                    0,
+                    [
+                        100,
+                        1,
+                        36,
+                        "flocons"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        40,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        17,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        13,
+                        41,
+                        "volaille, légumes"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        56,
+                        "olive"
+                    ]
+                ]
+            ],
+            "notes": "- Décorer avec du persil et de la ciboulette",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Couper les oignons et le poireau en lamelles.",
+                "Faire revenir dans une cocotte à feu vif les légumes découpés.",
+                "Ajouter l'avoine et le laisser griller un peu.",
+                "Ajouter le bouillon et porter à ébullition.",
+                "Couvrir, baisser le feu au minimum et laisser cuire pendant 15 minutes."
+            ],
+            "t-portions": "personnes",
+            "title": "Soupe de poireaux à l'avoine",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 4,
+            "duration": 1,
+            "id": 15,
+            "ing": [
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        42,
+                        "500g"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        6,
+                        2,
+                        43,
+                        "grosses"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        17,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        44,
+                        "allumettes"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        56,
+                        "olive"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Trancher les pommes de terre, le fromage et les oignons le plus fin possible.",
+                "Huiler le plat.",
+                "Ajouter sucessivement en couches : pommes de terre, oignons, allumettes de bacon, fromage à tartiflette jusqu'à épuisement.",
+                "Faire cuire au four au moins pendant une heure à 200°C (thermostat 5).\t"
+            ],
+            "t-portions": "personnes",
+            "title": "Tartiflette",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 16,
+            "ing": [
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        45,
+                        "entière"
+                    ]
+                ],
+                [
+                    1,
+                    7
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        40,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        46,
+                        "moyennes"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        6,
+                        2,
+                        18,
+                        "frais"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        47,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Faire rôtir la canette.",
+                "Faire cuire les légumes dans une casserole d'eau salée. Réserver le bouillon.",
+                "Cuire le riz avec le bouillon. Ajouter du jus de canette dans le riz."
+            ],
+            "t-portions": "personnes",
+            "title": "Super canette",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 17,
+            "ing": [
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        48,
+                        "plantains"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        49,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        50,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        14,
+                        51,
+                        "espelette"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        52,
+                        "liquide"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        56,
+                        "olive"
+                    ]
+                ]
+            ],
+            "notes": "- Manger avec des tranches de jambon cru.\n- Prendre des bananes plantains assez mûres.",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Couper les bananes plantains en rondelles et en biais.",
+                "Dans un saladier, les mélanger avec tout le reste des épices.",
+                "Mettre les bananes dans un plat en une seule couche.",
+                "Mettre au four au milieu pendant 30 minutes à 180°C."
+            ],
+            "t-portions": "personnes",
+            "title": "Bananes plantains au four",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 1,
+            "duration": 1,
+            "id": 18,
+            "ing": [
+                [
+                    0,
+                    [
+                        250,
+                        1,
+                        24,
+                        "poulet, dinde, boeuf"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        9,
+                        57,
+                        "noires"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        2,
+                        2,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        2,
+                        53,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        4,
+                        5,
+                        54,
+                        "extra-fine"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        65,
+                        12,
+                        56,
+                        "végétale"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        50,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        49,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        14,
+                        51,
+                        "espelette"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Hacher la viande.",
+                "Mélanger tous les ingrédients dans un saladier.",
+                "Mettre dans une boîte en plastique qui supporte la vapeur.",
+                "Mettre la boîte fermée à cuire à la vapeur pendant 50 minutes;"
+            ],
+            "t-portions": "cachir",
+            "title": "Cachir",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 1,
+            "duration": 2,
+            "id": 19,
+            "ing": [
+                [
+                    0,
+                    [
+                        220,
+                        1,
+                        1,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        125,
+                        12,
+                        10,
+                        "tiède"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        25,
+                        2,
+                        56,
+                        "olive"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        11,
+                        34,
+                        "boulangère"
+                    ]
+                ]
+            ],
+            "notes": "- Ajouter des herbes",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Tout mettre dans la map sans que le sel et levure ne se touchent.",
+                "Lancer le programme pâte."
+            ],
+            "t-portions": "pizza",
+            "title": "Pâte à pizza à la map",
+            "type": 1,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 2,
+            "id": 20,
+            "ing": [
+                [
+                    0,
+                    [
+                        4,
+                        15,
+                        58,
+                        "vert ou frisé"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        1,
+                        59,
+                        "haché"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        1,
+                        60,
+                        "haché"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        17,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        8,
+                        16,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        7,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        61,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- Essayer avec une poignée de cranberries réhydratée.",
+            "regimen": 1,
+            "status": 2,
+            "steps": [
+                "Faire blanchir les feuilles de chou 1.30 minutes au préàlable.",
+                "Faire une farce avec les autres ingrédients.",
+                "Faire des boulettes avec la farce et les enrouler d'une feuille de chou chacune.",
+                "Les faire cuire au four à 180°C, thermostat 4.5, pendant 45 minutes."
+            ],
+            "t-portions": "personnes",
+            "title": "Choux farcis",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 2,
+            "id": 21,
+            "ing": [
+                [
+                    2,
+                    "Pour la salade"
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        7,
+                        62,
+                        "vertes"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        1,
+                        63,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        64,
+                        "coeur de boeuf mûre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        65,
+                        "verte"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        17,
+                        "blanc"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        2,
+                        66,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        17,
+                        "frits"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        16,
+                        68,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        17,
+                        69,
+                        ""
+                    ]
+                ],
+                [
+                    2,
+                    "Pour la sauce"
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        56,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        67,
+                        "balsamique"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Faire cuire les lentilles 15 minutes dans du thym et du laurier et les laisser refroidir.",
+                "Couper tous les ingrédients de la salade mais réserver les oignons frits.",
+                "Faire la sauce et décorer avec les oignons frits."
+            ],
+            "t-portions": "personnes",
+            "title": "Salade de lentilles au fromage de brebis",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 3,
+            "duration": 1,
+            "id": 22,
+            "ing": [
+                [
+                    0,
+                    [
+                        60,
+                        1,
+                        1,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        125,
+                        12,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        2,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        12,
+                        1,
+                        32,
+                        "fondu"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        11,
+                        "fin"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Dans un saladier, mettre la farine et le sel et rajouter l'oeuf.",
+                "Mélanger jusqu'à faire une pâte épaisse puis ajouter le lait petit à petit.",
+                "Ajouter le beurre fondu.",
+                "Faire cuire les crêpes dans une poêle à feu vif."
+            ],
+            "t-portions": "crêpes",
+            "title": "Crêpes express",
+            "type": 1,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 23,
+            "ing": [
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        43,
+                        "moyennes"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        2,
+                        1,
+                        "pas complète"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        56,
+                        "olive"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        19,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        70,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        2,
+                        71,
+                        "grosse"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        17,
+                        "moyen"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        19,
+                        50,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        16,
+                        68,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        17,
+                        69,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        39,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        72,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        1,
+                        73,
+                        "pistils"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        18,
+                        10,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- Changer les légumes selon la saison et la disponibilité.\n- Adapter les épices et les herbes.\n- Décorer avec des herbes fraîches (persil, oignons verts, coriandre, ciboulette...).",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Couper les légumes et les pommes de terre en gros morceaux.",
+                "Faire revenir ces morceaux dans une cocotte dans l'huile d'olive à feu vif.",
+                "Ajouter la farine et les épices.",
+                "Lorsque la farine est absorbée par les légumes ajouter l'eau.",
+                "Ajouter le thym et le laurier. Mettre du sel si besoin.",
+                "Lorsque l'eau bout, mettre à cuire à couvert au minimum.",
+                "Remuer régulièrement. Le plat est prêt lorsque les pommes de terre et les légumes sont cuits.",
+                "Décorer avec des herbes fraîches."
+            ],
+            "t-portions": "personnes",
+            "title": "Casserole de légumes",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 6,
+            "duration": 3,
+            "id": 24,
+            "ing": [
+                [
+                    0,
+                    [
+                        500,
+                        1,
+                        74,
+                        "frais"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        250,
+                        1,
+                        75,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        28,
+                        "vert"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        14,
+                        51,
+                        "espelette"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Cuire le saumon (vapeur, four, court-bouillon). Attendre qu'il refroidisse.",
+                "Mélanger le saumon avec le mascarpone, le sel, les cubes de poivron vert et la pointe de piment d'espelette.",
+                "Mettre dans une terrine et réserver au réfrégirateur pendant toute une nuit."
+            ],
+            "t-portions": "personnes",
+            "title": "Rillettes de saumon",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 6,
+            "duration": 1,
+            "id": 25,
+            "ing": [
+                [
+                    0,
+                    [
+                        150,
+                        1,
+                        1,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        1,
+                        32,
+                        "salé, mou"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        2,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        11,
+                        34,
+                        "chimique"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        5,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- Mettre 130 g de \"saveur\" : chocolat, cranberries, fruits secs concassés, fruits déshydratés...",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Mélanger le sucre, le beurre mou et l'oeuf à la main dans un saladier.",
+                "Ajouter les autres ingrédients pour faire une boule de pâte.",
+                "Ajouter les saveurs choisies.",
+                "Faire des petites boules de pâtes que l'on espacera sur la plaque de cuisson.",
+                "Faire cuire 10 minutes au four à 180°C (thermostat 4.5), au milieu du four."
+            ],
+            "t-portions": "cookies",
+            "title": "Cookies",
+            "type": 3,
+            "used": 0
+        }
+    ],
+    "units": [
+        [
+            1,
+            "g",
+            35
+        ],
+        [
+            2,
+            "Ø",
+            49
+        ],
+        [
+            3,
+            "lichette",
+            2
+        ],
+        [
+            4,
+            "pincée",
+            11
+        ],
+        [
+            5,
+            "cas",
+            17
+        ],
+        [
+            6,
+            "portion",
+            1
+        ],
+        [
+            7,
+            "verre",
+            6
+        ],
+        [
+            8,
+            "tranche",
+            2
+        ],
+        [
+            9,
+            "boîte",
+            1
+        ],
+        [
+            10,
+            "cac",
+            4
+        ],
+        [
+            11,
+            "sachet",
+            4
+        ],
+        [
+            12,
+            "ml",
+            4
+        ],
+        [
+            13,
+            "litre",
+            2
+        ],
+        [
+            14,
+            "pointe",
+            3
+        ],
+        [
+            15,
+            "feuille",
+            1
+        ],
+        [
+            16,
+            "branche",
+            2
+        ],
+        [
+            17,
+            "feuille",
+            2
+        ],
+        [
+            18,
+            "bol",
+            1
+        ],
+        [
+            19,
+            "gousse",
+            1
+        ],
+        [
+            20,
+            "pinchouille",
+            0
+        ]
+    ]
+}
