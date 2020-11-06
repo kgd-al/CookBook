@@ -106,7 +106,7 @@ IngredientDialog::IngredientDialog (QWidget *parent, const QString &title)
   validator.setDecimals(2);
   amount->setValidator(&validator);
 
-  QVector<QWidget*> torder { type, amount, unit, group };
+  QVector<QWidget*> torder { type, group, amount, unit, qualif };
   for (int i=0; i<torder.size()-1; i++)
     setTabOrder(torder[i], torder[i+1]);
 

@@ -15,16 +15,13 @@ namespace db {
 int iconSize (void) {
   return 15;
 }
-int iconDrawSize (void) {
-  return 4 * iconSize();
+
+QSize iconQSize (void) {
+  return QSize (iconSize(), iconSize());
 }
 
-void fontChanged (const QFont &font) {
-  QSettings settings;
-  settings.setValue("font", font);
-  QFontMetrics metrics (font);
-  settings.setValue("iconSize", metrics.height());
-  qDebug() << font << "is" << metrics.height() << "pixels high";
+QSize iconDrawQSize (void) {
+  return 4 * iconQSize();
 }
 
 QIcon iconFromFile (const QString &filepath) {
@@ -34,19 +31,19 @@ QIcon iconFromFile (const QString &filepath) {
 }
 
 QPixmap rectangularIconFromColor (const QColor &d) {
-  QPixmap p (iconDrawSize(), iconDrawSize());
+  QPixmap p (iconDrawQSize());
   p.fill(d);
   return p;
 }
 
 QPixmap circularIconFromColor (const QColor &d) {
-  QPixmap p (iconDrawSize(), iconDrawSize());
+  QPixmap p (iconDrawQSize());
   p.fill(Qt::transparent);
   QPainter painter (&p);
   painter.setPen(Qt::NoPen);
   painter.setBrush(d);
   painter.setRenderHint(QPainter::Antialiasing, true);
-  painter.drawEllipse(0, 0, iconDrawSize(), iconDrawSize());
+  painter.drawEllipse(0, 0, iconDrawQSize().width(), iconDrawQSize().height());
   return p;
 }
 

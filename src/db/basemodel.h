@@ -51,6 +51,22 @@ struct BaseModel : public QAbstractTableModel {
     return atIndex(index.row());
   }
 
+  typename map_t::iterator begin (void) {
+    return _data.begin();
+  }
+
+  typename map_t::const_iterator begin (void) const {
+    return _data.cbegin();
+  }
+
+  typename map_t::iterator end (void) {
+    return _data.end();
+  }
+
+  typename map_t::const_iterator end (void) const {
+    return _data.cend();
+  }
+
   int indexOf (ID id) const {
     auto it = _data.find(id);
     if (it == _data.end())

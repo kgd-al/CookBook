@@ -4,4 +4,4 @@ log
 *.rbk
 
 build_*
-android_*
+android*

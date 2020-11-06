@@ -20,16 +20,20 @@
 #include <QRadioButton>
 #include <QButtonGroup>
 #include <QPushButton>
+#include <QDialogButtonBox>
 
 #ifdef Q_OS_ANDROID
 #include "androidspecifics.hpp"
 #endif
 
+#include "common.h"
 #include "gui_book.h"
 #include "autofiltercombobox.hpp"
 #include "ingredientsmanager.h"
 #include "updatemanager.h"
-#include "common.h"
+#include "repairsmanager.h"
+#include "settings.h"
+
 #include "../db/recipesmodel.h"
 
 
@@ -700,6 +704,8 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
       Q_ASSERT(rheader);
 #ifdef Q_OS_ANDROID
       rheader->setMinimumSectionSize(2*db::iconSize());
+#else
+      rheader->setMinimumSectionSize(1.5*db::iconSize());
 #endif
       rheader->setSectionResizeMode(QHeaderView::ResizeToContents);
       rheader->setStretchLastSection(true);
@@ -729,23 +735,15 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 
   QMenuBar *bar = menuBar();
     QMenu *m_book = bar->addMenu("Book");
-#ifndef Q_OS_ANDROID
-      m_book->addAction(QIcon::fromTheme(""), "New",
-                        [this] {
-                          db::Book::current().clear();
-                          setModified(false);
-                        },
-                        QKeySequence("Ctrl+Shift+N"));
-#endif
-
       m_book->addAction(QIcon::fromTheme(""), "Load",
                         this, QOverload<>::of(&Book::loadRecipes),
                         QKeySequence("Ctrl+O"));
 
 #ifndef Q_OS_ANDROID
       m_book->addAction(QIcon::fromTheme(""), "Save",
-                        [this] { overwriteRecipes(); },
+                        [this] { overwriteRecipes(false); },
                         QKeySequence("Ctrl+S"));
+
       m_book->addAction(QIcon::fromTheme(""), "Save As",
                         [this] { saveRecipes(); },
                         QKeySequence("Ctrl+Shift+S"));
@@ -759,22 +757,16 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
                              QKeySequence("Ctrl+I"));
 
     QMenu *m_other = bar->addMenu("Misc");
-      m_other->addAction("Font", [this] {
-        bool ok;
-        QFont font = QApplication::font();
-        font = QFontDialog::getFont(&ok, font);
-        if (ok) {
-          QApplication::setFont(font);
-          db::fontChanged(font);
-        }
-
-      }, QKeySequence("Ctrl+Shift+F"));
-      m_other->addAction("Update", this, &Book::showUpdateManager,
+      m_other->addAction("Mise à jour", this, &Book::showUpdateManager,
                          QKeySequence("Ctrl+U"));
-      m_other->addAction("Clear settings", [] { QSettings().clear(); });
+      m_other->addAction("Réparer", this, &Book::showRepairUtility,
+                         QKeySequence("Ctrl+R"));
+      m_other->addAction("Configuration", this, &Book::showSettings,
+                         QKeySequence("Ctrl+C"));
       m_other->addAction("Bug tracker", [] {
         QDesktopServices::openUrl(QUrl("https://github.com/kgd-al/CookBook/issues"));
       });
+      m_other->addAction("About", this, &Book::showAbout);
 
 #else
   grabGesture(android::SingleFingerSwipeRecognizer::type());
@@ -816,8 +808,7 @@ void Book::addRecipe(void) {
   });
   drecipe.show(&recipe, false);
 
-  if (validated && db::Book::current().modified)
-    overwriteRecipes();
+  if (validated)  overwriteRecipes();
 }
 #endif
 
@@ -828,8 +819,7 @@ void Book::showRecipe(const QModelIndex &index) {
               .recipes.at(db::ID(index.data(db::IDRole).toInt())),
               true, index);
 #ifndef Q_OS_ANDROID
-  if (db::Book::current().modified)
-    overwriteRecipes();
+  overwriteRecipes();
 #endif
 }
 
@@ -848,7 +838,9 @@ bool Book::saveRecipes(const QString &path) {
   return ok;
 }
 
-bool Book::overwriteRecipes(void) {
+bool Book::overwriteRecipes(bool spontaneous) {
+  if (!db::Book::current().modified)  return false;
+  if (spontaneous && !Settings::value<bool>(Settings::AUTOSAVE)) return false;
   return saveRecipes(db::Book::current().path);
 }
 #endif
@@ -870,21 +862,63 @@ bool Book::loadRecipes(const QString &path) {
 }
 
 #ifndef Q_OS_ANDROID
-void Book::showIngredientsManager(void) {
-  auto &settings = localSettings(this);
-  if (settings.value("modal").toBool()) {
-    IngredientsManager manager (this);
+template <typename T>
+void maybeShowModal (Book *b, Settings::Type t) {
+  if (Settings::value<bool>(t)) {
+    T manager (b);
     manager.exec();
+    b->overwriteRecipes();
 
-  } else
-    (new IngredientsManager (this))->show();
+  } else {
+    auto manager = new T (b);
+    Book::connect(manager, &T::destroyed,
+                  b, &Book::overwriteRecipes);
+    manager->show();
+  }
+}
+
+void Book::showIngredientsManager(void) {
+  maybeShowModal<IngredientsManager>(this, Settings::MODAL_IMANAGER);
 }
 
 void Book::showUpdateManager(void) {
-  UpdateManager manager (this);
-  manager.exec();
+  UpdateManager (this).exec();
 }
+
+void Book::showRepairUtility(void) {
+  maybeShowModal<RepairsManager>(this, Settings::MODAL_REPAIRS);
+}
+
+void Book::showSettings(void) {
+  maybeShowModal<Settings>(this, Settings::MODAL_SETTINGS);
+}
+
 #endif
+
+void Book::showAbout(void) {
+  QDialog d (this);
+
+  auto *layout = new QGridLayout;
+  auto *tdisplay = new QLabel;
+  layout->addWidget(tdisplay, 0, 1);
+  d.setLayout(layout);
+
+  auto *label = new QLabel;
+  label->setPixmap(QIcon(":/icons/book.png").pixmap(10*db::iconQSize()));
+  layout->addWidget(label, 0, 0);
+
+  QString text;
+  QTextStream qts(&text);
+  qts << QApplication::applicationDisplayName() << "\n"
+      << "Version " << QApplication::applicationVersion() << "\n";
+  tdisplay->setText(text);
+
+  auto *buttons = new QDialogButtonBox (QDialogButtonBox::Close);
+  layout->addWidget(buttons, 1, 0, 1, 2);
+  connect(buttons, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+
+  d.exec();
+}
 
 void Book::setAutoTitle(void) {
   db::Book &book = db::Book::current();
@@ -921,7 +955,7 @@ void Book::closeEvent(QCloseEvent *e) {
                                     QMessageBox::Cancel);
     switch (ret) {
     case QMessageBox::Yes:
-      overwriteRecipes();
+      overwriteRecipes(false);
       break;
     case QMessageBox::No:
       e->accept();

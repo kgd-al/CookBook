@@ -17,7 +17,7 @@ TEMPLATE = app
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-DEFINES += BASE_DIR=\\\"$$system(pwd)\\\"
+DEFINES += BASE_DIR=\\\"$$PWD\\\" BASE_BUILD_DIR=\\\"$$OUT_PWD\\\"
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -28,43 +28,47 @@ DEFINES += BASE_DIR=\\\"$$system(pwd)\\\"
 CONFIG += c++11
 
 SOURCES += \
-    src/db/recipe.cpp \
     src/db/book.cpp \
-    src/db/ingredientsmodel.cpp \
     src/db/ingredientlistentries.cpp \
-    src/gui/ingrediententrydialog.cpp \
-    src/gui/gui_recipe.cpp \
-    src/gui/gui_book.cpp \
-    src/gui/ingredientsmanager.cpp \
-    src/main.cpp \
-    src/gui/updatemanager.cpp \
-    src/gui/common.cpp \
-    src/db/unitsmodel.cpp \
+    src/db/ingredientsmodel.cpp \
+    src/db/recipe.cpp \
+    src/db/recipedata.cpp \
     src/db/recipesmodel.cpp \
+    src/db/unitsmodel.cpp \
+    src/gui/common.cpp \
+    src/gui/gui_book.cpp \
+    src/gui/gui_recipe.cpp \
+    src/gui/ingrediententrydialog.cpp \
+    src/gui/ingredientsmanager.cpp \
     src/gui/listcontrols.cpp \
-    src/db/recipedata.cpp
+    src/gui/repairsmanager.cpp \
+    src/gui/updatemanager.cpp \
+    src/main.cpp \
+    src/gui/settings.cpp
 
 HEADERS += \
-    src/db/recipe.h \
+    src/db/basemodel.h \
     src/db/book.h \
-    src/db/ingredientsmodel.h \
     src/db/ingredientlistentries.h \
+    src/db/ingredientsmodel.h \
+    src/db/recipe.h \
+    src/db/recipedata.h \
+    src/db/recipesmodel.h \
+    src/db/unitsmodel.h \
+    src/gui/androidspecifics.hpp \
+    src/gui/autofiltercombobox.hpp \
+    src/gui/common.h \
     src/gui/gui_book.h \
     src/gui/gui_recipe.h \
-    src/gui/autofiltercombobox.hpp \
     src/gui/ingrediententrydialog.h \
     src/gui/ingredientsmanager.h \
-    src/gui/updatemanager.h \
-    src/gui/common.h \
-    src/db/unitsmodel.h \
-    src/db/recipesmodel.h \
-    src/db/basemodel.h \
     src/gui/listcontrols.h \
-    src/db/recipedata.h \
-    src/gui/androidspecifics.hpp
+    src/gui/repairsmanager.h \
+    src/gui/updatemanager.h \
+    src/gui/settings.h
 
 RESOURCES += \
-    icons.qrc
+    resources.qrc
 
 DISTFILES += \
     android/AndroidManifest.xml \

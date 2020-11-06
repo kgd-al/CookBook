@@ -12,12 +12,11 @@
 
 #include "gui/gui_book.h"
 #include "gui/common.h"
+#include "gui/settings.h"
 
 #ifdef Q_OS_ANDROID
 #include <android/log.h>
 #endif
-
-static constexpr auto appName = "cookbook";
 
 QFile logfile;
 void logger (QtMsgType type, const QMessageLogContext &context,
@@ -56,7 +55,7 @@ void logger (QtMsgType type, const QMessageLogContext &context,
     {    QtFatalMsg, ANDROID_LOG_FATAL  },
   };
   __android_log_write(qt2androidMsgType.value(type),
-                      appName,
+                      QCoreApplication::applicationName(),
                       formattedMessage.toStdString().c_str());
 #endif
 }
@@ -89,8 +88,14 @@ void simulateKey (const QString &kstr) {
 int main(int argc, char *argv[]) {
   QApplication app (argc, argv);
 
-  QCoreApplication::setOrganizationName("almann");
-  QCoreApplication::setApplicationName(appName);
+  QApplication::setOrganizationName("almann");
+  QApplication::setApplicationName("cookbook");
+  QApplication::setApplicationDisplayName("CookBook");
+  QApplication::setApplicationVersion("0.9.95");
+  QApplication::setDesktopFileName(
+    QApplication::organizationName() + "-" + QApplication::applicationName()
+    + ".desktop");
+
   QSettings settings;
 
   QString logFilePath;
@@ -112,7 +117,7 @@ int main(int argc, char *argv[]) {
     q << "************************\n";
   }
 
-  QApplication::setFont(settings.value("font").value<QFont>());
+  QApplication::setFont(gui::Settings::value<QFont>(gui::Settings::FONT));
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
   QLocale fr_locale (QLocale::French);

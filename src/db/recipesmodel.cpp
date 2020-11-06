@@ -41,7 +41,7 @@ QVariant RecipesModel::headerData(int section, Qt::Orientation orientation,
   if (role != Qt::SizeHintRole) return QVariant();
   if (section == titleColumn() && orientation == Qt::Horizontal)
     return QVariant();
-  return QSize(iconSize(), iconSize());
+  return QSize(iconSize(), .25*iconSize());
 }
 
 QVariant RecipesModel::data (const QModelIndex &index, int role) const {

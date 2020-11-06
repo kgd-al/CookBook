@@ -2,12 +2,16 @@
 #include <QSplitter>
 
 #include <QLabel>
+#include <QLineEdit>
 #include <QToolButton>
 #include <QPushButton>
 #include <QDialogButtonBox>
 
 #include <QApplication>
+#include <QStandardPaths>
+#include <QFile>
 #include <QProcess>
+#include <QPainter>
 
 #include <QDebug>
 
@@ -18,19 +22,57 @@
 
 namespace gui {
 
-static const QString windowName = "Gestionnaire d'update";
+static const QString windowName = "Gestionnaire de mise à jour";
 
 struct ProgressLabel : public QLabel {
+  double progress;
+  enum State { PENDING = 0, OK = 1, ERROR = 2 };
+  State state;
 
+  ProgressLabel (QWidget *parent = nullptr)
+    : QLabel(parent), progress(1), state(PENDING) {}
+
+  void setState (State state, float progress = 1) {
+    this->state = state;
+    this->progress = progress;
+    update();
+  }
+
+  QSize sizeHint(void) const override {
+    return db::iconQSize();
+  }
+
+  void paintEvent(QPaintEvent*) {
+    static const QMap<State, QColor> c {
+      { PENDING, Qt::gray   },
+      {      OK, Qt::green  },
+      {   ERROR, Qt::red    },
+    };
+
+    QPainter p (this);
+    QRectF r = rect();
+    p.setRenderHint(QPainter::Antialiasing, true);
+    p.setBrush(c.value(state));
+    p.setPen(Qt::NoPen);
+    p.drawPie(r, 0, progress*360*16);
+  }
 };
 
 UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
   QVBoxLayout *layout = new QVBoxLayout;
     QHBoxLayout *srclayout = new QHBoxLayout;
       srclayout->addWidget(new QLabel ("Dossier source: "));
-      srclayout->addWidget(_path = new QLineEdit);
-      srclayout->addWidget(new QToolButton);
+      auto path = new QLineEdit (BASE_DIR);
+      srclayout->addWidget(path);
+      path->setReadOnly(true);
     layout->addLayout(srclayout);
+
+    QHBoxLayout *scaleLayout = new QHBoxLayout;
+      scaleLayout->addWidget(new QLabel("Scale"));
+      scaleLayout->addWidget(_scale = new QDoubleSpinBox);
+      _scale->setMinimum(1);
+      _scale->setSingleStep(.5);
+    layout->addLayout(scaleLayout);
 
     _splitter = new QSplitter (Qt::Vertical);
       QWidget *lholder = new QWidget;
@@ -39,16 +81,23 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
         llayout->addWidget(new QWidget, 1);
         llayout->addWidget(_buttons.pull = new QPushButton("Pull"));
 //        _buttons.pull->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        llayout->addWidget(_labels.pull = new QLabel);
+        llayout->addWidget(_labels.pull = new ProgressLabel);
         _labels.pull->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         llayout->addSpacing(10);
 
         llayout->addWidget(_buttons.compile = new QPushButton("Compiler"));
-        llayout->addWidget(_labels.compile = new QLabel);
+        llayout->addWidget(_labels.compile = new ProgressLabel);
         _labels.compile->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         llayout->addSpacing(10);
 
         llayout->addWidget(_buttons.deploy = new QPushButton("Relancer"));
+        llayout->addWidget(_labels.deploy = new ProgressLabel);
+        _labels.deploy->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+        llayout->addWidget(_buttons.push = new QPushButton("Push"));
+        llayout->addWidget(_labels.push = new ProgressLabel);
+        _labels.push->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
         llayout->addWidget(new QWidget, 1);
 
 //        for (QLabel *l: {_labels.pull, _labels.compile, _labels.deploy})
@@ -77,19 +126,19 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
           this, &UpdateManager::doCompile);
   connect(_buttons.deploy, &QPushButton::clicked,
           this, &UpdateManager::doDeploy);
+  connect(_buttons.push, &QPushButton::clicked,
+          this, &UpdateManager::doPush);
 
   auto &settings = localSettings(this);
-  QString path = settings.value("src").toString();
-  if (path.isEmpty()) path = BASE_DIR;
-  _path->setText(path);
-  connect(_path, &QLineEdit::textEdited, [this] (const QString &path) {
-    qDebug() << "path edited. new value: " << path;
-    auto &settings = localSettings(this);
-    settings.setValue("src", path);
-  });
-
   gui::restoreGeometry(this, settings);
   _splitter->restoreState(settings.value("splitter").toByteArray());
+  _scale->setValue(settings.value("scale", 1).toFloat());
+
+  connect(_scale, &QDoubleSpinBox::editingFinished,
+          [this] {
+    auto &settings = localSettings(this);
+    settings.setValue("scale", _scale->value());
+  });
 
   setWindowTitle(windowName);
 }
@@ -98,36 +147,81 @@ bool ok (int exitCode, QProcess::ExitStatus exitStatus) {
   return exitStatus == QProcess::NormalExit && exitCode == 0;
 }
 
-void setStatus (QLabel *l, int s) {
-  static QMap<int, const QIcon*> codes {
-//    {  0, Qt::gray  },
-    {  0, &db::at<db::StatusData>(db::ID(1)).decoration  },
-    {  1, &db::at<db::StatusData>(db::ID(3)).decoration  }
-  };
-  if (s == -1) l->setPixmap(QPixmap());
-  else
-    l->setPixmap(codes.value(s)->pixmap(l->size()));
-}
-
 void UpdateManager::doPull(void) {
-  process(_labels.pull, "git", "pull", ".");
+  process(_labels.pull, 1, "git", "pull", ".");
 }
 
 void UpdateManager::doCompile(void) {
-  auto *p = process(_labels.compile, "qmake",
+  auto *p = process(_labels.compile, .5, "qmake",
                     "CookBook.pro -spec linux-g++ CONFIG+=release -- -j 3");
   connect(p, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
           [this] (int exitCode, QProcess::ExitStatus exitStatus) {
     if (ok(exitCode, exitStatus))
-      process(_labels.compile, "make", "", "build_debug");
+      process(_labels.compile, 1, "make", "", "build_debug");
   });
 }
 
 void UpdateManager::doDeploy(void) {
-  if (parentWidget()->close()) {
-    qApp->exit(RebootCode);
-    QProcess::startDetached(qApp->arguments()[0], qApp->arguments());
+  if (!parentWidget()->close()) {
+    _labels.deploy->setState(ProgressLabel::ERROR, 1);
+    return;
   }
+
+  QApplication *app = qApp;
+#ifdef Q_OS_LINUX
+  QString l = QStandardPaths::writableLocation(
+                QStandardPaths::ApplicationsLocation);
+  if (l.isEmpty()) {
+    qInfo("No standard location for writing .desktop file. Autolaunch aborted");
+    return;
+  }
+
+  QFile dfile (l + "/" + app->desktopFileName());
+  dfile.open(QIODevice::WriteOnly);
+  if (!dfile.isWritable()) {
+    _output->append("Failed to write to " + dfile.fileName());
+    _labels.deploy->setState(ProgressLabel::ERROR, .5);
+    return;
+  }
+
+  QTextStream qts (&dfile);
+  qts << "[Desktop Entry]\n"
+         "Type=Application\n"
+      << "Name=" << app->applicationDisplayName() << "\n"
+      << "Version=" << app->applicationVersion() << "\n"
+      << "Comment=Malenda's recipes (version " << app->applicationVersion()
+        << ")\n"
+      << "Exec=QT_SCALE_FACTOR=" << QString::number(_scale->value(), 'f', 2)
+        << " " << BASE_BUILD_DIR << "/CookBook\n"
+      << "Icon=" << BASE_DIR << "/icons/book.png\n"
+      << "MimeType=\n"
+      << "Category=Qt;KDE;Utility\n";
+
+  _output->append("Generated desktop entry " + dfile.fileName());
+  _labels.deploy->setState(ProgressLabel::OK, .5);
+
+  if (parentWidget()->close()) {
+    QProcess::startDetached(
+      "kioclient5", QStringList() << "exec" << dfile.fileName());
+  }
+#else
+  app->exit(RebootCode);
+  qDebug() << "Launching " << app->arguments()[0] << app->arguments();
+  QProcess::startDetached(app->arguments()[0], app->arguments());
+  _labels.deploy->setState(ProgressLabel::OK, 1);
+#endif
+}
+
+void UpdateManager::doPush(void) {
+  auto *p = process(_labels.push, .5, "git",
+                    QStringList() << "commit"
+                      << "-m" << "Updated recipes database"
+                      << "--"  << "main.rbk");
+  connect(p, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
+          [this] (int exitCode, QProcess::ExitStatus exitStatus) {
+    if (ok(exitCode, exitStatus))
+      process(_labels.push, 1, "git", "push");
+  });
 }
 
 void UpdateManager::logOutput (void) {
@@ -138,7 +232,7 @@ void UpdateManager::logOutput (void) {
 }
 
 QProcess*
-UpdateManager::process(QLabel *monitor,
+UpdateManager::process(ProgressLabel *monitor, float progress,
                        const QString &program, const QStringList &arguments,
                        const QString &relativeWorkPath) {
 
@@ -147,7 +241,7 @@ UpdateManager::process(QLabel *monitor,
 
   QProcess *process = new QProcess(this);
   process->setProcessChannelMode(QProcess::MergedChannels);
-  process->setWorkingDirectory(_path->text() + "/" + relativeWorkPath);
+  process->setWorkingDirectory(QString(BASE_DIR) + "/" + relativeWorkPath);
   connect(process, &QProcess::readyReadStandardOutput,
           this, &UpdateManager::logOutput);
 
@@ -160,7 +254,7 @@ UpdateManager::process(QLabel *monitor,
   working(program);
 
   connect(process, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
-          [this, monitor, process]
+          [this, monitor, progress, process]
           (int exitCode, QProcess::ExitStatus exitStatus){
 
     QString s;
@@ -176,7 +270,7 @@ UpdateManager::process(QLabel *monitor,
     _output->append(s);
     s.clear();
 
-    setStatus(monitor, _ok);
+    monitor->setState(_ok ? ProgressLabel::OK : ProgressLabel::ERROR, progress);
 
     _output->append(decoration);
     _output->append("");

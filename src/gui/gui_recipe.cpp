@@ -18,11 +18,14 @@
 #include "gui_recipe.h"
 #include "ingrediententrydialog.h"
 #include "common.h"
+#include "settings.h"
 
 #include "../db/book.h"
 #include "../db/recipesmodel.h"
 
 namespace gui {
+
+static constexpr int STATUS_ICONS_SCALE = 1;
 
 QModelIndex nextRow (const QModelIndex &i, int direction) {
   return i.sibling(i.row()+direction, i.column());
@@ -152,7 +155,7 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
     _consult.holder = new QWidget;
     QGridLayout *clayout = new QGridLayout; {
 
-      bool tightIcons = false;
+      bool tightIcons = Settings::value<bool>(Settings::TIGHT_RECIPE_ICONS);
       int r = 0, c = 0;
       if (tightIcons) {
         clayout->addWidget(new QWidget, r, c++);
@@ -160,8 +163,10 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
       }
       for (QLabel ** l: { &_consult.subrecipe, &_consult.basic,
                           &_consult.regimen, &_consult.type, &_consult.duration,
-                          &_consult.status })
+                          &_consult.status }) {
         clayout->addWidget(*l = new QLabel, r, c++, C);
+        (*l)->setMinimumSize(STATUS_ICONS_SCALE * db::iconQSize());
+      }
       if (tightIcons) {
         clayout->addWidget(new QWidget, r, c);
         clayout->setColumnStretch(c, 1);
@@ -421,7 +426,7 @@ void Recipe::writeThrough(void) {
 #endif
 
 void pixmap (QLabel *l, const QIcon &icon) {
-  l->setPixmap(icon.pixmap(2*db::iconSize(), 2*db::iconSize()));
+  l->setPixmap(icon.pixmap(STATUS_ICONS_SCALE*db::iconQSize()));
 }
 
 void Recipe::setReadOnly(bool ro) {

@@ -5,13 +5,14 @@
 
 #include <QSplitter>
 #include <QLabel>
-#include <QLineEdit>
+#include <QDoubleSpinBox>
 #include <QTextEdit>
 
 #include <QProcess>
 
 namespace gui {
 
+struct ProgressLabel;
 class UpdateManager : public QDialog {
   Q_OBJECT
 public:
@@ -21,30 +22,31 @@ public:
   ~UpdateManager (void) {}
 
 private:
-  QLineEdit *_path;
+  QDoubleSpinBox *_scale;
   QTextEdit *_output;
   QSplitter *_splitter;
 
   struct {
-    QLabel *pull, *compile;
+    ProgressLabel *pull, *compile, *deploy, *push;
   } _labels;
 
   struct {
-    QPushButton *pull, *compile, *deploy;
+    QPushButton *pull, *compile, *deploy, *push;
   } _buttons;
 
 
   void doPull (void);
   void doCompile (void);
   void doDeploy (void);
+  void doPush (void);
 
-  QProcess* process (QLabel *monitor,
+  QProcess* process (ProgressLabel *monitor, float progress,
                      const QString &program, const QStringList &arguments,
                      const QString &relativeWorkPath = ".");
-  QProcess* process (QLabel *monitor,
+  QProcess* process (ProgressLabel *monitor, float progress,
                      const QString &program, const QString &arguments,
                      const QString &relativeWorkPath = ".") {
-    return process(monitor,
+    return process(monitor, progress,
                    program, arguments.split(' ', QString::SkipEmptyParts),
                    relativeWorkPath);
   }

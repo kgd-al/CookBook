@@ -4,6 +4,7 @@
 #include <QVariant>
 #include <QtMath>
 #include <QIcon>
+#include <QApplication>
 
 #include "ingredientlistentries.h"
 #include "book.h"
@@ -132,7 +133,13 @@ void SubRecipeEntry::setRecipeFromHackedPointer(void) {
 QVariant DecorationEntry::data (int role, double) const {
   if (role == Qt::DisplayRole)
     return "\n" + text;
-  else
+
+  else if (role == Qt::FontRole) {
+    auto f = QApplication::font();
+    f.setItalic(true);
+    return f;
+
+  } else
     return QVariant();
 }
 

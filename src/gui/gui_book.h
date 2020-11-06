@@ -25,7 +25,7 @@ public:
 #ifndef Q_OS_ANDROID
   bool saveRecipes(void);
   bool saveRecipes(const QString &path);
-  bool overwriteRecipes(void);
+  bool overwriteRecipes(bool spontaneous = true);
 #endif
 
   bool loadRecipes(void);
@@ -54,7 +54,10 @@ private:
 #ifndef Q_OS_ANDROID
   void showIngredientsManager (void);
   void showUpdateManager (void);
+  void showRepairUtility (void);
+  void showSettings (void);
 #endif
+  void showAbout (void);
 
   void setAutoTitle (void);
   void setModified (bool m);

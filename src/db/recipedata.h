@@ -11,11 +11,12 @@
 namespace db {
 
 enum ID : int { INVALID = -1 };
+
 static constexpr int IDRole = Qt::UserRole+42;
 static constexpr int PtrRole = IDRole+42;
 
 int iconSize (void);
-void fontChanged (const QFont &font);
+QSize iconQSize (void);
 
 template <typename T>
 struct TransparentID_CMP {
