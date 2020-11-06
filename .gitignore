@@ -3,5 +3,5 @@ log
 *.pro.user
 *.rbk
 
-build_*
+*build*
 android*

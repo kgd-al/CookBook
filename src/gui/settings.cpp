@@ -119,11 +119,11 @@ void Settings::settingChanged(Type t, const QVariant &newValue) {
   qDebug() << "Setting" << t << "changed from" << value(t) << "to" << newValue;
   QSettings settings;
   settings.beginGroup("global-settings");
-  Q_ASSERT(newValue.type() == sdata.value(t).defaultValue.type());
 #ifndef QT_NO_DEBUG
+  Q_ASSERT(newValue.type() == sdata.value(t).defaultValue.type());
   auto prevValue = value(t);
-#endif
   Q_ASSERT(prevValue.canConvert(newValue.type()));
+#endif
   settings.setValue(QMetaEnum::fromType<Type>().key(t), newValue);
 }
 

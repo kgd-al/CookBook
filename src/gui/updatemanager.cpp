@@ -13,12 +13,14 @@
 #include <QProcess>
 #include <QPainter>
 
+#include <QDir>
+
 #include <QDebug>
 
 #include "updatemanager.h"
 #include "common.h"
 
-#include "../db/recipedata.h"
+#include "../db/book.h"
 
 namespace gui {
 
@@ -68,11 +70,17 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
     layout->addLayout(srclayout);
 
     QHBoxLayout *scaleLayout = new QHBoxLayout;
-      scaleLayout->addWidget(new QLabel("Scale"));
+      scaleLayout->addWidget(new QLabel("Échelle: "));
       scaleLayout->addWidget(_scale = new QDoubleSpinBox);
       _scale->setMinimum(1);
       _scale->setSingleStep(.5);
     layout->addLayout(scaleLayout);
+
+    QHBoxLayout *buildTypeLayout = new QHBoxLayout;
+      buildTypeLayout->addWidget(new QLabel("Build type: "));
+      buildTypeLayout->addWidget(_buildType = new QComboBox);
+      _buildType->addItems({"debug"/*,"release"*/});
+    layout->addLayout(buildTypeLayout);
 
     _splitter = new QSplitter (Qt::Vertical);
       QWidget *lholder = new QWidget;
@@ -152,12 +160,21 @@ void UpdateManager::doPull(void) {
 }
 
 void UpdateManager::doCompile(void) {
+  static const QString buildDirName = "autobuild";
+  QDir buildDir (QString(BASE_DIR) + "/" + buildDirName);
+  if (!buildDir.exists())
+    QDir(BASE_DIR).mkdir(buildDirName);
+
   auto *p = process(_labels.compile, .5, "qmake",
-                    "CookBook.pro -spec linux-g++ CONFIG+=release -- -j 3");
+                    QStringList() << "../CookBook.pro"
+                      << "-spec" << "linux-g++"
+                    << "CONFIG+=" + _buildType->currentText(),
+                    buildDirName);
+
   connect(p, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
           [this] (int exitCode, QProcess::ExitStatus exitStatus) {
     if (ok(exitCode, exitStatus))
-      process(_labels.compile, 1, "make", "", "build_debug");
+      process(_labels.compile, 1, "make", "-j 3", buildDirName);
   });
 }
 
@@ -216,7 +233,7 @@ void UpdateManager::doPush(void) {
   auto *p = process(_labels.push, .5, "git",
                     QStringList() << "commit"
                       << "-m" << "Updated recipes database"
-                      << "--"  << "main.rbk");
+                      << "--"  << db::Book::monitoredName());
   connect(p, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
           [this] (int exitCode, QProcess::ExitStatus exitStatus) {
     if (ok(exitCode, exitStatus))
@@ -293,13 +310,15 @@ void UpdateManager::closeEvent(QCloseEvent *e) {
 
 void UpdateManager::working(const QString &name) {
   setWindowTitle("Travail en cours: " + name);
-  for (QPushButton *b: {_buttons.pull,_buttons.compile,_buttons.deploy})
+  for (QPushButton *b: { _buttons.pull, _buttons.compile,
+                         _buttons.deploy, _buttons.push })
     b->setEnabled(false);
 }
 
 void UpdateManager::stoppedWorking(void) {
   setWindowTitle(windowName);
-  for (QPushButton *b: {_buttons.pull,_buttons.compile,_buttons.deploy})
+  for (QPushButton *b: { _buttons.pull, _buttons.compile,
+                         _buttons.deploy, _buttons.push })
     b->setEnabled(true);
 }
 

@@ -27,6 +27,9 @@ struct Book {
   void clear (void);
 
   static Book& current (void);
+
+  static QString monitoredName (void);
+  static QString monitoredPath (void);
 };
 
 } // end of namespace db

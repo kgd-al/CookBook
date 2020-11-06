@@ -107,4 +107,12 @@ void Book::clear (void) {
   path = "";
 }
 
+QString Book::monitoredName(void) {
+  return "main.rbk";
+}
+
+QString Book::monitoredPath(void) {
+  return QString(BASE_DIR) + "/" + monitoredName();
+}
+
 } // end of namespace db

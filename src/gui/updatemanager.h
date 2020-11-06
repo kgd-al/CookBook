@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QDoubleSpinBox>
 #include <QTextEdit>
+#include <QComboBox>
 
 #include <QProcess>
 
@@ -23,6 +24,8 @@ public:
 
 private:
   QDoubleSpinBox *_scale;
+  QComboBox *_buildType;
+
   QTextEdit *_output;
   QSplitter *_splitter;
 
