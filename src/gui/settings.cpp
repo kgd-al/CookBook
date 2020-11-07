@@ -17,16 +17,20 @@ struct SettingData {
   QString displayName;
   QVariant defaultValue;
 };
-QMap<Settings::Type, SettingData> sdata {
-  {           Settings::AUTOSAVE, { "Sauvegarde automatique", false   } },
-  { Settings::TIGHT_RECIPE_ICONS, { "Icônes collés",          true    } },
-  {               Settings::FONT, { "Police",                 QFont() } },
 
-  { Settings::MODAL_IMANAGER, { "Gestion d'ingrédients", true } },
-  {  Settings::MODAL_REPAIRS, { "Réparation",            true } },
-  { Settings::MODAL_SETTINGS, { "Configuration",         true } },
+SettingData settingData (Settings::Type type) {
+  static QMap<Settings::Type, SettingData> sdata {
+    {           Settings::AUTOSAVE, { "Sauvegarde automatique", false   } },
+    { Settings::TIGHT_RECIPE_ICONS, { "Icônes collés",          true    } },
+    {               Settings::FONT, { "Police",                 QFont() } },
 
-};
+    { Settings::MODAL_IMANAGER, { "Gestion d'ingrédients", true } },
+    {  Settings::MODAL_REPAIRS, { "Réparation",            true } },
+    { Settings::MODAL_SETTINGS, { "Configuration",         true } },
+
+  };
+  return sdata.value(type);
+}
 
 QString description (const QFont &font) {
   return font.family()
@@ -35,7 +39,7 @@ QString description (const QFont &font) {
 }
 
 QWidget* factory (Settings *settings, Settings::Type stype) {
-  SettingData data = sdata.value(stype);
+  SettingData data = settingData(stype);
   QVariant::Type dtype = data.defaultValue.type();
   if (QVariant::Bool == dtype) {
     auto cb = new QCheckBox (data.displayName);
@@ -110,7 +114,7 @@ QVariant Settings::value (Type t) {
   QSettings settings;
   settings.beginGroup("global-settings");
   auto v = settings.value(QMetaEnum::fromType<Type>().key(t),
-                          sdata.value(t).defaultValue);
+                          settingData(t).defaultValue);
   qDebug().nospace() << "Settings[" << t << "] = " << v;
   return v;
 }
@@ -120,7 +124,7 @@ void Settings::settingChanged(Type t, const QVariant &newValue) {
   QSettings settings;
   settings.beginGroup("global-settings");
 #ifndef QT_NO_DEBUG
-  Q_ASSERT(newValue.type() == sdata.value(t).defaultValue.type());
+  Q_ASSERT(newValue.type() == settingData(t).defaultValue.type());
   auto prevValue = value(t);
   Q_ASSERT(prevValue.canConvert(newValue.type()));
 #endif

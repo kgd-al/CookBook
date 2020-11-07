@@ -666,12 +666,13 @@ void Recipe::keyPressEvent(QKeyEvent *e) {
 void Recipe::closeEvent(QCloseEvent *e) {
 //  qDebug() << __PRETTY_FUNCTION__ << "(" << e << ");";
   safeQuit(e);
-  androidKeepScreenOn(false);
 #ifndef Q_OS_ANDROID
   gui::saveGeometry(this);
   auto &settings = localSettings(this);
   settings.setValue("vsplitter", QVariant::fromValue(_vsplitter->sizes()));
   settings.setValue("hsplitter", QVariant::fromValue(_hsplitter->sizes()));
+#else
+  androidKeepScreenOn(false);
 #endif
 }
 

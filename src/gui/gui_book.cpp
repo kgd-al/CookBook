@@ -146,7 +146,8 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
                          + db::Book::monitoredPath() + "'");
 
 #ifndef Q_OS_ANDROID
-  QVariant defaultSizes = QVariant::fromValue(QList<int>{100,100});
+  int maxWidth = QGuiApplication::primaryScreen()->size().width();
+  QVariant defaultSizes = QVariant::fromValue(QList<int>{maxWidth,1});
   _splitter->setSizes(
     settings.value("splitter", defaultSizes).value<QList<int>>());
 #else
