@@ -22,13 +22,14 @@ struct Book {
   QModelIndex addRecipe (Recipe &&r);
 
   bool save (const QString &path);
-  bool load (const QString &path);
+  bool load (const QString &path = monitoredPath());
 
   void clear (void);
 
   static Book& current (void);
 
   static QString monitoredName (void);
+  static QString monitoredDir (void);
   static QString monitoredPath (void);
 };
 

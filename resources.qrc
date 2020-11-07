@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>icons/regimen-protein.png</file>
-        <file>icons/regimen-vegan.svg</file>
         <file>icons/regimen-vegetarian.png</file>
         <file>icons/time-long.png</file>
         <file>icons/time-medium.png</file>
@@ -15,5 +14,6 @@
         <file>icons/time-short.png</file>
         <file>icons/type-neutral.png</file>
         <file>icons/book.png</file>
+        <file>icons/regimen-vegan.png</file>
     </qresource>
 </RCC>

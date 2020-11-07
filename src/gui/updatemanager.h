@@ -34,7 +34,7 @@ private:
   } _labels;
 
   struct {
-    QPushButton *pull, *compile, *deploy, *push;
+    QPushButton *pull, *compile, *deploy, *push, *data, *phone;
   } _buttons;
 
 

@@ -22,19 +22,9 @@ public:
   Book(QWidget *parent = 0);
   ~Book();
 
+  bool loadDefaultBook(void);
 #ifndef Q_OS_ANDROID
-  bool saveRecipes(void);
-  bool saveRecipes(const QString &path);
   bool overwriteRecipes(bool spontaneous = true);
-#endif
-
-  bool loadRecipes(void);
-  bool loadRecipes(const QString &path);
-
-  bool load(const QJsonObject &json);
-
-#ifndef Q_OS_ANDROID
-  bool save(QJsonObject &json);
 #endif
 
   void closeEvent(QCloseEvent *e) override;
@@ -43,7 +33,13 @@ private:
   QSplitter *_splitter;
   QTableView *_recipes;
   FilterView *_filter;
-  RecipeFilter *_proxy;
+
+#ifndef Q_OS_ANDROID
+  bool saveRecipes(void);
+  bool saveRecipes(const QString &path);
+#endif
+  bool loadRecipes(void);
+  bool loadRecipes(const QString &path);
 
 #ifndef Q_OS_ANDROID
   void addRecipe (void);
@@ -64,6 +60,12 @@ private:
 
   void toggleFilterArea (void);
   void showFilterArea (bool show);
+
+  bool load(const QJsonObject &json);
+
+#ifndef Q_OS_ANDROID
+  bool save(QJsonObject &json);
+#endif
 
 #ifdef Q_OS_ANDROID
   bool event (QEvent *event) override;

@@ -13,7 +13,11 @@
 namespace db {
 
 int iconSize (void) {
+#ifndef Q_OS_ANDROID
   return 15;
+#else
+  return 32;
+#endif
 }
 
 QSize iconQSize (void) {
@@ -92,7 +96,7 @@ RegimenData::Database RegimenData::loadDatabase (void) {
   return RegimenData::Database {
     ENTRY(1, "Protéiné",   ":/icons/regimen-protein.png"    ),
     ENTRY(2, "Végétarien", ":/icons/regimen-vegetarian.png" ),
-    ENTRY(3, "Vegan",      ":/icons/regimen-vegan.svg"      )
+    ENTRY(3, "Vegan",      ":/icons/regimen-vegan.png"      )
   };
 }
 

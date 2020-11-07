@@ -108,11 +108,19 @@ void Book::clear (void) {
 }
 
 QString Book::monitoredName(void) {
-  return "main.rbk";
+  return "cookbook.rbk";
+}
+
+QString Book::monitoredDir(void) {
+#ifndef Q_OS_ANDROID
+  return QString(BASE_DIR) + "/data/";
+#else
+  return "/sdcard/";
+#endif
 }
 
 QString Book::monitoredPath(void) {
-  return QString(BASE_DIR) + "/" + monitoredName();
+  return monitoredDir() + monitoredName();
 }
 
 } // end of namespace db

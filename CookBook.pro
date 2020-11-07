@@ -4,7 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui svg
+QT += core gui
+
+QT += androidextras
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -44,7 +46,8 @@ SOURCES += \
     src/gui/repairsmanager.cpp \
     src/gui/updatemanager.cpp \
     src/main.cpp \
-    src/gui/settings.cpp
+    src/gui/settings.cpp \
+    src/gui/filterview.cpp
 
 HEADERS += \
     src/db/basemodel.h \
@@ -65,7 +68,8 @@ HEADERS += \
     src/gui/listcontrols.h \
     src/gui/repairsmanager.h \
     src/gui/updatemanager.h \
-    src/gui/settings.h
+    src/gui/settings.h \
+    src/gui/filterview.h
 
 RESOURCES += \
     resources.qrc

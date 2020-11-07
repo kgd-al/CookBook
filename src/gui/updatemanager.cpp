@@ -84,32 +84,46 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
 
     _splitter = new QSplitter (Qt::Vertical);
       QWidget *lholder = new QWidget;
-      QHBoxLayout *llayout = new QHBoxLayout;
+      auto *llayout = new QGridLayout;
 
-        llayout->addWidget(new QWidget, 1);
-        llayout->addWidget(_buttons.pull = new QPushButton("Pull"));
-//        _buttons.pull->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        llayout->addWidget(_labels.pull = new ProgressLabel);
-        _labels.pull->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        llayout->addSpacing(10);
+//        llayout->addWidget(new QWidget, 1);
+        int r = 0, c = 0;
+        llayout->addWidget(new QLabel("Actions"), r++, c, 1, 2);
 
-        llayout->addWidget(_buttons.compile = new QPushButton("Compiler"));
-        llayout->addWidget(_labels.compile = new ProgressLabel);
-        _labels.compile->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        llayout->addSpacing(10);
+        llayout->addWidget(_buttons.pull = new QPushButton("Pull"), r, c++);
+        llayout->addWidget(_labels.pull = new ProgressLabel, r, c++);
+//        llayout->addSpacing(10);
 
-        llayout->addWidget(_buttons.deploy = new QPushButton("Relancer"));
-        llayout->addWidget(_labels.deploy = new ProgressLabel);
-        _labels.deploy->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        r++; c = 0;
+        llayout->addWidget(_buttons.compile = new QPushButton("Compiler"), r, c++);
+        llayout->addWidget(_labels.compile = new ProgressLabel, r, c++);
+//        llayout->addSpacing(10);
 
-        llayout->addWidget(_buttons.push = new QPushButton("Push"));
-        llayout->addWidget(_labels.push = new ProgressLabel);
-        _labels.push->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        r++; c = 0;
+        llayout->addWidget(_buttons.deploy = new QPushButton("Relancer"), r, c++);
+        llayout->addWidget(_labels.deploy = new ProgressLabel, r, c++);
 
-        llayout->addWidget(new QWidget, 1);
+        r++; c = 0;
+        llayout->addWidget(_buttons.push = new QPushButton("Push"), r, c++);
+        llayout->addWidget(_labels.push = new ProgressLabel, r, c++);
 
-//        for (QLabel *l: {_labels.pull, _labels.compile, _labels.deploy})
-//          l->setFixedSize(db::iconSize(), db::iconSize());
+        llayout->addWidget(new QWidget, 0, 2, -1, 1);
+
+        r = 0; c = 3;
+        llayout->addWidget(new QLabel("Dossiers"), r++, c, 1, 2);
+        llayout->addWidget(_buttons.data = new QPushButton("Local"), r++, c);
+        llayout->addWidget(_buttons.phone = new QPushButton("Phone"), r++, c);
+
+        llayout->addWidget(new QWidget, 0, 4, -1, 1);
+
+        for (QLabel *l: { _labels.pull, _labels.compile,
+                          _labels.deploy, _labels.push  })
+          l->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+        for (QPushButton *b: {  _buttons.pull, _buttons.compile,
+                                _buttons.deploy, _buttons.push,
+                                _buttons.data, _buttons.phone })
+          b->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 
       lholder->setLayout(llayout);
       lholder->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
@@ -136,6 +150,17 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
           this, &UpdateManager::doDeploy);
   connect(_buttons.push, &QPushButton::clicked,
           this, &UpdateManager::doPush);
+
+  connect(_buttons.data, &QPushButton::clicked,
+          [this] {
+    process(nullptr, 1, "xdg-open", db::Book::monitoredDir());
+  });
+
+  connect(_buttons.phone, &QPushButton::clicked,
+          [this] {
+    process(nullptr, 1,
+            "xdg-open", QStringList() << "mtp:/HT16/Internal storage/");
+  });
 
   auto &settings = localSettings(this);
   gui::restoreGeometry(this, settings);
@@ -233,7 +258,7 @@ void UpdateManager::doPush(void) {
   auto *p = process(_labels.push, .5, "git",
                     QStringList() << "commit"
                       << "-m" << "Updated recipes database"
-                      << "--"  << db::Book::monitoredName());
+                      << "--"  << db::Book::monitoredPath());
   connect(p, QOverload<int,QProcess::ExitStatus>::of(&QProcess::finished),
           [this] (int exitCode, QProcess::ExitStatus exitStatus) {
     if (ok(exitCode, exitStatus))
@@ -287,7 +312,10 @@ UpdateManager::process(ProgressLabel *monitor, float progress,
     _output->append(s);
     s.clear();
 
-    monitor->setState(_ok ? ProgressLabel::OK : ProgressLabel::ERROR, progress);
+    if (monitor)
+      monitor->setState(_ok ? ProgressLabel::OK
+                            : ProgressLabel::ERROR,
+                        progress);
 
     _output->append(decoration);
     _output->append("");

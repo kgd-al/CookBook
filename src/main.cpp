@@ -55,34 +55,9 @@ void logger (QtMsgType type, const QMessageLogContext &context,
     {    QtFatalMsg, ANDROID_LOG_FATAL  },
   };
   __android_log_write(qt2androidMsgType.value(type),
-                      QCoreApplication::applicationName(),
+                      QCoreApplication::applicationName().toStdString().c_str(),
                       formattedMessage.toStdString().c_str());
 #endif
-}
-
-void simulateKey (const QString &kstr) {
-  const QKeySequence kseq = kstr;
-//    qDebug() << "Key sequence: " << kseq;
-  int key = kseq[0] & (~Qt::KeyboardModifierMask);
-  auto modifiers = Qt::KeyboardModifiers(kseq[0] & Qt::KeyboardModifierMask);
-//    qDebug().nospace() << hex
-//      << "0x" << kseq[0] << " -> 0x" << key << " | 0x" << modifiers;
-
-//    qDebug() << "Requesting " << kstr;
-  auto *w = QGuiApplication::focusWindow();
-
-//    qDebug() << "Focus is on " << FOCUSOBJ;
-//    qDebug() << "Sent" << kstr << " PRESS";
-
-  for (QEvent::Type t: {QEvent::KeyPress, QEvent::KeyRelease}) {
-    auto e = new QKeyEvent(t, key, modifiers, kstr);
-//    if(!handleShortcutEvent(e, w))
-    QCoreApplication::postEvent(w, e);
-  }
-//    qDebug() << "Done " << kstr;
-  QDebug q = qDebug().nospace();
-  q << kstr;
-//  q << " (" << hex << key << " | " << modifiers << ")";
 }
 
 int main(int argc, char *argv[]) {
@@ -117,7 +92,9 @@ int main(int argc, char *argv[]) {
     q << "************************\n";
   }
 
+#ifndef Q_OS_ANDROID
   QApplication::setFont(gui::Settings::value<QFont>(gui::Settings::FONT));
+#endif
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
   QLocale fr_locale (QLocale::French);
@@ -145,11 +122,8 @@ int main(int argc, char *argv[]) {
   }
   qDebug() << "************************\n";
 
-  //  QLocale loc = QLocale::system(); // current locale
-  ////  loc.set(QLocale::c().decimalPoint()); // borrow decimal char from the "C" locale
-  //  loc.setNumberOptions(QLocale::c().numberOptions()); // borrow number options from the "C" locale
-  //  QLocale::setDefault(loc); // set as default
-    QLocale::setDefault(QLocale::c());
+  // For decimal point (and lots of other changes I suppose)
+  QLocale::setDefault(QLocale::c());
 
 #ifdef Q_OS_ANDROID
   // Force the style
@@ -182,64 +156,5 @@ int main(int argc, char *argv[]) {
   w.setWindowIcon(QIcon(":/icons/book.png"));
   w.show();
 
-  QList<QString> data {
-
-// Test that invalid ingredients show appropriate errors
-//    "Down", "Enter",
-//    "Tab", "Tab", "Tab",
-//    "Enter",
-//    "Tab", "Tab", "Tab", "Tab", "Tab", "Tab",
-//    "Space",
-//    "Enter"
-
-// Test add ingredient (one new, one existing and edit existing)
-//    "Down", "Enter",
-//    "Tab", "Tab", "Tab",
-//    "Enter",
-//    "Tab", "Tab", "Tab", "Tab", "Tab", "Tab",
-//    "Space",
-//    "Tab",
-
-//    "Rhum", "Enter", "Tab",
-//    "120", "Enter", "Tab",
-//    "L", "Enter", "Tab",
-//    "Liq", "Down", "Enter", "Tab",
-//    "Space",
-
-//    "Space", "Tab",
-//    "Eau", "Down", "Enter", "Tab",
-//    "1", "Tab",
-//    "cL", "Enter", "Tab", "Space",
-
-//    "Shift+Tab", "Down", "Tab", "Tab", "Space"
-
-// Menu shortcuts don't work...
-//    "Ctrl+I",
-//    "Ctrl+N",
-//    "Ctrl+U"
-  };
-
-  int duration = 5;
-  QTimeLine timeline (duration*1000);
-  timeline.setEasingCurve(QEasingCurve::Linear);
-  timeline.setFrameRange(0, data.size());
-
-  QTimeLine::connect(&timeline, &QTimeLine::frameChanged,
-                     [&data,&timeline] {
-    if (data.isEmpty()) {
-      timeline.stop();
-      return;
-    }
-
-    QString k = data.takeFirst();
-    if (k != "-") simulateKey(k);
-  });
-
-  if (!data.empty())
-    QTimer::singleShot(100, [&timeline] {
-      qDebug() << "Start";
-      timeline.start();
-    });
-
-  return app .exec();
+  return app.exec();
 }

@@ -4,6 +4,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QToolButton>
+#include <QScroller>
 
 #include <QJsonDocument>
 #include <QJsonArray>
@@ -12,6 +13,7 @@
 #include <QMessageBox>
 
 #ifdef Q_OS_ANDROID
+#include <QtAndroidExtras>
 #include "androidspecifics.hpp"
 #endif
 
@@ -26,6 +28,31 @@
 namespace gui {
 
 static constexpr int STATUS_ICONS_SCALE = 1;
+
+#ifdef Q_OS_ANDROID
+void androidKeepScreenOn (bool on) {
+  QtAndroid::runOnAndroidThread([on]{
+    QAndroidJniObject activity = QtAndroid::androidActivity();
+    if (activity.isValid()) {
+      QAndroidJniObject window =
+          activity.callObjectMethod("getWindow", "()Landroid/view/Window;");
+
+      if (window.isValid()) {
+        const int FLAG_KEEP_SCREEN_ON = 128;
+        if (on) {
+          window.callMethod<void>("addFlags", "(I)V", FLAG_KEEP_SCREEN_ON);
+        } else {
+          window.callMethod<void>("clearFlags", "(I)V", FLAG_KEEP_SCREEN_ON);
+        }
+      }
+    }
+    QAndroidJniEnvironment env;
+    if (env->ExceptionCheck()) {
+      env->ExceptionClear();
+    }
+  });
+}
+#endif
 
 QModelIndex nextRow (const QModelIndex &i, int direction) {
   return i.sibling(i.row()+direction, i.column());
@@ -291,7 +318,7 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
       blayout->addWidget(buttons);
     mainLayout->addLayout(blayout);
 #else
-        grabGesture(android::SingleFingerSwipeRecognizer::type());
+  grabGesture(android::SingleFingerSwipeRecognizer::type());
 #endif
 
 #ifndef Q_OS_ANDROID
@@ -332,6 +359,11 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
     settings.value("hsplitter", defaultSizes).value<QList<int>>());
   _vsplitter->setSizes(
     settings.value("vsplitter", defaultSizes).value<QList<int>>());
+#else
+  QScroller::grabGesture(_ingredients, QScroller::LeftMouseButtonGesture);
+  QScroller::grabGesture(_steps, QScroller::LeftMouseButtonGesture);
+  QScroller::grabGesture(_notes, QScroller::LeftMouseButtonGesture);
+  androidKeepScreenOn(true);
 #endif
 }
 
@@ -634,8 +666,9 @@ void Recipe::keyPressEvent(QKeyEvent *e) {
 void Recipe::closeEvent(QCloseEvent *e) {
 //  qDebug() << __PRETTY_FUNCTION__ << "(" << e << ");";
   safeQuit(e);
-  gui::saveGeometry(this);
+  androidKeepScreenOn(false);
 #ifndef Q_OS_ANDROID
+  gui::saveGeometry(this);
   auto &settings = localSettings(this);
   settings.setValue("vsplitter", QVariant::fromValue(_vsplitter->sizes()));
   settings.setValue("hsplitter", QVariant::fromValue(_hsplitter->sizes()));
