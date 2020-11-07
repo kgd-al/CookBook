@@ -25,6 +25,7 @@
 namespace gui {
 
 static const QString windowName = "Gestionnaire de mise à jour";
+static const QString buildDirName = "autobuild";
 
 struct ProgressLabel : public QLabel {
   double progress;
@@ -185,7 +186,6 @@ void UpdateManager::doPull(void) {
 }
 
 void UpdateManager::doCompile(void) {
-  static const QString buildDirName = "autobuild";
   QDir buildDir (QString(BASE_DIR) + "/" + buildDirName);
   if (!buildDir.exists())
     QDir(BASE_DIR).mkdir(buildDirName);
@@ -234,7 +234,7 @@ void UpdateManager::doDeploy(void) {
       << "Comment=Malenda's recipes (version " << app->applicationVersion()
         << ")\n"
       << "Exec=QT_SCALE_FACTOR=" << QString::number(_scale->value(), 'f', 2)
-        << " " << BASE_BUILD_DIR << "/CookBook\n"
+        << " " <<BASE_DIR << "/" << buildDirName << "/CookBook\n"
       << "Icon=" << BASE_DIR << "/icons/book.png\n"
       << "MimeType=\n"
       << "Category=Qt;KDE;Utility\n";
