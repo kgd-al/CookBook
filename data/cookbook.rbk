@@ -10,13 +10,13 @@
             2,
             "oeuf",
             1,
-            7
+            9
         ],
         [
             3,
             "lait",
             8,
-            7
+            8
         ],
         [
             4,
@@ -64,7 +64,7 @@
             11,
             "sel",
             5,
-            8
+            9
         ],
         [
             13,
@@ -82,19 +82,19 @@
             17,
             "oignon",
             2,
-            19
+            11
         ],
         [
             18,
             "champignons",
             2,
-            1
+            3
         ],
         [
             19,
             "citrouille",
             2,
-            2
+            3
         ],
         [
             24,
@@ -136,7 +136,7 @@
             31,
             "sucre",
             4,
-            6
+            7
         ],
         [
             32,
@@ -184,7 +184,7 @@
             40,
             "poireau",
             2,
-            3
+            4
         ],
         [
             41,
@@ -218,9 +218,9 @@
         ],
         [
             46,
-            "carottes",
+            "carotte",
             2,
-            1
+            2
         ],
         [
             47,
@@ -274,7 +274,7 @@
             56,
             "huile",
             9,
-            9
+            11
         ],
         [
             57,
@@ -310,7 +310,7 @@
             62,
             "lentilles",
             3,
-            1
+            2
         ],
         [
             63,
@@ -364,7 +364,7 @@
             71,
             "courgette",
             2,
-            1
+            2
         ],
         [
             72,
@@ -392,27 +392,45 @@
         ],
         [
             76,
-            "mascarpone",
-            8,
-            0
+            "jambon cru",
+            1,
+            1
         ],
         [
             77,
-            "café",
-            6,
-            0
-        ],
-        [
-            78,
-            "café",
-            10,
-            0
+            "chèvre frais",
+            8,
+            1
         ],
         [
             79,
-            "café",
+            "crème fraîche",
+            9,
+            2
+        ],
+        [
+            80,
+            "curry",
             5,
-            0
+            1
+        ],
+        [
+            81,
+            "chipolatas",
+            1,
+            1
+        ],
+        [
+            82,
+            "pois cassés",
+            3,
+            1
+        ],
+        [
+            83,
+            "saucisse",
+            1,
+            1
         ]
     ],
     "recipes": [
@@ -464,7 +482,7 @@
             "t-portions": "pancakes",
             "title": "Pancakes express",
             "type": 1,
-            "used": 1
+            "used": 0
         },
         {
             "basic": false,
@@ -576,7 +594,7 @@
             "t-portions": "personnes",
             "title": "Gnocchis",
             "type": 2,
-            "used": 2
+            "used": 1
         },
         {
             "basic": false,
@@ -866,7 +884,7 @@
             "t-portions": "personnes",
             "title": "Riz gluant",
             "type": 2,
-            "used": 3
+            "used": 5
         },
         {
             "basic": false,
@@ -1119,7 +1137,7 @@
             "t-portions": "yaourts",
             "title": "Yaourts natures",
             "type": 1,
-            "used": 1
+            "used": 2
         },
         {
             "basic": true,
@@ -2262,18 +2280,328 @@
             "title": "Cookies",
             "type": 3,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 26,
+            "ing": [
+                [
+                    1,
+                    7
+                ],
+                [
+                    0,
+                    [
+                        5,
+                        2,
+                        2,
+                        "battus"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        8,
+                        76,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        20,
+                        77,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        17,
+                        "vert, tige et bulbe"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        56,
+                        "olive"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Faire du riz blanc et le laisser reposer.",
+                "Couper en lamelles l'oignon et le jambon cru.",
+                "Faire revenir les lamalles d'oignon dans une poêle à feu vif avec l'huile d'olive.",
+                "Ajouter les oeufs battus et baisser le feu.",
+                "ajouter le jambon cru et les morceaux de fromage de chèvre frais.",
+                "Plier l'omelette en deux et arrêter le feu.",
+                "Servir l'omelette avec le riz et décorer avec le vert de l'oignon frais."
+            ],
+            "t-portions": "personnes",
+            "title": "Omelette au jambon cru et riz blanc",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 2,
+            "id": 27,
+            "ing": [
+                [
+                    1,
+                    7
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        80,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        40,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        17,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        46,
+                        "moyenne"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        2,
+                        71,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        79,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        56,
+                        "olive"
+                    ]
+                ]
+            ],
+            "notes": "- Décorer avec des oignons verts ou du persil.",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Cuire le riz et laisser reposer.",
+                "Ajouter le curry et laisser reposer.",
+                "Faire le revenir les légumes dans une grande poêle à vif avec l'huile d'olive.",
+                "Ajouter le riz au curry petit à petit toujours à feu vif.",
+                "Eteindre la poêle et ajouter la crème fraîche."
+            ],
+            "t-portions": "personnes",
+            "title": "Riz au curry",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 28,
+            "ing": [
+                [
+                    0,
+                    [
+                        4,
+                        2,
+                        81,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1.5,
+                        7,
+                        82,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Faire cuire les pois cassés dans de l'eau salée au moins 45 minutes. Ne pas mettre trop d'eau, il faut pouvoir mixer la purée directement.",
+                "Mixer la purée.",
+                "Faire griller les saucisses à la poêle : d'abord à feu vif pour les colorer, puis à feu doux à couvert pour cuire l'intérieur des saucisses."
+            ],
+            "t-portions": "personnes",
+            "title": "Saucisses et purée de pois cassés",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 29,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        83,
+                        "de toulouse"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        7,
+                        62,
+                        "vertes"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "gros"
+                    ]
+                ]
+            ],
+            "notes": "- On peut ajouter un oignon, du thym et du laurier.",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Mettre le tout à bouillir dans une cocotte avec un bon volume d'eau. Lorsque ça bout, baiiser le feu et laisser cuire pendant au moins 45 minutes."
+            ],
+            "t-portions": "personnes",
+            "title": "Saucisse lentilles",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 4,
+            "duration": 2,
+            "id": 30,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        19,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        12,
+                        79,
+                        "liquide"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        12,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        2,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        31,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Cuire la citrouille à la vapeur.",
+                "Mélanger tous les ingrédients au mixer à main jusqu'à ce que ce soit homogène.",
+                "Mettre en pots et faire cuire au bain marie 50 minutes au four à 160°C (thermostat 3.5)."
+            ],
+            "t-portions": "pots",
+            "title": "Pudding à la citrouille",
+            "type": 3,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            35
+            37
         ],
         [
             2,
             "Ø",
-            49
+            57
         ],
         [
             3,
@@ -2283,12 +2611,12 @@
         [
             4,
             "pincée",
-            11
+            12
         ],
         [
             5,
             "cas",
-            17
+            22
         ],
         [
             6,
@@ -2298,12 +2626,12 @@
         [
             7,
             "verre",
-            6
+            8
         ],
         [
             8,
             "tranche",
-            2
+            3
         ],
         [
             9,
@@ -2323,7 +2651,7 @@
         [
             12,
             "ml",
-            4
+            6
         ],
         [
             13,
@@ -2362,8 +2690,8 @@
         ],
         [
             20,
-            "pinchouille",
-            0
+            "portions",
+            1
         ]
     ]
 }
