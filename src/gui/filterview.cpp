@@ -1,3 +1,5 @@
+#include <random>
+
 #include <QListWidgetItem>
 #include <QStyledItemDelegate>
 #include <QPainter>
@@ -169,6 +171,48 @@ struct RecipeFilter : public QSortFilterProxyModel {
 
   using RecipesModel = EditableModel<RecipeReference>;
   Data<RecipesModel> subrecipes;
+
+  static constexpr int RandomRole = db::RecipesModel::SortRole+1;
+
+  RecipeFilter (void) {
+    qsrand(QDateTime::currentMSecsSinceEpoch());
+  }
+
+  QMap<db::ID, int> shuffled_ids;
+  void shuffle (void) {
+    QList<db::ID> ids;
+    for (QModelIndex i=index(0,0); i.isValid(); i=i.sibling(i.row()+1,i.column())) {
+      qDebug() << i;
+      Q_ASSERT(i.isValid());
+      ids.push_back(db::ID(i.data(db::IDRole).toInt()));
+    }
+
+    for (int i=ids.size()-1; i>0; i--) {
+      int j = qrand()%(i+1);
+      std::swap(ids[i], ids[j]);
+    }
+
+    for (int i=0; i<ids.size(); i++)
+      shuffled_ids[ids[i]] = i;
+
+    QSortFilterProxyModel::sort(db::RecipesModel::titleColumn(),
+                                Qt::SortOrder(1-sortOrder()));
+
+    shuffled_ids.clear();
+  }
+
+  void sort (int column, Qt::SortOrder order) override {
+    QSortFilterProxyModel::sort(column, order);
+  }
+
+  bool lessThan(const QModelIndex &source_left,
+                const QModelIndex &source_right) const override {
+    if (!shuffled_ids.empty())
+      return shuffled_ids[db::ID(source_left.data(db::IDRole).toInt())]
+           < shuffled_ids[db::ID(source_right.data(db::IDRole).toInt())];
+    else
+      return QSortFilterProxyModel::lessThan(source_left, source_right);
+  }
 
   bool filterAcceptsRow(int source_row,
                         const QModelIndex &source_parent) const override {
@@ -479,9 +523,17 @@ FilterView::FilterView (QWidget *parent)
           scontrols, &ListControls::setEnabled);
 #endif
 
-  QPushButton *clear = new QPushButton ("Clear");
-  layout->addWidget(clear, layout->rowCount(), 0, 1, 4, Qt::AlignRight);
-  connect(clear, &QPushButton::clicked, this, &FilterView::clear);
+  QHBoxLayout *blayout = new QHBoxLayout;
+
+    QPushButton *random = new QPushButton ("Random");
+    blayout->addWidget(random);
+    connect(random, &QPushButton::clicked, this, &FilterView::random);
+
+    QPushButton *clear = new QPushButton ("Clear");
+    blayout->addWidget(clear);
+    connect(clear, &QPushButton::clicked, this, &FilterView::clear);
+
+  layout->addLayout(blayout, layout->rowCount(), 0, 1, 4, Qt::AlignRight);
 
   layout->setColumnStretch(0, 0);
   layout->setColumnStretch(1, 0);
@@ -645,6 +697,16 @@ void FilterView::clear (void) {
   _filter->ingredients.data.clear();
   _filter->subrecipes.data.clear();
   filterChanged();
+}
+
+void FilterView::random(void) {
+//  _filter->setSortRole(RecipeFilter::RandomRole);
+//  qDebug() << "Sort role: " << _filter->sortRole();
+//  _filter->sort(db::RecipesModel::titleColumn());
+//  qDebug() << "Sorting on column " << _filter->sortColumn();
+//  _filter->setSortRole(db::RecipesModel::SortRole);
+//  qDebug() << "Sort role: " << _filter->sortRole();
+  _filter->shuffle();
 }
 
 } // end of namespace gui

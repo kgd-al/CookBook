@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
   QApplication::setOrganizationName("almann");
   QApplication::setApplicationName("cookbook");
   QApplication::setApplicationDisplayName("CookBook");
-  QApplication::setApplicationVersion("0.9.95");
+  QApplication::setApplicationVersion("1.0.0");
   QApplication::setDesktopFileName(
     QApplication::organizationName() + "-" + QApplication::applicationName()
     + ".desktop");

@@ -32,7 +32,6 @@ class FilterView : public QWidget {
   };
   Entry<QLineEdit> *title;
   Entry<YesNoGroupBox> *basic, *subrecipe;
-  QRadioButton *basic_yes, *subrecipe_yes;
   Entry<QComboBox> *regimen, *status, *type, *duration;
 
 #ifndef Q_OS_ANDROID
@@ -52,6 +51,7 @@ private:
 
   void filterChanged (void);
   void clear (void);
+  void random (void);
 };
 
 } // end of namespace gui
