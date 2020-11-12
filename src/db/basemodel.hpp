@@ -10,9 +10,65 @@ struct BaseModel : public QAbstractTableModel {
   using ID = typename T::ID;
   using map_t = typename T::Database;
 
+// =============================================================================
+// Qt model implementation
+// =============================================================================
+
   int rowCount(const QModelIndex& = QModelIndex()) const override {
     return _data.size();
   }
+
+  bool insertRows(int row, int count, const QModelIndex &/*parent*/) override {
+    Q_ASSERT(count == 1);
+    auto rows = rowCount();
+    if (row < rows) return false;
+
+    beginInsertRows(QModelIndex(), rows, rows);
+      T d;
+      d.id = nextID();
+      _data.insert({d.id,d});
+    endInsertRows();
+
+    return true;
+  }
+
+  bool removeRows(int row, int count,
+                  const QModelIndex &parent = QModelIndex()) override {
+    Q_ASSERT(count == 1);
+    T &item = atIndex(row);
+    auto it = _data.find(item.id);
+    Q_ASSERT(it != _data.end());
+    beginRemoveRows(parent, row, row);
+    _data.erase(it);
+    endRemoveRows();
+    return true;
+  }
+
+// =============================================================================
+// Qt model extensions
+// =============================================================================
+
+  bool removeItem (ID id) {
+    auto it = _data.find(id);
+    Q_ASSERT(it != _data.end());
+    int index = std::distance(_data.begin(), it);
+    beginRemoveRows(QModelIndex(), index, index);
+    _data.erase(it);
+    endRemoveRows();
+    return true;
+  }
+
+  void clear (void) {
+    beginResetModel();
+    _data.clear();
+    endResetModel();
+  }
+
+  virtual void valueModified (ID id) = 0;
+
+// =============================================================================
+// Qt model extension
+// =============================================================================
 
   const T& at (ID id) const {
     if (id <= 0) {
@@ -77,50 +133,6 @@ struct BaseModel : public QAbstractTableModel {
   ID nextIDNoIncrement (void) const {
     return _nextID;
   }
-
-  bool insertRows(int row, int count, const QModelIndex &/*parent*/) override {
-    Q_ASSERT(count == 1);
-    auto rows = rowCount();
-    if (row < rows) return false;
-
-    beginInsertRows(QModelIndex(), rows, rows);
-      T d;
-      d.id = nextID();
-      _data.insert({d.id,d});
-    endInsertRows();
-
-    return true;
-  }
-
-  bool removeItem (ID id) {
-    auto it = _data.find(id);
-    Q_ASSERT(it != _data.end());
-    int index = std::distance(_data.begin(), it);
-    beginRemoveRows(QModelIndex(), index, index);
-    _data.erase(it);
-    endRemoveRows();
-    return true;
-  }
-
-  bool removeRows(int row, int count,
-                  const QModelIndex &parent = QModelIndex()) override {
-    Q_ASSERT(count == 1);
-    T &item = atIndex(row);
-    auto it = _data.find(item.id);
-    Q_ASSERT(it != _data.end());
-    beginRemoveRows(parent, row, row);
-    _data.erase(it);
-    endRemoveRows();
-    return true;
-  }
-
-  void clear (void) {
-    beginResetModel();
-    _data.clear();
-    endResetModel();
-  }
-
-  virtual void valueModified (ID id) = 0;
 
 protected:
   map_t _data;

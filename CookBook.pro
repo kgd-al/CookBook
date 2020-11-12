@@ -28,7 +28,6 @@ DEFINES += BASE_DIR=\\\"$$PWD\\\" BASE_BUILD_DIR=\\\"$$OUT_PWD\\\"
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-#CONFIG += object_parallel_to_source
 CONFIG += c++11
 
 SOURCES += \
@@ -52,7 +51,6 @@ SOURCES += \
     src/gui/filterview.cpp
 
 HEADERS += \
-    src/db/basemodel.h \
     src/db/book.h \
     src/db/ingredientlistentries.h \
     src/db/ingredientsmodel.h \
@@ -71,7 +69,8 @@ HEADERS += \
     src/gui/repairsmanager.h \
     src/gui/updatemanager.h \
     src/gui/settings.h \
-    src/gui/filterview.h
+    src/gui/filterview.h \
+    src/db/basemodel.hpp
 
 RESOURCES += \
     resources.qrc

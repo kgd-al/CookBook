@@ -1,7 +1,7 @@
 #ifndef RECIPESLISTMODEL_H
 #define RECIPESLISTMODEL_H
 
-#include "basemodel.h"
+#include "basemodel.hpp"
 #include "recipe.h"
 
 namespace db {

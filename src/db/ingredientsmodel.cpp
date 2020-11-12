@@ -93,7 +93,23 @@ Qt::ItemFlags IngredientsModel::flags(const QModelIndex &index) const {
   return flg;
 }
 
+bool IngredientsModel::insertRows(int row, int count,
+                                  const QModelIndex &parent) {
+  Q_ASSERT(count == 1);
+  auto prevID = nextIDNoIncrement();
+  auto r = BaseModel<IngredientData>::insertRows(row, count, parent);
+  if (r)  _tmpData.insert(prevID);
+  return r;
+}
+
 int IngredientsModel::validateTemporaryData(const IDList &ids) {
+  auto q = qDebug().nospace();
+  q << "Validating temporary data [";
+  for (auto id: ids)  q << " " << id;
+  q << " ] out of [";
+  for (auto id: _tmpData) q << " " << id;
+  q << " ]\n";
+
   for (auto id: ids)  _tmpData.erase(id);
 
   uint removed = 0;
@@ -102,6 +118,7 @@ int IngredientsModel::validateTemporaryData(const IDList &ids) {
     Q_ASSERT(it != _data.end());
     auto index = std::distance(_data.begin(), it);
     beginRemoveRows(QModelIndex(), index, index);
+    q << "Erased " << it->first << ": " << it->second.text << "\n";
     _data.erase(it);
     endRemoveRows();
   }

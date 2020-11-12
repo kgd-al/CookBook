@@ -182,7 +182,6 @@ struct RecipeFilter : public QSortFilterProxyModel {
   void shuffle (void) {
     QList<db::ID> ids;
     for (QModelIndex i=index(0,0); i.isValid(); i=i.sibling(i.row()+1,i.column())) {
-      qDebug() << i;
       Q_ASSERT(i.isValid());
       ids.push_back(db::ID(i.data(db::IDRole).toInt()));
     }
