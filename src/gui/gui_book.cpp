@@ -35,6 +35,7 @@
 #include "updatemanager.h"
 #include "repairsmanager.h"
 #include "settings.h"
+#include "about.h"
 
 #include "../db/recipesmodel.h"
 
@@ -274,28 +275,7 @@ void Book::showSettings(void) {
 #endif
 
 void Book::showAbout(void) {
-  QDialog d (this);
-
-  auto *layout = new QGridLayout;
-  auto *tdisplay = new QLabel;
-  layout->addWidget(tdisplay, 0, 1);
-  d.setLayout(layout);
-
-  auto *label = new QLabel;
-  label->setPixmap(QIcon(":/icons/book.png").pixmap(10*db::iconQSize()));
-  layout->addWidget(label, 0, 0);
-
-  QString text;
-  QTextStream qts(&text);
-  qts << QApplication::applicationDisplayName() << "\n"
-      << "Version " << QApplication::applicationVersion() << "\n";
-  tdisplay->setText(text);
-
-  auto *buttons = new QDialogButtonBox (QDialogButtonBox::Close);
-  layout->addWidget(buttons, 1, 0, 1, 2);
-  connect(buttons, &QDialogButtonBox::rejected, &d, &QDialog::reject);
-
-  d.exec();
+  About (this).exec();
 }
 
 void Book::setAutoTitle(void) {

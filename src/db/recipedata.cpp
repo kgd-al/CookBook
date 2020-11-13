@@ -30,7 +30,7 @@ QSize iconDrawQSize (void) {
 
 QIcon iconFromFile (const QString &filepath) {
   QIcon i (filepath);
-  qDebug() << "Loaded" << i << "from" << filepath;
+//  qDebug() << "Loaded" << i << "from" << filepath;
   return i;
 }
 

@@ -21,7 +21,15 @@ TEMPLATE = app
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-DEFINES += BASE_DIR=\\\"$$PWD\\\" BASE_BUILD_DIR=\\\"$$OUT_PWD\\\"
+DEFINES += \
+    BASE_DIR=\\\"$$PWD\\\" BASE_BUILD_DIR=\\\"$$OUT_PWD\\\"
+
+METADATA=src/gui/about_metadata.h
+metatarget.target=$$METADATA
+metatarget.commands='$$PWD/meta.sh $$PWD/$$METADATA'
+metatarget.depends=FORCE
+PRE_TARGETDEPS += $$METADATA
+QMAKE_EXTRA_TARGETS += metatarget
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -48,7 +56,8 @@ SOURCES += \
     src/gui/updatemanager.cpp \
     src/main.cpp \
     src/gui/settings.cpp \
-    src/gui/filterview.cpp
+    src/gui/filterview.cpp \
+    src/gui/about.cpp
 
 HEADERS += \
     src/db/book.h \
@@ -70,7 +79,9 @@ HEADERS += \
     src/gui/updatemanager.h \
     src/gui/settings.h \
     src/gui/filterview.h \
-    src/db/basemodel.hpp
+    src/db/basemodel.hpp \
+    src/gui/about.h \
+    src/gui/about_metadata.h
 
 RESOURCES += \
     resources.qrc
