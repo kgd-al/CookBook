@@ -8,6 +8,7 @@
 template <typename T>
 struct BaseModel : public QAbstractTableModel {
   using ID = typename T::ID;
+  using base_t = BaseModel<T>;
   using map_t = typename T::Database;
 
 // =============================================================================

@@ -12,8 +12,10 @@
 #include <QFile>
 #include <QProcess>
 #include <QPainter>
-
 #include <QDir>
+
+#include <QStorageInfo>
+#include <QFileDialog>
 
 #include <QDebug>
 
@@ -175,6 +177,15 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
   });
 
   setWindowTitle(windowName);
+
+  auto q = qDebug().nospace();
+  q << "Storage info:\n";
+  QStorageInfo storage = QStorageInfo::root();
+  q << "\t" << storage.displayName() << "\n";
+  for (const QStorageInfo &i: QStorageInfo::mountedVolumes())
+    q << "\t" << i.displayName() << "\n";
+
+  q << "\n";
 }
 
 bool ok (int exitCode, QProcess::ExitStatus exitStatus) {

@@ -146,16 +146,6 @@ void IngredientsModel::clear(void) {
   endResetModel();
 }
 
-//void IngredientsModel::fromScratch(const RecipesListModel &recipes) {
-//  beginResetModel();
-//  _data.clear();
-//  for (const auto &p: recipes) {
-//    const Recipe &r = p.second;
-
-//  }
-//  endResetModel();
-//}
-
 void IngredientsModel::fromJson(const QJsonArray &j) {
   beginResetModel();
   for (const QJsonValue &v: j) {

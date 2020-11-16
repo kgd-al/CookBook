@@ -57,7 +57,9 @@ SOURCES += \
     src/main.cpp \
     src/gui/settings.cpp \
     src/gui/filterview.cpp \
-    src/gui/about.cpp
+    src/gui/about.cpp \
+    src/gui/planningview.cpp \
+    src/db/planningmodel.cpp
 
 HEADERS += \
     src/db/book.h \
@@ -81,7 +83,9 @@ HEADERS += \
     src/gui/filterview.h \
     src/db/basemodel.hpp \
     src/gui/about.h \
-    src/gui/about_metadata.h
+    src/gui/about_metadata.h \
+    src/gui/planningview.h \
+    src/db/planningmodel.h
 
 RESOURCES += \
     resources.qrc

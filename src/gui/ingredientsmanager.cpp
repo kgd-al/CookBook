@@ -183,9 +183,9 @@ IngredientsManager::IngredientsManager(QWidget *parent)
 
   rcbox->setModel(&db::Book::current().units);
 
-  auto setModified = [] { db::Book::current().modified = true;  };
-  connect(isorter->sourceModel(), &QAbstractItemModel::dataChanged, setModified);
-  connect(usorter->sourceModel(), &QAbstractItemModel::dataChanged, setModified);
+//  auto setModified = [] { db::Book::current().modified = true;  };
+//  connect(isorter->sourceModel(), &QAbstractItemModel::dataChanged, setModified);
+//  connect(usorter->sourceModel(), &QAbstractItemModel::dataChanged, setModified);
 
   auto &settings = localSettings(this);
   setGeometry(settings.value("geometry").toRect());

@@ -354,11 +354,8 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
 #ifndef Q_OS_ANDROID
   gui::restoreGeometry(this);
   auto &settings = localSettings(this);
-  QVariant defaultSizes = QVariant::fromValue(QList<int>{100,100});
-  _hsplitter->setSizes(
-    settings.value("hsplitter", defaultSizes).value<QList<int>>());
-  _vsplitter->setSizes(
-    settings.value("vsplitter", defaultSizes).value<QList<int>>());
+  gui::restore(settings, "vsplitter", _vsplitter);
+  gui::restore(settings, "hsplitter", _hsplitter);
 #else
   QScroller::grabGesture(_ingredients, QScroller::LeftMouseButtonGesture);
   QScroller::grabGesture(_steps, QScroller::LeftMouseButtonGesture);
@@ -371,7 +368,9 @@ void Recipe::makeLayout(QLayout *mainLayout,
                         const QMap<QString, QWidget *> &widgets) {
 #ifndef Q_OS_ANDROID
   _vsplitter = new QSplitter (Qt::Vertical);
+  _vsplitter->setChildrenCollapsible(false);
     _hsplitter = new QSplitter;
+    _hsplitter->setChildrenCollapsible(false);
       _hsplitter->addWidget(widgets["ingredients"]);
       _hsplitter->addWidget(widgets["notes"]);
     _vsplitter->addWidget(_hsplitter);
@@ -453,6 +452,8 @@ void Recipe::writeThrough(void) {
 
   _data->notes = _notes->toPlainText();
 
+  if (_data->id != db::INVALID)
+    db::Book::current().recipes.valueModified(_data->id);
   emit validated();
 }
 #endif
@@ -669,8 +670,8 @@ void Recipe::closeEvent(QCloseEvent *e) {
 #ifndef Q_OS_ANDROID
   gui::saveGeometry(this);
   auto &settings = localSettings(this);
-  settings.setValue("vsplitter", QVariant::fromValue(_vsplitter->sizes()));
-  settings.setValue("hsplitter", QVariant::fromValue(_hsplitter->sizes()));
+  gui::save(settings, "vsplitter", _vsplitter);
+  gui::save(settings, "hsplitter", _hsplitter);
 #else
   androidKeepScreenOn(false);
 #endif

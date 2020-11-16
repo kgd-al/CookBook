@@ -12,6 +12,8 @@ struct Recipe {
   using ID = db::ID;
   using Database = cb_container<Recipe>;
 
+  static constexpr auto MimeType = "application/x-cookbook-recipe";
+
   ID id = ID::INVALID;
   int used;
 
