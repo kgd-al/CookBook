@@ -4,19 +4,19 @@
             1,
             "farine",
             3,
-            9
+            8
         ],
         [
             2,
             "oeuf",
             1,
-            9
+            8
         ],
         [
             3,
             "lait",
             8,
-            8
+            9
         ],
         [
             4,
@@ -82,7 +82,7 @@
             17,
             "oignon",
             2,
-            11
+            12
         ],
         [
             18,
@@ -100,7 +100,7 @@
             24,
             "viande",
             1,
-            2
+            3
         ],
         [
             26,
@@ -118,7 +118,7 @@
             28,
             "poivron",
             2,
-            2
+            3
         ],
         [
             29,
@@ -136,25 +136,25 @@
             31,
             "sucre",
             4,
-            7
+            8
         ],
         [
             32,
             "beurre",
             9,
-            6
+            5
         ],
         [
             33,
             "citron",
             2,
-            2
+            1
         ],
         [
             34,
             "levure",
             5,
-            4
+            3
         ],
         [
             36,
@@ -220,7 +220,7 @@
             46,
             "carotte",
             2,
-            2
+            3
         ],
         [
             47,
@@ -268,13 +268,13 @@
             54,
             "semoule",
             3,
-            1
+            2
         ],
         [
             56,
             "huile",
             9,
-            11
+            12
         ],
         [
             57,
@@ -412,7 +412,7 @@
             80,
             "curry",
             5,
-            1
+            2
         ],
         [
             81,
@@ -430,6 +430,12 @@
             83,
             "saucisse",
             1,
+            1
+        ],
+        [
+            85,
+            "brick",
+            3,
             1
         ]
     ],
@@ -624,7 +630,7 @@
                     0,
                     [
                         100,
-                        2,
+                        1,
                         60,
                         "haché"
                     ]
@@ -694,7 +700,7 @@
                     0,
                     [
                         1,
-                        2,
+                        9,
                         18,
                         "forestier"
                     ]
@@ -721,7 +727,7 @@
                     0,
                     [
                         1,
-                        2,
+                        5,
                         56,
                         "olive"
                     ]
@@ -1046,7 +1052,7 @@
                     0,
                     [
                         50,
-                        2,
+                        1,
                         32,
                         "salé"
                     ]
@@ -1137,7 +1143,7 @@
             "t-portions": "yaourts",
             "title": "Yaourts natures",
             "type": 1,
-            "used": 2
+            "used": 3
         },
         {
             "basic": true,
@@ -1250,7 +1256,7 @@
                     0,
                     [
                         1,
-                        2,
+                        5,
                         56,
                         "olive"
                     ]
@@ -1315,7 +1321,7 @@
                     0,
                     [
                         1,
-                        2,
+                        5,
                         56,
                         "olive"
                     ]
@@ -1382,7 +1388,7 @@
                     0,
                     [
                         1,
-                        2,
+                        5,
                         56,
                         "olive"
                     ]
@@ -1856,6 +1862,15 @@
                     [
                         0.5,
                         2,
+                        28,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        2,
                         66,
                         ""
                     ]
@@ -1882,7 +1897,7 @@
                     0,
                     [
                         2,
-                        17,
+                        15,
                         69,
                         ""
                     ]
@@ -2008,7 +2023,7 @@
                     0,
                     [
                         0.5,
-                        2,
+                        7,
                         1,
                         "pas complète"
                     ]
@@ -2080,7 +2095,7 @@
                     0,
                     [
                         2,
-                        17,
+                        15,
                         69,
                         ""
                     ]
@@ -2590,18 +2605,164 @@
             "title": "Pudding à la citrouille",
             "type": 3,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 16,
+            "duration": 1,
+            "id": 31,
+            "ing": [
+                [
+                    1,
+                    11
+                ],
+                [
+                    0,
+                    [
+                        8,
+                        15,
+                        85,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        1,
+                        24,
+                        "porc, poulet, boeuf, dinde..."
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        46,
+                        "moyenne"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        17,
+                        "moyen"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        10,
+                        80,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        7,
+                        56,
+                        "arachide"
+                    ]
+                ]
+            ],
+            "notes": "- Il faut un yaourt par personne.",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Hacher la viande et les légumes.",
+                "Mélanger les ingrédients hachés et le curry.",
+                "Faire le pliage des samoussas avec une cuillère à café de farce.",
+                "Chauffer l'huile dans une poêle puis cuire les samoussas.",
+                "Servir les samoussas avec le yaourt."
+            ],
+            "t-portions": "samoussas",
+            "title": "Samoussas au curry, sauce au yaourt",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 4,
+            "duration": 2,
+            "id": 32,
+            "ing": [
+                [
+                    0,
+                    [
+                        500,
+                        12,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        1,
+                        54,
+                        "extra-fine"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        11,
+                        31,
+                        "vanillé"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ]
+            ],
+            "notes": "- Ajouter des cranberries réhydratées.",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Faire bouillir le lait.",
+                "Ajouter les autres ingrédient en pluie et baisser un peu le feu.",
+                "Ne pas cesser de remuer en attendant que le mélange épaississe.",
+                "Une fois la texture voulue atteinte, éteindre le feu et mettre en pots."
+            ],
+            "t-portions": "pots",
+            "title": "Semoule au lait",
+            "type": 3,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            37
+            38
         ],
         [
             2,
             "Ø",
-            57
+            49
         ],
         [
             3,
@@ -2616,7 +2777,7 @@
         [
             5,
             "cas",
-            22
+            27
         ],
         [
             6,
@@ -2626,7 +2787,7 @@
         [
             7,
             "verre",
-            8
+            10
         ],
         [
             8,
@@ -2636,22 +2797,22 @@
         [
             9,
             "boîte",
-            1
+            2
         ],
         [
             10,
             "cac",
-            4
+            5
         ],
         [
             11,
             "sachet",
-            4
+            5
         ],
         [
             12,
             "ml",
-            6
+            7
         ],
         [
             13,
@@ -2666,16 +2827,11 @@
         [
             15,
             "feuille",
-            1
+            4
         ],
         [
             16,
             "branche",
-            2
-        ],
-        [
-            17,
-            "feuille",
             2
         ],
         [
