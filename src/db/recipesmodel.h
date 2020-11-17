@@ -1,10 +1,13 @@
 #ifndef RECIPESLISTMODEL_H
 #define RECIPESLISTMODEL_H
 
-#include "basemodel.h"
+#include "basemodel.hpp"
 #include "recipe.h"
 
 namespace db {
+
+QByteArray toByteArray (const QSet<db::ID> &set);
+QSet<db::ID> fromByteArray (const QByteArray &array);
 
 class RecipesModel : public BaseModel<Recipe> {
 public:
@@ -22,6 +25,12 @@ public:
   QVariant headerData(int section, Qt::Orientation orientation,
                       int role) const override;
   QVariant data (const QModelIndex &index, int role) const override;
+
+  Qt::ItemFlags flags(const QModelIndex &index) const override;
+  QMimeData* mimeData(const QModelIndexList &indexes) const override;
+  Qt::DropActions supportedDragActions(void) const override {
+    return Qt::LinkAction;
+  }
 
   void valueModified(ID id) override;
 

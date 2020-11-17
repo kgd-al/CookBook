@@ -21,14 +21,21 @@ TEMPLATE = app
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-DEFINES += BASE_DIR=\\\"$$PWD\\\" BASE_BUILD_DIR=\\\"$$OUT_PWD\\\"
+DEFINES += \
+    BASE_DIR=\\\"$$PWD\\\" BASE_BUILD_DIR=\\\"$$OUT_PWD\\\"
+
+METADATA=src/gui/about_metadata.h
+metatarget.target=$$METADATA
+metatarget.commands='$$PWD/meta.sh $$PWD/$$METADATA'
+metatarget.depends=FORCE
+PRE_TARGETDEPS += $$METADATA
+QMAKE_EXTRA_TARGETS += metatarget
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-#CONFIG += object_parallel_to_source
 CONFIG += c++11
 
 SOURCES += \
@@ -49,10 +56,12 @@ SOURCES += \
     src/gui/updatemanager.cpp \
     src/main.cpp \
     src/gui/settings.cpp \
-    src/gui/filterview.cpp
+    src/gui/filterview.cpp \
+    src/gui/about.cpp \
+    src/gui/planningview.cpp \
+    src/db/planningmodel.cpp
 
 HEADERS += \
-    src/db/basemodel.h \
     src/db/book.h \
     src/db/ingredientlistentries.h \
     src/db/ingredientsmodel.h \
@@ -71,7 +80,12 @@ HEADERS += \
     src/gui/repairsmanager.h \
     src/gui/updatemanager.h \
     src/gui/settings.h \
-    src/gui/filterview.h
+    src/gui/filterview.h \
+    src/db/basemodel.hpp \
+    src/gui/about.h \
+    src/gui/about_metadata.h \
+    src/gui/planningview.h \
+    src/db/planningmodel.h
 
 RESOURCES += \
     resources.qrc

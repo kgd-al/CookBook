@@ -14,7 +14,7 @@
 namespace gui {
 
 struct FilterView;
-struct RecipeFilter;
+struct PlanningView;
 
 class Book : public QMainWindow {
   Q_OBJECT
@@ -30,9 +30,20 @@ public:
   void closeEvent(QCloseEvent *e) override;
 
 private:
+#ifndef Q_OS_ANDROID
+  QSplitter *_hsplitter, *_vsplitter;
+#else
   QSplitter *_splitter;
+#endif
+
   QTableView *_recipes;
   FilterView *_filter;
+
+#ifndef Q_OS_ANDROID
+  PlanningView *_planning;
+#endif
+
+  void buildLayout (void);
 
 #ifndef Q_OS_ANDROID
   bool saveRecipes(void);
@@ -56,10 +67,10 @@ private:
   void showAbout (void);
 
   void setAutoTitle (void);
-  void setModified (bool m);
+//  void setModified (bool m);
 
   void toggleFilterArea (void);
-  void showFilterArea (bool show);
+  void togglePlanningArea (void);
 
   bool load(const QJsonObject &json);
 

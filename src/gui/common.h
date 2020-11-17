@@ -2,6 +2,8 @@
 #define COMMON_HPP
 
 #include <QSettings>
+#include <QSplitter>
+
 #include <QDebug>
 
 namespace gui {
@@ -19,6 +21,9 @@ bool saveGeometry (QWidget *w, QSettings &s);
 
 bool restoreGeometry (QWidget *w);
 bool restoreGeometry (QWidget *w, QSettings &s);
+
+void save (QSettings &settings, const QString &key, const QSplitter *s);
+void restore (QSettings &settings, const QString &key, QSplitter *s);
 
 } // end of namespace gui
 

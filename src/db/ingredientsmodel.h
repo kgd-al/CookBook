@@ -4,7 +4,7 @@
 #include <QAbstractItemModel>
 
 #include "recipedata.h"
-#include "basemodel.h"
+#include "basemodel.hpp"
 #include "recipesmodel.h"
 
 namespace db {
@@ -31,6 +31,8 @@ public:
                int role) override;
   Qt::ItemFlags flags(const QModelIndex &index) const override;
 
+  bool insertRows (int row, int count,
+                   const QModelIndex &parent = QModelIndex()) override;
   int validateTemporaryData (const IDList &ids);
 
   void valueModified (ID id) override;

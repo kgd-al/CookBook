@@ -9,7 +9,16 @@
 
 namespace db {
 
-Book::Book(void) : modified(false) {}
+Book::Book(void) : _modified(false) {
+  for (QAbstractTableModel *m: std::initializer_list<QAbstractTableModel*>{
+                                  &recipes, &ingredients, &units, &planning})
+    connect(m, &QAbstractItemModel::dataChanged, this, &Book::setModified);
+}
+
+void Book::setModified(void) {
+  _modified = true;
+  emit modified();
+}
 
 Book& Book::current (void) {
   static Book b;
@@ -23,6 +32,7 @@ QModelIndex Book::addRecipe(Recipe &&r) {
 //#define FAKE_SAVE 1
 bool Book::save(const QString &path) {
   QJsonObject json;
+  json["planning"] = planning.toJson();
   json["recipes"] = recipes.toJson();
   json["ingredients"] = ingredients.toJson();
   json["units"] = units.toJson();
@@ -56,7 +66,7 @@ bool Book::save(const QString &path) {
   saveFile.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
 #endif
 
-  modified = false;
+  _modified = false;
   this->path = path;
   return true;
 }
@@ -89,12 +99,13 @@ bool Book::load (const QString &path) {
   units.fromJson(json["units"].toArray());
   ingredients.fromJson(json["ingredients"].toArray());
   recipes.fromJson(json["recipes"].toArray());
+  planning.fromJson(json["planning"].toArray());
 
 
   qInfo("Loaded and parsed database from '%s'",
         path.toStdString().c_str());
 
-  modified = false;
+  _modified = false;
   this->path = path;
   return true;
 }
@@ -103,7 +114,7 @@ void Book::clear (void) {
   units.clear();
   ingredients.clear();
   recipes.clear();
-  modified = false;
+  _modified = false;
   path = "";
 }
 

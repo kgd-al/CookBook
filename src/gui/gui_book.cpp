@@ -30,11 +30,13 @@
 #include "common.h"
 #include "gui_book.h"
 #include "filterview.h"
+#include "planningview.h"
 #include "autofiltercombobox.hpp"
 #include "ingredientsmanager.h"
 #include "updatemanager.h"
 #include "repairsmanager.h"
 #include "settings.h"
+#include "about.h"
 
 #include "../db/recipesmodel.h"
 
@@ -45,47 +47,42 @@ static const QString saveFormat = ".rbk";
 static const QString fileFilter = "Recipe Book (*" + saveFormat + ")";
 
 Book::Book(QWidget *parent) : QMainWindow(parent) {
-#ifndef Q_OS_ANDROID
-  auto sorientation = Qt::Horizontal;
-#else
-  auto sorientation = Qt::Vertical;
-#endif
-    _splitter = new QSplitter (sorientation);
-    _filter = new FilterView (this);
-    auto *proxy = _filter->proxyModel();
+  _filter = new FilterView (this);
+  auto *proxy = _filter->proxyModel();
 
-      _recipes = new QTableView;
-      _recipes->setEditTriggers(QAbstractItemView::NoEditTriggers);
-      _recipes->setModel(proxy);
-      _splitter->addWidget(_recipes);
-      auto rheader = _recipes->horizontalHeader();
-      Q_ASSERT(rheader);
+  _recipes = new QTableView;
+  _recipes->setEditTriggers(QAbstractItemView::NoEditTriggers);
+  _recipes->setModel(proxy);
+  auto rheader = _recipes->horizontalHeader();
+  Q_ASSERT(rheader);
 #ifdef Q_OS_ANDROID
-      rheader->setMinimumSectionSize(0);//.5*db::iconSize());
+  rheader->setMinimumSectionSize(0);//.5*db::iconSize());
 #else
-      rheader->setMinimumSectionSize(1.5*db::iconSize());
+  rheader->setMinimumSectionSize(1.5*db::iconSize());
 #endif
-      rheader->setSectionResizeMode(QHeaderView::ResizeToContents);
-      rheader->setStretchLastSection(true);
-      _recipes->verticalHeader()->hide();
-      _recipes->setSelectionBehavior(QTableView::SelectRows);
-      _recipes->setSelectionMode(QTableView::SingleSelection);
-      _recipes->setShowGrid(false);
-//      rheader->setSectionResizeMode(_recipes->model()->columnCount()-1,
-//                                    QHeaderView::Stretch);
-//      _recipes->setItemDelegate(new RecipeListDelegate (this));
-      _recipes->setSortingEnabled(true);
-      proxy->setSortRole(db::RecipesModel::SortRole);
-      proxy->setSortCaseSensitivity(Qt::CaseInsensitive);
-      proxy->setDynamicSortFilter(true);
-      _recipes->sortByColumn(db::RecipesModel::titleColumn(),
-                             Qt::AscendingOrder);
-
-      _splitter->addWidget(_filter);
-
-  setCentralWidget(_splitter);
+  rheader->setSectionResizeMode(QHeaderView::ResizeToContents);
+  rheader->setStretchLastSection(true);
+  _recipes->verticalHeader()->hide();
+  _recipes->setSelectionBehavior(QTableView::SelectRows);
+  _recipes->setSelectionMode(QTableView::SingleSelection);
+  _recipes->setShowGrid(false);
+  _recipes->setSortingEnabled(true);
+  _recipes->setDragDropMode(QAbstractItemView::DragOnly);
+  proxy->setSortRole(db::RecipesModel::SortRole);
+  proxy->setSortCaseSensitivity(Qt::CaseInsensitive);
+  proxy->setDynamicSortFilter(true);
+  _recipes->sortByColumn(db::RecipesModel::titleColumn(),
+                           Qt::AscendingOrder);
 
   connect(_recipes, &QTableView::activated, this, &Book::showRecipe);
+
+#ifndef Q_OS_ANDROID
+  _planning = new PlanningView;
+#endif
+
+  buildLayout();
+
+  connect(&db::Book::current(), &db::Book::modified, this, &Book::setAutoTitle);
 
   QMenuBar *bar = menuBar();
     QMenu *m_book = bar->addMenu("Book");
@@ -94,7 +91,7 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 //                        QKeySequence("Ctrl+O"));
 
 #ifndef Q_OS_ANDROID
-      m_book->addAction(QIcon::fromTheme(""), "Save",
+      m_book->addAction(QIcon::fromTheme(""), "&Save",
                         [this] { overwriteRecipes(false); },
                         QKeySequence("Ctrl+S"));
 
@@ -103,9 +100,13 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 //                        QKeySequence("Ctrl+Shift+S"));
 #endif
 
-      m_book->addAction(QIcon::fromTheme(""), "Filtrer",
+      m_book->addAction(QIcon::fromTheme(""), "&Filtrer",
                         this, &Book::toggleFilterArea,
                         QKeySequence("Ctrl+F"));
+
+      m_book->addAction(QIcon::fromTheme(""), "P&lanning",
+                        this, &Book::togglePlanningArea,
+                        QKeySequence("Ctrl+L"));
 
 #ifndef Q_OS_ANDROID
     QMenu *m_recipes = bar->addMenu("Recipes");
@@ -145,18 +146,35 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
                          "Impossible de charger le livre de recette '"
                          + db::Book::monitoredPath() + "'");
 
+
 #ifndef Q_OS_ANDROID
-  int maxWidth = QGuiApplication::primaryScreen()->size().width();
-  QVariant defaultSizes = QVariant::fromValue(QList<int>{maxWidth,1});
-  _splitter->setSizes(
-    settings.value("splitter", defaultSizes).value<QList<int>>());
+  gui::restore(settings, "vsplitter", _vsplitter);
+  gui::restore(settings, "hsplitter", _hsplitter);
 #else
-  int maxHeight = QGuiApplication::primaryScreen()->size().height();
-  _splitter->setSizes({maxHeight,maxHeight});
+  _splitter->setSizes({M, M});
   _filter->hide();
 #endif
 
   gui::restoreGeometry(this, settings);
+}
+
+void Book::buildLayout(void) {
+#ifndef Q_OS_ANDROID
+  _vsplitter = new QSplitter (Qt::Vertical);
+  _vsplitter->setChildrenCollapsible(false);
+    _hsplitter = new QSplitter (Qt::Horizontal);
+    _hsplitter->setChildrenCollapsible(false);
+      _hsplitter->addWidget(_recipes);
+      _hsplitter->addWidget(_filter);
+    _vsplitter->addWidget(_hsplitter);
+    _vsplitter->addWidget(_planning);
+  setCentralWidget(_vsplitter);
+#else
+  _splitter = new QSplitter (Qt::Vertical);
+    _splitter->addWidget(_recipes);
+    _splitter->addWidget(_filter);
+  setCentralWidget(_splitter);
+#endif
 }
 
 Book::~Book(void) {}
@@ -172,7 +190,7 @@ void Book::addRecipe(void) {
     qDebug() << "Inserting: " << db::Recipe::toJson(recipe);
     QModelIndex source_index = db::Book::current().addRecipe(std::move(recipe));
     drecipe.setIndex(_filter->proxyModel()->mapFromSource(source_index));
-    setModified(true);
+//    setModified(true);
   });
   drecipe.show(&recipe, false);
 
@@ -182,7 +200,7 @@ void Book::addRecipe(void) {
 
 void Book::showRecipe(const QModelIndex &index) {
   Recipe recipe (this);
-  connect(&recipe, &Recipe::validated, [this] { setModified(true); });
+//  connect(&recipe, &Recipe::validated, [this] { setModified(true); });
   recipe.show(&db::Book::current()
               .recipes.at(db::ID(index.data(db::IDRole).toInt())),
               true, index);
@@ -202,12 +220,12 @@ bool Book::saveRecipes(void) {
 bool Book::saveRecipes(const QString &path) {
   if (path.isEmpty()) return saveRecipes();
   auto ok = db::Book::current().save(path);
-  if (ok) setModified(false);
+  if (ok) setAutoTitle();
   return ok;
 }
 
 bool Book::overwriteRecipes(bool spontaneous) {
-  if (!db::Book::current().modified)  return false;
+  if (!db::Book::current().isModified())  return false;
   if (spontaneous && !Settings::value<bool>(Settings::AUTOSAVE)) return false;
   return saveRecipes(db::Book::current().path);
 }
@@ -224,7 +242,7 @@ bool Book::loadRecipes(const QString &path) {
   auto ret = book.load(path);
   if (ret) {
     _filter->proxyModel()->setSourceModel(&book.recipes);
-    setModified(false);
+    setAutoTitle();
   }
   return ret;
 }
@@ -234,7 +252,7 @@ bool Book::loadDefaultBook(void) {
   auto ret = book.load();
   if (ret) {
     _filter->proxyModel()->setSourceModel(&book.recipes);
-    setModified(false);
+    setAutoTitle();
   }
   return ret;
 }
@@ -274,28 +292,7 @@ void Book::showSettings(void) {
 #endif
 
 void Book::showAbout(void) {
-  QDialog d (this);
-
-  auto *layout = new QGridLayout;
-  auto *tdisplay = new QLabel;
-  layout->addWidget(tdisplay, 0, 1);
-  d.setLayout(layout);
-
-  auto *label = new QLabel;
-  label->setPixmap(QIcon(":/icons/book.png").pixmap(10*db::iconQSize()));
-  layout->addWidget(label, 0, 0);
-
-  QString text;
-  QTextStream qts(&text);
-  qts << QApplication::applicationDisplayName() << "\n"
-      << "Version " << QApplication::applicationVersion() << "\n";
-  tdisplay->setText(text);
-
-  auto *buttons = new QDialogButtonBox (QDialogButtonBox::Close);
-  layout->addWidget(buttons, 1, 0, 1, 2);
-  connect(buttons, &QDialogButtonBox::rejected, &d, &QDialog::reject);
-
-  d.exec();
+  About (this).exec();
 }
 
 void Book::setAutoTitle(void) {
@@ -310,21 +307,21 @@ void Book::setAutoTitle(void) {
     name = name.mid(0, name.lastIndexOf('.')) + "(unmonitored)";
   }
 
-  if (book.modified)  name += " *";
+  if (book.isModified())  name += " *";
 
   setWindowTitle(name);
 }
 
-void Book::setModified(bool m) {
-  db::Book::current().modified = m;
-  setAutoTitle();
-}
+//void Book::setModified(bool m) {
+//  db::Book::current().modified = m;
+//  setAutoTitle();
+//}
 
 void Book::closeEvent(QCloseEvent *e) {
   auto &book = db::Book::current();
 
 #ifndef Q_OS_ANDROID
-  const bool confirm = book.modified;
+  const bool confirm = book.isModified();
   const QString msg = "Sauvegarder les changements?";
   auto b2 = QMessageBox::No;
 #else
@@ -352,8 +349,10 @@ void Book::closeEvent(QCloseEvent *e) {
   }
 
   auto &settings = localSettings(this);
-  settings.setValue("lastBook", book.path);
-  settings.setValue("splitter", QVariant::fromValue(_splitter->sizes()));
+#ifndef Q_OS_ANDROID
+  gui::save(settings, "vsplitter", _vsplitter);
+  gui::save(settings, "hsplitter", _hsplitter);
+#endif
   gui::saveGeometry(this, settings);
 }
 
@@ -383,18 +382,15 @@ bool Book::event(QEvent *event) {
 void Book::toggleFilterArea(void) {
   auto q = qDebug().nospace();
   q << "filter visible? " << _filter->geometry().isValid();
-  showFilterArea(!_filter->geometry().isValid());
+  _filter->setVisible(!_filter->isVisible());
   q << " >> " << _filter->geometry().isValid();
 }
 
-void Book::showFilterArea(bool show) {
-//  int maxHeight = QGuiApplication::primaryScreen()->size().height();
-//  _splitter->setSizes(QList<int>({maxHeight, maxHeight*show}));
-  if (show)
-    _filter->show();
-  else
-    _filter->hide();
-  qDebug() << _filter << _filter->geometry() << _filter->isVisible();
+void Book::togglePlanningArea(void) {
+  auto q = qDebug().nospace();
+  q << "planning visible? " << _planning->geometry().isValid();
+  _planning->setVisible(!_planning->isVisible());
+  q << " >> " << _planning->geometry().isValid();
 }
 
 } // end of namespace gui

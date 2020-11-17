@@ -371,7 +371,7 @@ void RepairsManager::correct(void) {
       if (s->needsRepair() && s->wantsRepairs()) {
         f(_results);
         _resultsDisplayer->removeTab(_resultsDisplayer->indexOf(s));
-        db::Book::current().modified = true;
+//        db::Book::current().modified = true;
       }
     }
   };

@@ -85,7 +85,8 @@ private:
   QPushButton *_toggle, *_apply;
 #endif
 
-  void makeLayout (QLayout *mainLayout, const QMap<QString, QWidget*> &widgets);
+  void makeLayout (QLayout *mainLayout,
+                   const QMap<QString, QWidget *> &widgets);
 
   void update (db::Recipe *recipe, bool readOnly, QModelIndex index,
                double ratio);

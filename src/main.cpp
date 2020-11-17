@@ -10,6 +10,8 @@
 #include <QTimer>
 #include <QTimeLine>
 
+#include <QDir>
+
 #include "gui/gui_book.h"
 #include "gui/common.h"
 #include "gui/settings.h"
@@ -66,16 +68,23 @@ int main(int argc, char *argv[]) {
   QApplication::setOrganizationName("almann");
   QApplication::setApplicationName("cookbook");
   QApplication::setApplicationDisplayName("CookBook");
-  QApplication::setApplicationVersion("0.9.95");
+  QApplication::setApplicationVersion("1.0.0");
   QApplication::setDesktopFileName(
     QApplication::organizationName() + "-" + QApplication::applicationName()
     + ".desktop");
 
-  QSettings settings;
-
   QString logFilePath;
   QTextStream qss (&logFilePath);
-  qss << settings.fileName().left(settings.fileName().lastIndexOf('.')) << "."
+  qss << QDir::tempPath() << "/" << QApplication::organizationName()
+      << "/" << QApplication::applicationName();
+  QDir logFileDir (logFilePath);
+  if (!logFileDir.exists()) {
+    qDebug() << "Creating tmp directory " << logFileDir.path();
+    if (!logFileDir.mkpath(logFileDir.path()))
+      qWarning("Failed to create temporary folder %s",
+               logFileDir.path().toStdString().c_str());
+  }
+  qss << "/"
       << QDateTime::currentDateTime().toString("yyyy-MM-dd.hh-mm-ss")
       << ".log";
   qDebug() << "logfilepath: " << logFilePath;
@@ -84,6 +93,7 @@ int main(int argc, char *argv[]) {
     qWarning("Failed to open log file");
   qInstallMessageHandler(logger);
 
+  QSettings settings;
   {
     auto q = qDebug();
     q << "Current settings (@" << settings.fileName() << "):\n";

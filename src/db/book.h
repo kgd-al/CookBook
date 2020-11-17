@@ -6,16 +6,20 @@
 #include "recipesmodel.h"
 #include "ingredientsmodel.h"
 #include "unitsmodel.h"
+#include "planningmodel.h"
 
 namespace db {
 
-struct Book {
+struct Book : public QObject {
+  Q_OBJECT
+public:
   QString path;
-  bool modified;
 
   RecipesModel recipes;
   IngredientsModel ingredients;
   UnitsModel units;
+
+  PlanningModel planning;
 
   Book(void);
 
@@ -26,11 +30,22 @@ struct Book {
 
   void clear (void);
 
+  void setModified (void);
+  bool isModified (void) {
+    return _modified;
+  }
+
   static Book& current (void);
 
   static QString monitoredName (void);
   static QString monitoredDir (void);
   static QString monitoredPath (void);
+
+signals:
+  void modified (void);
+
+private:
+  bool _modified;
 };
 
 } // end of namespace db

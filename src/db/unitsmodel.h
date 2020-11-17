@@ -3,7 +3,7 @@
 
 #include <QSortFilterProxyModel>
 
-#include "basemodel.h"
+#include "basemodel.hpp"
 #include "recipedata.h"
 
 namespace db {
