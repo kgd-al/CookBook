@@ -5,3 +5,5 @@ log
 
 *build*
 android*
+
+src/gui/about_metadata.h
