@@ -1,13 +1,11 @@
 #ifndef SETTINGS_H
 #define SETTINGS_H
 
-#include <QDialog>
-#include <QSettings>
 #include <QVariant>
 
-namespace gui {
+namespace db {
 
-class Settings : public QDialog {
+class Settings : public QObject {
   Q_OBJECT
 public:
   enum Type {
@@ -19,7 +17,10 @@ public:
   };
   Q_ENUM(Type)
 
-  Settings(QWidget *parent);
+  struct Data {
+    QString displayName;
+    QVariant defaultValue;
+  };
 
   static QVariant value (Type t);
 
@@ -28,9 +29,11 @@ public:
     return value(t).value<T>();
   }
 
-  void settingChanged (Type t, const QVariant &newValue);
+  static const Data& data (Type t);
+
+  static void settingChanged (Type t, const QVariant &newValue);
 };
 
-} // end of namespace gui
+} // end of namespace db
 
 #endif // SETTINGS_H

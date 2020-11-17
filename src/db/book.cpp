@@ -1,9 +1,11 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QMessageBox>
 
 #include "book.h"
 #include "recipesmodel.h"
+#include "settings.h"
 
 #include <QDebug>
 
@@ -12,12 +14,13 @@ namespace db {
 Book::Book(void) : _modified(false) {
   for (QAbstractTableModel *m: std::initializer_list<QAbstractTableModel*>{
                                   &recipes, &ingredients, &units, &planning})
-    connect(m, &QAbstractItemModel::dataChanged, this, &Book::setModified);
+    connect(m, &QAbstractItemModel::dataChanged,
+            this, QOverload<>::of(&Book::setModified));
 }
 
-void Book::setModified(void) {
-  _modified = true;
-  emit modified();
+void Book::setModified(bool m) {
+  _modified = m;
+  emit modified(_modified);
 }
 
 Book& Book::current (void) {
@@ -29,53 +32,69 @@ QModelIndex Book::addRecipe(Recipe &&r) {
   return recipes.addRecipe(std::move(r));
 }
 
-//#define FAKE_SAVE 1
-bool Book::save(const QString &path) {
+bool Book::close (QWidget *widget) {
+  if (!_modified) return true;
+  auto ret = QMessageBox::warning(widget, "Confirmez",
+                                  "Sauvegarder les changements?",
+                                  QMessageBox::Yes, QMessageBox::No,
+                                  QMessageBox::Cancel);
+  switch (ret) {
+  case QMessageBox::Yes:
+    autosave(false);
+    return true;
+  case QMessageBox::No:
+    return true;
+  case QMessageBox::Cancel:
+  default:
+    return false;
+  }
+}
+
+bool Book::autosave(bool spontaneous) {
+  // Nothing to save
+  if (!_modified) return true;
+  if (spontaneous && !Settings::value<bool>(Settings::AUTOSAVE))  return false;
+  return save();
+}
+
+bool Book::save(void) {
   QJsonObject json;
   json["planning"] = planning.toJson();
   json["recipes"] = recipes.toJson();
   json["ingredients"] = ingredients.toJson();
   json["units"] = units.toJson();
 
-  int eindex = path.lastIndexOf('.');
-  QString backup = path.mid(0, eindex);
+  int eindex = monitoredPath().lastIndexOf('.');
+  QString backup = monitoredPath().mid(0, eindex);
   backup += ".backup";
-  if (eindex >= 0)  backup += path.mid(eindex);
+  if (eindex >= 0)  backup += monitoredPath().mid(eindex);
   qDebug() << backup;
 
   QFile (backup).remove();
-  QFile::copy(path, backup);
+  QFile::copy(monitoredPath(), backup);
 
-  QFile saveFile (path);
+  QFile saveFile (monitoredPath());
 
-#ifndef FAKE_SAVE
   if (!saveFile.open(QIODevice::WriteOnly)) {
-    qWarning("Failed to save to file '%s'", path.toStdString().c_str());
+    qWarning("Failed to save to file '%s'",
+             monitoredPath().toStdString().c_str());
     return false;
   }
-#endif
 
-#ifdef FAKE_SAVE
-  qDebug() << "Not saving! Displaying below instead:\n"
-           << QJsonDocument(json).toJson(QJsonDocument::Indented)
-                                 .toStdString().c_str();
-#else
   qDebug() << "Saving:\n"
            << QJsonDocument(json).toJson(QJsonDocument::Indented)
                                  .toStdString().c_str();
   saveFile.write(QJsonDocument(json).toJson(QJsonDocument::Indented));
-#endif
 
-  _modified = false;
-  this->path = path;
+  setModified(false);
   return true;
 }
 
-bool Book::load (const QString &path) {
-  QFile loadFile (path);
+bool Book::load (void) {
+  QFile loadFile (monitoredPath());
 
   if (!loadFile.open(QIODevice::ReadOnly)) {
-    qWarning("Failed to open file '%s'", path.toStdString().c_str());
+    qWarning("Failed to open file '%s'", monitoredPath().toStdString().c_str());
     return false;
   }
 
@@ -85,16 +104,11 @@ bool Book::load (const QString &path) {
 
   if (json_doc.isNull()) {
     qWarning("Failed to parse json file '%s': %s",
-             path.toStdString().c_str(),
+             monitoredPath().toStdString().c_str(),
              err.errorString().toStdString().c_str());
     return false;
   }
 
-//  qDebug() << "Loading:\n"
-//           << json_doc.toJson(QJsonDocument::Indented)
-//                      .toStdString().c_str();
-
-  clear();
   QJsonObject json = json_doc.object();
   units.fromJson(json["units"].toArray());
   ingredients.fromJson(json["ingredients"].toArray());
@@ -103,19 +117,10 @@ bool Book::load (const QString &path) {
 
 
   qInfo("Loaded and parsed database from '%s'",
-        path.toStdString().c_str());
+        monitoredPath().toStdString().c_str());
 
-  _modified = false;
-  this->path = path;
+  setModified(false);
   return true;
-}
-
-void Book::clear (void) {
-  units.clear();
-  ingredients.clear();
-  recipes.clear();
-  _modified = false;
-  path = "";
 }
 
 QString Book::monitoredName(void) {

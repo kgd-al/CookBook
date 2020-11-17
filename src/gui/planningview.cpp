@@ -8,6 +8,7 @@
 #include <QToolButton>
 
 #include "planningview.h"
+#include "gui_recipe.h"
 #include "../db/book.h"
 
 #include <QDebug>
@@ -98,8 +99,43 @@ PlanningView::PlanningView(QWidget *parent) : QDialog(parent) {
 //  connect(_table->model(), &QAbstractItemModel::modelReset,
 //          this, &PlanningView::updateSize);
 
+  connect(_table, &QTableView::activated, this, &PlanningView::showRecipe);
+
   layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
   setLayout(layout);
+}
+
+void PlanningView::showRecipe(const QModelIndex &index) {
+  static const auto recipe = [] (db::ID id) {
+    return &db::Book::current().recipes.at(id);
+  };
+  const auto show = [this] (db::ID id) {
+    gui::Recipe (this).show(recipe(id), true, QModelIndex());
+  };
+  auto ids = index.data(db::IDRole).value<db::PlanningModel::IDSet>();
+  if (ids.empty())
+    return;
+
+  else if (ids.size() == 1) {
+    show(*ids.begin());
+
+  } else {
+    QDialog dialog (this, Qt::Popup);
+    QHBoxLayout *layout = new QHBoxLayout;
+    QListWidget *list = new QListWidget;
+    for (db::ID id: ids) {
+      auto item = new QListWidgetItem(recipe(id)->title);
+      item->setData(db::IDRole, id);
+      list->addItem(item);
+    }
+    connect(list, &QListWidget::itemActivated,
+            [show] (QListWidgetItem *item) {
+      show(db::ID(item->data(db::IDRole).toInt()));
+    });
+    layout->addWidget(list);
+    dialog.setLayout(layout);
+    dialog.exec();
+  }
 }
 
 void PlanningView::resizeEvent(QResizeEvent *e) {

@@ -548,10 +548,10 @@ FilterView::FilterView (QWidget *parent)
   connectMany(title, &QLineEdit::textChanged);
   connectMany(basic);
   connect(basic->widget->buttons[1], &QRadioButton::toggled,
-          this, &FilterView::filterChanged);
+          this, &FilterView::processFilterChanges);
   connectMany(subrecipe);
   connect(subrecipe->widget->buttons[1], &QRadioButton::toggled,
-          this, &FilterView::filterChanged);
+          this, &FilterView::processFilterChanges);
   for (const auto &cb: {regimen, status, type, duration})
     connectMany(cb, QOverload<int>::of(&QComboBox::currentIndexChanged));
 
@@ -560,7 +560,7 @@ FilterView::FilterView (QWidget *parent)
   connectMany(subrecipes);
 
   connect(ingredients->widget->model(), &QAbstractItemModel::dataChanged,
-          this, &FilterView::filterChanged);
+          this, &FilterView::processFilterChanges);
   ingredients->widget->setItemDelegate(
     new IngredientReferenceDelegate(ingredients->widget->model()));
   connect(icontrols->addButton(), &QToolButton::clicked,
@@ -570,10 +570,10 @@ FilterView::FilterView (QWidget *parent)
     ingredients->widget->edit(inserted);
   });
   connect(icontrols->delButton(), &QToolButton::clicked,
-          this, &FilterView::filterChanged);
+          this, &FilterView::processFilterChanges);
 
   connect(subrecipes->widget->model(), &QAbstractItemModel::dataChanged,
-          this, &FilterView::filterChanged);
+          this, &FilterView::processFilterChanges);
   subrecipes->widget->setItemDelegate(
     new RecipeReferenceDelegate (subrecipes->widget->model()));
   connect(scontrols->addButton(), &QToolButton::clicked,
@@ -583,7 +583,7 @@ FilterView::FilterView (QWidget *parent)
     subrecipes->widget->edit(inserted);
   });
   connect(scontrols->delButton(), &QToolButton::clicked,
-          this, &FilterView::filterChanged);
+          this, &FilterView::processFilterChanges);
 
   /// TODO Remove (?)
   ingredients->cb->setChecked(true);
@@ -601,19 +601,19 @@ QSortFilterProxyModel* FilterView::proxyModel(void) {
 template <typename T, typename... SRC>
 void FilterView::connectMany (Entry<T> *entry, SRC... members) {
   connect(entry->cb, &QCheckBox::stateChanged,
-          this, &FilterView::filterChanged);
+          this, &FilterView::processFilterChanges);
 
   using expander = int[];
   (void) expander{
     (
       connect(entry->widget, std::forward<SRC>(members),
-              this, &FilterView::filterChanged),
+              this, &FilterView::processFilterChanges),
       void(),
       0)...
   };
 }
 
-void FilterView::filterChanged (void) {
+void FilterView::processFilterChanges (void) {
 #if 0
   auto q = qDebug().nospace();
   q << __PRETTY_FUNCTION__ << "\n";
@@ -663,16 +663,7 @@ void FilterView::filterChanged (void) {
 #endif
 
   _filter->invalidate();
-
-  if (_filter->sourceModel()) {
-    QString msg;
-    QTextStream qts (&msg);
-    qts << _filter->rowCount() << " recettes";
-    if (_filter->rowCount() != _filter->sourceModel()->rowCount())
-      qts << " (sur un total de " << _filter->sourceModel()->rowCount() << ")";
-    static_cast<QMainWindow*>(this->topLevelWidget())
-        ->statusBar()->showMessage(msg, 5000);
-  }
+  emit filterChanged();
 }
 
 void FilterView::clear (void) {
@@ -695,7 +686,7 @@ void FilterView::clear (void) {
 
   _filter->ingredients.data.clear();
   _filter->subrecipes.data.clear();
-  filterChanged();
+  processFilterChanges();
 }
 
 void FilterView::random(void) {

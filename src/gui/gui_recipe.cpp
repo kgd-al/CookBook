@@ -20,10 +20,10 @@
 #include "gui_recipe.h"
 #include "ingrediententrydialog.h"
 #include "common.h"
-#include "settings.h"
 
 #include "../db/book.h"
 #include "../db/recipesmodel.h"
+#include "../db/settings.h"
 
 namespace gui {
 
@@ -182,7 +182,8 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
     _consult.holder = new QWidget;
     QGridLayout *clayout = new QGridLayout; {
 
-      bool tightIcons = Settings::value<bool>(Settings::TIGHT_RECIPE_ICONS);
+      bool tightIcons = db::Settings::value<bool>(
+                          db::Settings::TIGHT_RECIPE_ICONS);
       int r = 0, c = 0;
       if (tightIcons) {
         clayout->addWidget(new QWidget, r, c++);

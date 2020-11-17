@@ -118,7 +118,7 @@ QVariant PlanningModel::data (const QModelIndex &i, int role) const {
                                                    : QPalette::Active,
       QPalette::WindowText);
   case IDRole: {
-    QSet<ID> ids;
+    IDSet ids;
     for (Recipe *r: cellData(i)) ids.insert(r->id);
     return QVariant::fromValue(ids);
   }
@@ -138,9 +138,9 @@ QMimeData* PlanningModel::mimeData(const QModelIndexList &indexes) const {
   Q_ASSERT(indexes.size() == 1);
   d->setText(indexes.front().data().toString());
 
-  QSet<ID> ids;
+  IDSet ids;
   for (const QModelIndex &i: indexes)
-    ids += data(i, IDRole).value<QSet<ID>>();
+    ids += data(i, IDRole).value<IDSet>();
 
   d->setData(Recipe::MimeType, toByteArray(ids));
   qDebug() << "dragMimeData" << d->text() << d->data(Recipe::MimeType);
@@ -154,13 +154,13 @@ bool PlanningModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
   auto q = qDebug().nospace();
   q << "dropMimeData(" << data << " " << action << " " << row << " " << column
     << " " << parent << ")\n";
-  QSet<ID> ids = fromByteArray(data->data(Recipe::MimeType));
+  IDSet ids = fromByteArray(data->data(Recipe::MimeType));
   q << "input: [";
   for (ID id: ids)  q << " " << id;
   q << " ]\n";
   if (action & MergeAction) {
     q << "Try to merge with current data\n";
-    ids.unite(parent.data(IDRole).value<QSet<ID>>());
+    ids.unite(parent.data(IDRole).value<IDSet>());
   }
   auto r = setData(parent, QVariant::fromValue(ids), IDRole);
   if (!r) return false;
@@ -172,7 +172,7 @@ bool PlanningModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
 bool PlanningModel::setData (const QModelIndex &index, const QVariant &value,
                              int role) {
   if (role == IDRole) {
-    QSet<ID> ids = value.value<QSet<ID>>();
+    IDSet ids = value.value<IDSet>();
     Data::RSet &recipes = _data.at(index.column())->data.at(index.row());
     recipes.clear();
     for (ID id: ids)  recipes.insert(&Book::current().recipes.at(id));
@@ -232,5 +232,3 @@ QJsonArray PlanningModel::toJson (void) const {
 }
 
 } // end of namespace db
-
-Q_DECLARE_METATYPE(QSet<db::ID>)

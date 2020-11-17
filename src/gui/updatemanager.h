@@ -14,6 +14,8 @@
 namespace gui {
 
 struct ProgressLabel;
+struct PhoneDumper;
+
 class UpdateManager : public QDialog {
   Q_OBJECT
 public:
@@ -37,6 +39,7 @@ private:
     QPushButton *pull, *compile, *deploy, *push, *data, *phone;
   } _buttons;
 
+  PhoneDumper *_phone;
 
   void doPull (void);
   void doCompile (void);

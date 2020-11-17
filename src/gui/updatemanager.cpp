@@ -14,10 +14,9 @@
 #include <QPainter>
 #include <QDir>
 
-#include <QStorageInfo>
-#include <QFileDialog>
-
 #include <QDebug>
+
+#include "libmtp.h"
 
 #include "updatemanager.h"
 #include "common.h"
@@ -60,6 +59,95 @@ struct ProgressLabel : public QLabel {
     p.setBrush(c.value(state));
     p.setPen(Qt::NoPen);
     p.drawPie(r, 0, progress*360*16);
+  }
+};
+
+struct PhoneDumper : public QWidget {
+  PhoneDumper (void) {
+    auto *layout = new QGridLayout;
+    _cbox = new QComboBox;
+    QPushButton *ok = new QPushButton("Send");
+    QPushButton *refresh = new QPushButton("Refresh");
+    layout->addWidget(_cbox, 0, 0, 1, -1);
+    layout->addWidget(refresh, 1, 0);
+    layout->addWidget(ok, 1, 1);
+    setLayout(layout);
+
+    connect(_cbox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            [ok] (int index) {
+      ok->setEnabled(index >= 0);
+    });
+    connect(refresh, &QPushButton::clicked, this, &PhoneDumper::findDevices);
+
+    if (findDevices() != 0)
+      qWarning("Failed to detect mtp devices");
+    ok->setEnabled(_cbox->currentIndex() >= 0);
+  }
+
+private:
+  struct Device {
+    QString name;
+  };
+  QList<Device> _devices;
+
+  QComboBox *_cbox;
+
+  int findDevices (void) {
+    static constexpr auto FC = QChar('0');
+    LIBMTP_raw_device_t *rawdevices;
+    int numrawdevices;
+    LIBMTP_error_number_t err;
+
+    LIBMTP_Init();
+
+    _devices.clear();
+    _cbox->clear();
+
+    auto q = qDebug().nospace();
+    q << "libmtp version: " << LIBMTP_VERSION_STRING << "\n"
+      << "Listing raw devices:\n";
+    err = LIBMTP_Detect_Raw_Devices(&rawdevices, &numrawdevices);
+    switch(err) {
+    case LIBMTP_ERROR_NO_DEVICE_ATTACHED:
+      q << "No raw devices found.\n";
+      return 0;
+    case LIBMTP_ERROR_CONNECTING:
+      q << "Detect: There has been an error connecting. Exiting\n";
+      return 1;
+    case LIBMTP_ERROR_MEMORY_ALLOCATION:
+      q << "Detect: Encountered a Memory Allocation Error. Exiting\n";
+      return 1;
+    case LIBMTP_ERROR_NONE:
+      q << "Found " << numrawdevices << " device(s):\n";
+      for (int i = 0; i < numrawdevices; i++) {
+        QString name;
+        auto d = rawdevices[i];
+        if (d.device_entry.vendor != NULL || d.device_entry.product != NULL)
+          name = QString("%1: %2 (%3:%4) @ bus %5, dev %6")
+              .arg(d.device_entry.vendor).arg(d.device_entry.product)
+              .arg(d.device_entry.vendor_id, 4, 16, FC)
+              .arg(d.device_entry.product_id, 4, 16, FC)
+              .arg(d.bus_location).arg(d.devnum);
+        else
+          name = QString("%1:%2 @ bus %3, dev %4")
+              .arg(d.device_entry.vendor_id, 4, 16, FC)
+              .arg(d.device_entry.product_id, 4, 16, FC)
+              .arg(d.bus_location).arg(d.devnum);
+        q << "\t" << name;
+        _devices.push_back({name});
+        }
+      break;
+    case LIBMTP_ERROR_GENERAL:
+    default:
+      qDebug() << "Unknown connection error.\n";
+      return 1;
+    }
+
+    _cbox->setCurrentIndex(-1);
+    for (const Device &d: _devices)
+      _cbox->addItem(d.name);
+
+    return 0;
   }
 };
 
@@ -116,6 +204,7 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
         llayout->addWidget(new QLabel("Dossiers"), r++, c, 1, 2);
         llayout->addWidget(_buttons.data = new QPushButton("Local"), r++, c);
         llayout->addWidget(_buttons.phone = new QPushButton("Phone"), r++, c);
+        llayout->addWidget(_phone = new PhoneDumper, r++, c);
 
         llayout->addWidget(new QWidget, 0, 4, -1, 1);
 
@@ -177,15 +266,6 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
   });
 
   setWindowTitle(windowName);
-
-  auto q = qDebug().nospace();
-  q << "Storage info:\n";
-  QStorageInfo storage = QStorageInfo::root();
-  q << "\t" << storage.displayName() << "\n";
-  for (const QStorageInfo &i: QStorageInfo::mountedVolumes())
-    q << "\t" << i.displayName() << "\n";
-
-  q << "\n";
 }
 
 bool ok (int exitCode, QProcess::ExitStatus exitStatus) {
@@ -253,7 +333,8 @@ void UpdateManager::doDeploy(void) {
   _output->append("Generated desktop entry " + dfile.fileName());
   _labels.deploy->setState(ProgressLabel::OK, .5);
 
-  if (parentWidget()->close()) {
+  if (db::Book::current().close()) {
+    qApp->quit();
     QProcess::startDetached(
       "kioclient5", QStringList() << "exec" << dfile.fileName());
   }

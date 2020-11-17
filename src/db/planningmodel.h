@@ -11,6 +11,7 @@ class PlanningModel : public QAbstractTableModel {
 public:
   static constexpr int ROWS = 3;
   static constexpr auto MergeAction = Qt::DropAction((Qt::ActionMask+1)>>1);
+  using IDSet = QSet<db::ID>;
 
   int rowCount(const QModelIndex& = QModelIndex()) const override;
   int columnCount(const QModelIndex& = QModelIndex()) const override;
@@ -51,5 +52,7 @@ private:
 };
 
 } // end of namespace db
+
+Q_DECLARE_METATYPE(db::PlanningModel::IDSet)
 
 #endif // PLANNINGMODEL_H

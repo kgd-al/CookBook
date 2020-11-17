@@ -46,13 +46,6 @@ private:
   void buildLayout (void);
 
 #ifndef Q_OS_ANDROID
-  bool saveRecipes(void);
-  bool saveRecipes(const QString &path);
-#endif
-  bool loadRecipes(void);
-  bool loadRecipes(const QString &path);
-
-#ifndef Q_OS_ANDROID
   void addRecipe (void);
 #endif
 
@@ -71,12 +64,6 @@ private:
 
   void toggleFilterArea (void);
   void togglePlanningArea (void);
-
-  bool load(const QJsonObject &json);
-
-#ifndef Q_OS_ANDROID
-  bool save(QJsonObject &json);
-#endif
 
 #ifdef Q_OS_ANDROID
   bool event (QEvent *event) override;
