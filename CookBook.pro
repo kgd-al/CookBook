@@ -38,6 +38,8 @@ QMAKE_EXTRA_TARGETS += metatarget
 
 CONFIG += c++11
 
+LIBS += -lmtp
+
 SOURCES += \
     src/db/book.cpp \
     src/db/ingredientlistentries.cpp \
@@ -55,11 +57,12 @@ SOURCES += \
     src/gui/repairsmanager.cpp \
     src/gui/updatemanager.cpp \
     src/main.cpp \
-    src/gui/settings.cpp \
     src/gui/filterview.cpp \
     src/gui/about.cpp \
     src/gui/planningview.cpp \
-    src/db/planningmodel.cpp
+    src/db/planningmodel.cpp \
+    src/db/settings.cpp \
+    src/gui/gui_settings.cpp
 
 HEADERS += \
     src/db/book.h \
@@ -79,13 +82,14 @@ HEADERS += \
     src/gui/listcontrols.h \
     src/gui/repairsmanager.h \
     src/gui/updatemanager.h \
-    src/gui/settings.h \
     src/gui/filterview.h \
     src/db/basemodel.hpp \
     src/gui/about.h \
     src/gui/about_metadata.h \
     src/gui/planningview.h \
-    src/db/planningmodel.h
+    src/db/planningmodel.h \
+    src/db/settings.h \
+    src/gui/gui_settings.h
 
 RESOURCES += \
     resources.qrc

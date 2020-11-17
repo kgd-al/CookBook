@@ -14,7 +14,7 @@
 
 #include "gui/gui_book.h"
 #include "gui/common.h"
-#include "gui/settings.h"
+#include "gui/gui_settings.h"
 
 #ifdef Q_OS_ANDROID
 #include <android/log.h>
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
   }
 
 #ifndef Q_OS_ANDROID
-  QApplication::setFont(gui::Settings::value<QFont>(gui::Settings::FONT));
+  QApplication::setFont(db::Settings::value<QFont>(db::Settings::FONT));
 #endif
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 

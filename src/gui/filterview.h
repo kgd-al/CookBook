@@ -21,6 +21,8 @@ struct RecipeFilter;
 struct YesNoGroupBox;
 
 class FilterView : public QWidget {
+  Q_OBJECT
+
   RecipeFilter *_filter;
 
   template <typename T>
@@ -45,11 +47,14 @@ public:
 
   QSortFilterProxyModel* proxyModel (void);
 
+signals:
+  void filterChanged(void);
+
 private:
   template <typename T, typename... SRC>
   void connectMany (Entry<T> *entry, SRC... members);
 
-  void filterChanged (void);
+  void processFilterChanges (void);
   void clear (void);
   void random (void);
 };

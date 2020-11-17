@@ -35,16 +35,14 @@
 #include "ingredientsmanager.h"
 #include "updatemanager.h"
 #include "repairsmanager.h"
-#include "settings.h"
+#include "gui_settings.h"
 #include "about.h"
 
+#include "../db/settings.h"
 #include "../db/recipesmodel.h"
 
 
 namespace gui {
-
-static const QString saveFormat = ".rbk";
-static const QString fileFilter = "Recipe Book (*" + saveFormat + ")";
 
 Book::Book(QWidget *parent) : QMainWindow(parent) {
   _filter = new FilterView (this);
@@ -82,7 +80,9 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 
   buildLayout();
 
-  connect(&db::Book::current(), &db::Book::modified, this, &Book::setAutoTitle);
+  connect(&db::Book::current(), &db::Book::modified,
+          this, &Book::setWindowModified);
+  connect(_filter, &FilterView::filterChanged, this, &Book::setAutoTitle);
 
   QMenuBar *bar = menuBar();
     QMenu *m_book = bar->addMenu("Book");
@@ -150,6 +150,8 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 #ifndef Q_OS_ANDROID
   gui::restore(settings, "vsplitter", _vsplitter);
   gui::restore(settings, "hsplitter", _hsplitter);
+  _hsplitter->setVisible(true);
+  _recipes->setVisible(true);
 #else
   _splitter->setSizes({M, M});
   _filter->hide();
@@ -210,42 +212,10 @@ void Book::showRecipe(const QModelIndex &index) {
 }
 
 #ifndef Q_OS_ANDROID
-bool Book::saveRecipes(void) {
-  QString path = QFileDialog::getSaveFileName(
-    this, "Define where to save the book", ".", fileFilter);
-  if (!path.isEmpty())  return saveRecipes(path);
-  return false;
-}
-
-bool Book::saveRecipes(const QString &path) {
-  if (path.isEmpty()) return saveRecipes();
-  auto ok = db::Book::current().save(path);
-  if (ok) setAutoTitle();
-  return ok;
-}
-
 bool Book::overwriteRecipes(bool spontaneous) {
-  if (!db::Book::current().isModified())  return false;
-  if (spontaneous && !Settings::value<bool>(Settings::AUTOSAVE)) return false;
-  return saveRecipes(db::Book::current().path);
+  return db::Book::current().autosave(spontaneous);
 }
 #endif
-
-bool Book::loadRecipes(void) {
-  return loadRecipes(
-          QFileDialog::getOpenFileName(
-            this, "Select recipe book", ".", fileFilter));
-}
-
-bool Book::loadRecipes(const QString &path) {
-  auto &book = db::Book::current();
-  auto ret = book.load(path);
-  if (ret) {
-    _filter->proxyModel()->setSourceModel(&book.recipes);
-    setAutoTitle();
-  }
-  return ret;
-}
 
 bool Book::loadDefaultBook(void) {
   auto &book = db::Book::current();
@@ -259,8 +229,8 @@ bool Book::loadDefaultBook(void) {
 
 #ifndef Q_OS_ANDROID
 template <typename T>
-void maybeShowModal (Book *b, Settings::Type t) {
-  if (Settings::value<bool>(t)) {
+void maybeShowModal (Book *b, db::Settings::Type t) {
+  if (db::Settings::value<bool>(t)) {
     T manager (b);
     manager.exec();
     b->overwriteRecipes();
@@ -274,7 +244,7 @@ void maybeShowModal (Book *b, Settings::Type t) {
 }
 
 void Book::showIngredientsManager(void) {
-  maybeShowModal<IngredientsManager>(this, Settings::MODAL_IMANAGER);
+  maybeShowModal<IngredientsManager>(this, db::Settings::MODAL_IMANAGER);
 }
 
 void Book::showUpdateManager(void) {
@@ -282,11 +252,11 @@ void Book::showUpdateManager(void) {
 }
 
 void Book::showRepairUtility(void) {
-  maybeShowModal<RepairsManager>(this, Settings::MODAL_REPAIRS);
+  maybeShowModal<RepairsManager>(this, db::Settings::MODAL_REPAIRS);
 }
 
 void Book::showSettings(void) {
-  maybeShowModal<Settings>(this, Settings::MODAL_SETTINGS);
+  maybeShowModal<SettingsView>(this, db::Settings::MODAL_SETTINGS);
 }
 
 #endif
@@ -296,18 +266,13 @@ void Book::showAbout(void) {
 }
 
 void Book::setAutoTitle(void) {
-  db::Book &book = db::Book::current();
-
-  QString name = book.path;
-  if (name == db::Book::monitoredPath())
-    name = "(monitored)";
-
-  else {
-    name = name.mid(name.lastIndexOf('/')+1);
-    name = name.mid(0, name.lastIndexOf('.')) + "(unmonitored)";
-  }
-
-  if (book.isModified())  name += " *";
+  QString name;
+  QTextStream qts (&name);
+  auto *proxy = _filter->proxyModel();
+  qts << proxy->rowCount() << " recettes";
+  if (proxy->rowCount() != proxy->sourceModel()->rowCount())
+    qts << " sur " << proxy->sourceModel()->rowCount();
+  qts << " [*]";
 
   setWindowTitle(name);
 }
@@ -321,32 +286,27 @@ void Book::closeEvent(QCloseEvent *e) {
   auto &book = db::Book::current();
 
 #ifndef Q_OS_ANDROID
-  const bool confirm = book.isModified();
-  const QString msg = "Sauvegarder les changements?";
-  auto b2 = QMessageBox::No;
+  if (!book.close(this)) {
+    e->ignore();
+    return;
+  } else
+    e->accept();
 #else
   const bool confirm = true;
   const QString msg = "Quitter?";
   auto b2 = QMessageBox::NoButton;
-#endif
-
-  if (confirm) {
-    auto ret = QMessageBox::warning(this, "Confirmez", msg,
-                                    QMessageBox::Yes, b2, QMessageBox::Cancel);
-    switch (ret) {
-    case QMessageBox::Yes:
-#ifndef Q_OS_ANDROID
-      overwriteRecipes(false);
-#endif
-      break;
-    case QMessageBox::No:
-      e->accept();
-      break;
-    case QMessageBox::Cancel:
-    default:
-      e->ignore();
-    }
+  auto ret = QMessageBox::warning(this, "Confirmez", "Quitter?",
+                                  QMessageBox::Yes, QMessageBox::No);
+  switch (ret) {
+  case QMessageBox::Yes:
+    e->accept();
+    break;
+  case QMessageBox::No:
+  default:
+    e->ignore();
+    return;
   }
+#endif
 
   auto &settings = localSettings(this);
 #ifndef Q_OS_ANDROID

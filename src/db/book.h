@@ -13,8 +13,6 @@ namespace db {
 struct Book : public QObject {
   Q_OBJECT
 public:
-  QString path;
-
   RecipesModel recipes;
   IngredientsModel ingredients;
   UnitsModel units;
@@ -25,12 +23,11 @@ public:
 
   QModelIndex addRecipe (Recipe &&r);
 
-  bool save (const QString &path);
-  bool load (const QString &path = monitoredPath());
+  bool close (QWidget *widget = nullptr);
+  bool autosave (bool spontaneous);
+  bool save (void);
+  bool load (void);
 
-  void clear (void);
-
-  void setModified (void);
   bool isModified (void) {
     return _modified;
   }
@@ -42,10 +39,15 @@ public:
   static QString monitoredPath (void);
 
 signals:
-  void modified (void);
+  void modified (bool m);
 
 private:
   bool _modified;
+
+  void setModified (bool m);
+  void setModified (void) {
+    setModified(true);
+  }
 };
 
 } // end of namespace db
