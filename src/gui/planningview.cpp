@@ -6,6 +6,8 @@
 #include <QMenu>
 #include <QMimeData>
 #include <QToolButton>
+#include <QInputDialog>
+#include <QJsonArray>
 
 #include "planningview.h"
 #include "gui_recipe.h"
@@ -15,10 +17,44 @@
 
 namespace gui {
 
-struct CustomTableView : public QTableView {
+struct VerticallyConcentratedTable : public QTableView {
+
+  void resizeEvent(QResizeEvent *e) {
+    QTableView::resizeEvent(e);
+    QTimer::singleShot(0, this, &VerticallyConcentratedTable::updateSize);
+  }
+
+  void updateSize(void) {
+    int fitHeight = db::PlanningModel::ROWS * rowHeight(0)
+                     + horizontalHeader()->height()
+                     + 2 * frameWidth();
+    if (horizontalScrollBar()->isVisible())
+      fitHeight += horizontalScrollBar()->height();
+
+  //  auto q = qDebug().nospace();
+  //  q << "Table's minimum height:\n"
+  //    << fitHeight << " =\n"
+
+  //    << "\t  " << db::PlanningModel::ROWS * rowHeight(0)
+  //      << "\t(" << db::PlanningModel::ROWS << " * " << rowHeight(0)
+  //      << ") row height" << "\n"
+  //    << "\t+ " << horizontalHeader()->height()
+  //      << "\theader\n";
+  //  if (horizontalScrollBar()->isVisible())
+  //    q << "\t+ " << horizontalScrollBar()->height()
+  //      << "\tscrollbar\n";
+  //  q << "\t+ " << 2 * frameWidth() << "\tframe\n";
+
+    setMinimumHeight(fitHeight);
+    setMaximumHeight(fitHeight);
+  }
+
+};
+
+struct CustomTableView : public VerticallyConcentratedTable {
   QMenu *_contextMenu;
 
-  enum Action { ADD, OVERWRITE, DELETE };
+  enum Action { ADD, COMBINE, OVERWRITE, DELETE };
   QMap<Action, QAction*> actions;
 
   CustomTableView (void) {
@@ -30,7 +66,8 @@ struct CustomTableView : public QTableView {
       actions[a] = qa;
       return qa;
     };
-    action(ADD, "Combiner");
+    action(ADD, "Ajouter");
+    action(COMBINE, "Combiner");
     action(OVERWRITE, "Remplacer");
     action(DELETE, "Supprimer");
 
@@ -42,7 +79,8 @@ struct CustomTableView : public QTableView {
     QModelIndex index = indexAt(e->pos());
     bool notEmpty = !index.data().toString().isEmpty();
     if (notEmpty) {
-      actions[ADD]->setEnabled(true);
+      actions[ADD]->setEnabled(false);
+      actions[COMBINE]->setEnabled(true);
       actions[OVERWRITE]->setEnabled(true);
       actions[DELETE]->setEnabled(false);
 
@@ -50,7 +88,7 @@ struct CustomTableView : public QTableView {
       if (action == nullptr)  return;
 
       switch (action->data().value<Action>()) {
-      case ADD:
+      case COMBINE:
         e->setDropAction(Qt::DropAction(e->dropAction()
                                       + db::PlanningModel::MergeAction));
       case OVERWRITE:
@@ -66,15 +104,22 @@ struct CustomTableView : public QTableView {
   void contextMenuEvent(QContextMenuEvent *e) override {
     QModelIndex index = indexAt(e->pos());
     bool notEmpty = !index.data().toString().isEmpty();
-    actions[ADD]->setEnabled(false);
+    actions[ADD]->setEnabled(true);
+    actions[COMBINE]->setEnabled(false);
     actions[OVERWRITE]->setEnabled(false);
     actions[DELETE]->setEnabled(notEmpty);
 
     QAction *action = _contextMenu->exec(e->globalPos());
     if (action == nullptr)  return;
-    if (DELETE == action->data().value<Action>())
-      model()->setData(index, QVariant(), db::IDRole);
-//    QTableView::contextMenuEvent(e);
+    Action eaction = action->data().value<Action>();
+    auto model = &db::Book::current().planning;
+    if (DELETE == eaction)
+      model->setData(index, QVariant(), db::IDRole);
+
+    else if (ADD == eaction) {
+      QString item = QInputDialog::getText(this, "", "");
+      if (!item.isEmpty())  model->addItem(index, item);
+    }
   }
 };
 
@@ -105,67 +150,93 @@ PlanningView::PlanningView(QWidget *parent) : QDialog(parent) {
   setLayout(layout);
 }
 
+struct RecipeSublistModel : public QAbstractListModel {
+  RecipeSublistModel (const QJsonArray &jarray) {
+    auto &book = db::Book::current();
+    for (const QJsonValue &v: jarray) {
+      if (v.isDouble())
+        _recipes.push_back(&book.recipes.at(db::ID(v.toDouble())));
+      else
+        _texts.push_back(v.toString());
+    }
+  }
+
+  int rowCount(const QModelIndex& = QModelIndex()) const override {
+    return _recipes.size() + _texts.size();
+  }
+
+  QVariant data (const QModelIndex &index, int role) const override {
+    int row = index.row();
+    if (row < _recipes.size()) {
+      db::Recipe *r = _recipes.at(row);
+      if (role == Qt::DisplayRole)  return r->title;
+      else if (role == db::IDRole)  return r->id;
+      else if (role == Qt::DecorationRole)
+        return db::PlanningModel::recipeLinkIcon();
+
+    } else {
+      row -= _recipes.size();
+      if (role == Qt::DisplayRole)  return _texts.at(row);
+      else if (role == Qt::DecorationRole)
+        return db::PlanningModel::rawTextIcon();
+      else if (role == Qt::ForegroundRole)
+        return QApplication::palette().color(QPalette::Disabled,
+                                             QPalette::WindowText);
+    }
+
+    return QVariant();
+  }
+
+private:
+  QList<db::Recipe*> _recipes;
+  QStringList _texts;
+};
+
 void PlanningView::showRecipe(const QModelIndex &index) {
   static const auto recipe = [] (db::ID id) {
     return &db::Book::current().recipes.at(id);
   };
-  const auto show = [this] (db::ID id) {
-    gui::Recipe (this).show(recipe(id), true, QModelIndex());
+  const auto show = [this] (const QJsonValue &v, const QModelIndex &index) {
+    if (!v.isDouble())  return;
+    db::ID id = db::ID(v.toDouble());
+    gui::Recipe (this).show(recipe(id), true, index);
   };
-  auto ids = index.data(db::IDRole).value<db::PlanningModel::IDSet>();
-  if (ids.empty())
+  auto jarray = index.data(db::PlanningModel::JsonRole).value<QJsonArray>();
+  if (jarray.empty())
     return;
 
-  else if (ids.size() == 1) {
-    show(*ids.begin());
+  else if (jarray.size() == 1) {
+    show(jarray.first(), QModelIndex());
 
   } else {
     QDialog dialog (this, Qt::Popup);
     QHBoxLayout *layout = new QHBoxLayout;
-    QListWidget *list = new QListWidget;
-    for (db::ID id: ids) {
-      auto item = new QListWidgetItem(recipe(id)->title);
-      item->setData(db::IDRole, id);
-      list->addItem(item);
-    }
-    connect(list, &QListWidget::itemActivated,
-            [show] (QListWidgetItem *item) {
-      show(db::ID(item->data(db::IDRole).toInt()));
+    auto *list = new VerticallyConcentratedTable;
+
+    RecipeSublistModel model (jarray);
+    list->setModel(&model);
+    list->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    list->verticalHeader()->hide();
+    auto hheader = list->horizontalHeader();
+    hheader->setSectionResizeMode(QHeaderView::ResizeToContents);
+    hheader->setStretchLastSection(true);
+    hheader->hide();
+
+    connect(list, &QTableView::activated,
+            [show] (const QModelIndex &index) {
+      QVariant data = index.data(db::IDRole);
+      qDebug() << index << " (" << index.data() << index.data(db::IDRole) << ")";
+      if (!data.isValid())  return;
+      show(db::ID(data.toInt()), index);
     });
+
     layout->addWidget(list);
+    layout->setSizeConstraint(QLayout::SetFixedSize);
     dialog.setLayout(layout);
     dialog.exec();
+    qDebug() << "Destroying dialog";
   }
-}
-
-void PlanningView::resizeEvent(QResizeEvent *e) {
-  QDialog::resizeEvent(e);
-  QTimer::singleShot(0, this, &PlanningView::updateSize);
-}
-
-void PlanningView::updateSize(void) {
-  int fitHeight = db::PlanningModel::ROWS * _table->rowHeight(0)
-                   + _table->horizontalHeader()->height()
-                   + 2 * _table->frameWidth();
-  if (_table->horizontalScrollBar()->isVisible())
-    fitHeight += _table->horizontalScrollBar()->height();
-
-//  auto q = qDebug().nospace();
-//  q << "Table's minimum height:\n"
-//    << fitHeight << " =\n"
-
-//    << "\t  " << db::PlanningModel::ROWS * _table->rowHeight(0)
-//      << "\t(" << db::PlanningModel::ROWS << " * " << _table->rowHeight(0)
-//      << ") row height" << "\n"
-//    << "\t+ " << _table->horizontalHeader()->height()
-//      << "\theader\n";
-//  if (_table->horizontalScrollBar()->isVisible())
-//    q << "\t+ " << _table->horizontalScrollBar()->height()
-//      << "\tscrollbar\n";
-//  q << "\t+ " << 2 * _table->frameWidth() << "\tframe\n";
-
-  _table->setMinimumHeight(fitHeight);
-  _table->setMaximumHeight(fitHeight);
 }
 
 } // end of namespace gui

@@ -65,35 +65,112 @@ struct ProgressLabel : public QLabel {
 struct PhoneDumper : public QWidget {
   PhoneDumper (void) {
     auto *layout = new QGridLayout;
-    _cbox = new QComboBox;
-    QPushButton *ok = new QPushButton("Send");
-    QPushButton *refresh = new QPushButton("Refresh");
-    layout->addWidget(_cbox, 0, 0, 1, -1);
-    layout->addWidget(refresh, 1, 0);
-    layout->addWidget(ok, 1, 1);
+
+    int r = 0, c = 0;
+    layout->addWidget(new QLabel(tr("Gestion de périphériques")),
+                      r++, c, 1, -1);
+
+    layout->addWidget(_deviceCBox = new QComboBox, r++, c, 1, -1);
+    layout->addWidget(_storageCBox = new QComboBox, r++, c, 1, -1);
+
+    layout->addWidget(new QLabel("Distant:"), r, c++);
+    layout->addWidget(_rlabel = new QLabel, r, c++);
+    r++; c = 0;
+
+    layout->addWidget(new QLabel("  Local:"), r, c++);
+    layout->addWidget(_llabel = new QLabel, r, c++);
+    r++; c = 0;
+
+    layout->addWidget(_log = new QLabel, r++, 0, 1, -1, Qt::AlignCenter);
+    _log->setStyleSheet("color: red");
+
+    QHBoxLayout *blayout =  new QHBoxLayout;
+    blayout->addStretch(1);
+    blayout->addWidget(_refresh = new QPushButton("Refresh"));
+    blayout->addWidget(_send = new QPushButton("Send"));
+    blayout->addStretch(1);
+    layout->addLayout(blayout, r++, 0, 1, -1);
+
+    layout->addWidget(new QWidget, 0, 2, -1, 1);
+
     setLayout(layout);
 
-    connect(_cbox, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            [ok] (int index) {
-      ok->setEnabled(index >= 0);
-    });
-    connect(refresh, &QPushButton::clicked, this, &PhoneDumper::findDevices);
+    _deviceCBox->setMinimumContentsLength(1);
+    _deviceCBox->setSizeAdjustPolicy(QComboBox::AdjustToContentsOnFirstShow);
+    _deviceCBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+    _storageCBox->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
+
+    _llabel->setText(db::Book::monitoredName() + " ("
+                     + localModification().toString() + ")");
+
+    connect(_deviceCBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            [this] {  updateState(_deviceCBox); });
+    connect(_storageCBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            [this] {  updateState(_storageCBox);  });
+    connect(_send, &QPushButton::clicked, this, &PhoneDumper::sendToPhone);
+    connect(_refresh, &QPushButton::clicked, this, &PhoneDumper::findDevices);
 
     if (findDevices() != 0)
       qWarning("Failed to detect mtp devices");
-    ok->setEnabled(_cbox->currentIndex() >= 0);
+//    send->setEnabled(_cbox->currentIndex() >= 0);
+  }
+
+  ~PhoneDumper(void) {
+    for (Device &d: _devices)
+      LIBMTP_Release_Device(d.device);
   }
 
 private:
+  struct Storage {
+    QString name = "No name";
+    LIBMTP_devicestorage_t *storage = NULL;
+    LIBMTP_file_t *target = NULL;
+
+    bool found (void) const {
+      return target != NULL;
+    }
+  };
+
   struct Device {
     QString name;
+    LIBMTP_mtpdevice_t *device;
+    QList<Storage> storages;
+
+    static Device makeFrom (LIBMTP_raw_device_t &d) {
+      static constexpr auto FC = QChar('0');
+      QString name;
+      if (d.device_entry.vendor != NULL || d.device_entry.product != NULL)
+        name = QString("%1: %2 (%3:%4) @ bus %5, dev %6")
+            .arg(d.device_entry.vendor).arg(d.device_entry.product)
+            .arg(d.device_entry.vendor_id, 4, 16, FC)
+            .arg(d.device_entry.product_id, 4, 16, FC)
+            .arg(d.bus_location).arg(d.devnum);
+      else
+        name = QString("%1:%2 @ bus %3, dev %4")
+            .arg(d.device_entry.vendor_id, 4, 16, FC)
+            .arg(d.device_entry.product_id, 4, 16, FC)
+            .arg(d.bus_location).arg(d.devnum);
+      auto device = LIBMTP_Open_Raw_Device_Uncached(&d);
+      if (device == NULL)
+        qWarning("Unable to open %s\n", name.toStdString().c_str());
+      return Device(name, device);
+    }
+
+    explicit operator bool (void) const {
+      return device != NULL;
+    }
+
+
+  private:
+    Device (const QString &n, LIBMTP_mtpdevice_t *d) : name(n), device(d) {}
   };
   QList<Device> _devices;
 
-  QComboBox *_cbox;
+  QComboBox *_deviceCBox, *_storageCBox;
+  QLabel *_rlabel, *_llabel, *_log;
+  QPushButton *_refresh, *_send;
 
   int findDevices (void) {
-    static constexpr auto FC = QChar('0');
     LIBMTP_raw_device_t *rawdevices;
     int numrawdevices;
     LIBMTP_error_number_t err;
@@ -101,7 +178,9 @@ private:
     LIBMTP_Init();
 
     _devices.clear();
-    _cbox->clear();
+    _deviceCBox->clear();
+    _storageCBox->clear();
+    _rlabel->clear();
 
     auto q = qDebug().nospace();
     q << "libmtp version: " << LIBMTP_VERSION_STRING << "\n"
@@ -119,23 +198,9 @@ private:
       return 1;
     case LIBMTP_ERROR_NONE:
       q << "Found " << numrawdevices << " device(s):\n";
-      for (int i = 0; i < numrawdevices; i++) {
-        QString name;
-        auto d = rawdevices[i];
-        if (d.device_entry.vendor != NULL || d.device_entry.product != NULL)
-          name = QString("%1: %2 (%3:%4) @ bus %5, dev %6")
-              .arg(d.device_entry.vendor).arg(d.device_entry.product)
-              .arg(d.device_entry.vendor_id, 4, 16, FC)
-              .arg(d.device_entry.product_id, 4, 16, FC)
-              .arg(d.bus_location).arg(d.devnum);
-        else
-          name = QString("%1:%2 @ bus %3, dev %4")
-              .arg(d.device_entry.vendor_id, 4, 16, FC)
-              .arg(d.device_entry.product_id, 4, 16, FC)
-              .arg(d.bus_location).arg(d.devnum);
-        q << "\t" << name;
-        _devices.push_back({name});
-        }
+      for (int i = 0; i < numrawdevices; i++)
+        if (Device d = Device::makeFrom(rawdevices[i]))
+          _devices.push_back(d);
       break;
     case LIBMTP_ERROR_GENERAL:
     default:
@@ -143,11 +208,155 @@ private:
       return 1;
     }
 
-    _cbox->setCurrentIndex(-1);
-    for (const Device &d: _devices)
-      _cbox->addItem(d.name);
+    _deviceCBox->setCurrentIndex(-1);
+    for (Device &d: _devices) {
+      q << "Accessing files of " << d.name << "\n";
+      for (auto storage = d.device->storage; storage; storage = storage->next) {
+        Storage s;
+        s.name = storage->StorageDescription;
+        s.storage = storage;
+        LIBMTP_file_t *files
+          = LIBMTP_Get_Files_And_Folders(d.device,
+                                         storage->id,
+                                         LIBMTP_FILES_AND_FOLDERS_ROOT);
+        if (files != NULL) {
+          LIBMTP_file_t *file = files;
+          while (file != NULL && !s.found()) {
+            if (file->filename == db::Book::monitoredName())
+              s.target = file;
+            file = file->next;
+          }
+        }
 
+        if (s.found())
+          q << ">> Found target: " << s.target->filename << ":\n"
+            << "\tiid: " << s.target->item_id << "\n"
+            << "\tpid: " << s.target->parent_id << "\n"
+            << "\tsid: " << s.target->storage_id << "\n"
+            << "\ttype: " << s.target->filetype << "\n"
+            << "\n\tssid: " << s.storage->id << "\n";
+
+        d.storages.push_back(s);
+      }
+
+      q << "--\n";
+      _deviceCBox->addItem(d.name);
+    }
+
+    free(rawdevices);
     return 0;
+  }
+
+  bool sendToPhone (void) {
+    auto q = qDebug().nospace();
+    q << "Trying to send " << db::Book::monitoredPath()
+      << " to device " << device()->name << " " << storage()->name << "\n";
+    auto source = db::Book::monitoredPath();
+    QFileInfo sourceInfo (source);
+    LIBMTP_file_t *file = target();
+    if (!file) {
+      file = LIBMTP_new_file_t();
+      file->filesize = sourceInfo.size();
+      file->filename = strdup(sourceInfo.fileName().toStdString().c_str());
+      file->filetype = LIBMTP_FILETYPE_UNKNOWN;
+      file->parent_id = 0;
+      file->storage_id = storage()->storage->id;
+      q << ">> Creating new file from extrapolated metadata\n";
+
+    } else {
+      LIBMTP_Delete_Object(device()->device, file->item_id);
+      q << ">> Deleting existing target file and using its metadata\n";
+    }
+
+    auto r = LIBMTP_Send_File_From_File(device()->device,
+                                        source.toStdString().c_str(),
+                                        file, NULL, NULL);
+    if (r != 0) {
+      _log->setText("Error sending file");
+      LIBMTP_Dump_Errorstack(device()->device);
+      LIBMTP_Clear_Errorstack(device()->device);
+
+    } else {
+      _log->setText("File successfully sent");
+      updateState(nullptr);
+    }
+
+    if (file != target()) LIBMTP_destroy_file_t(file);
+    return true;
+  }
+
+  void updateState (QWidget *source) {
+    if (source == _deviceCBox) {
+      _storageCBox->clear();
+      int i = _deviceCBox->currentIndex();
+      if (i >= 0)
+        for (const Storage &s: _devices.at(i).storages)
+          _storageCBox->addItem(s.name);
+    }
+
+    QString error;
+    if (_devices.empty())
+      error = "No devices detected. Is the phone plugged in?";
+    else if (device() == nullptr)
+      error = "No devices selected";
+    else if (device()->storages.empty())
+      error = "No storage detected. Is file sharing activated on the phone?";
+    else if (storage() == nullptr)
+      error = "No storage selected";
+    else {
+      auto file = target();
+      if (!file)
+        _rlabel->setText("No database found");
+      else {
+        QString filedata;
+        QTextStream qts (&filedata);
+        qts << file->filename << " ("
+            << remoteModification().toString()
+            << ")";
+        _rlabel->setText(filedata);
+
+        auto lm = localModification(), rm = remoteModification();
+        if (rm < lm)
+          _log->setText("Phone version is outdated");
+        else if (rm == lm)
+          error = "No update necessary";
+        else
+          error = "Phone version is more recent!";
+      }
+    }
+
+    if (!error.isEmpty())  _log->setText(error);
+
+    _send->setEnabled(error.isEmpty());
+  }
+
+  QDateTime localModification (void) const {
+    return QFileInfo(db::Book::monitoredPath()).lastModified();
+  }
+
+  QDateTime remoteModification (void) {
+    if (!target())  return QDateTime();
+    return QDateTime::fromSecsSinceEpoch(target()->modificationdate);
+  }
+
+  Device* device (void) {
+    int i = _deviceCBox->currentIndex();
+    if (i < 0)  return nullptr;
+    return &_devices[i];
+  }
+
+  Storage* storage (void) {
+    Device *d = device();
+    if (d == nullptr) return nullptr;
+    int i = _storageCBox->currentIndex();
+    if (i < 0)  return nullptr;
+    return &d->storages[i];
+  }
+
+  LIBMTP_file_t* target (void) {
+    Storage *s = storage();
+    if (s == nullptr) return nullptr;
+    return s->target;
   }
 };
 
@@ -178,35 +387,38 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
       auto *llayout = new QGridLayout;
 
 //        llayout->addWidget(new QWidget, 1);
-        int r = 0, c = 0;
-        llayout->addWidget(new QLabel("Actions"), r++, c, 1, 2);
+        int lr = 0, lc = 0;
+        llayout->addWidget(new QLabel("Actions"), lr++, lc, 1, 2);
 
-        llayout->addWidget(_buttons.pull = new QPushButton("Pull"), r, c++);
-        llayout->addWidget(_labels.pull = new ProgressLabel, r, c++);
+        llayout->addWidget(_buttons.pull = new QPushButton("Pull"), lr, lc++);
+        llayout->addWidget(_labels.pull = new ProgressLabel, lr, lc++);
 //        llayout->addSpacing(10);
 
-        r++; c = 0;
-        llayout->addWidget(_buttons.compile = new QPushButton("Compiler"), r, c++);
-        llayout->addWidget(_labels.compile = new ProgressLabel, r, c++);
+        lr++; lc = 0;
+        llayout->addWidget(_buttons.compile = new QPushButton("Compiler"), lr, lc++);
+        llayout->addWidget(_labels.compile = new ProgressLabel, lr, lc++);
 //        llayout->addSpacing(10);
 
-        r++; c = 0;
-        llayout->addWidget(_buttons.deploy = new QPushButton("Relancer"), r, c++);
-        llayout->addWidget(_labels.deploy = new ProgressLabel, r, c++);
+        lr++; lc = 0;
+        llayout->addWidget(_buttons.deploy = new QPushButton("Relancer"), lr, lc++);
+        llayout->addWidget(_labels.deploy = new ProgressLabel, lr, lc++);
 
-        r++; c = 0;
-        llayout->addWidget(_buttons.push = new QPushButton("Push"), r, c++);
-        llayout->addWidget(_labels.push = new ProgressLabel, r, c++);
+        lr++; lc = 0;
+        llayout->addWidget(_buttons.push = new QPushButton("Push"), lr, lc++);
+        llayout->addWidget(_labels.push = new ProgressLabel, lr, lc++);
 
-        llayout->addWidget(new QWidget, 0, 2, -1, 1);
+//        llayout->addWidget(new QWidget, 0, 2, -1, 1);
 
-        r = 0; c = 3;
-        llayout->addWidget(new QLabel("Dossiers"), r++, c, 1, 2);
-        llayout->addWidget(_buttons.data = new QPushButton("Local"), r++, c);
-        llayout->addWidget(_buttons.phone = new QPushButton("Phone"), r++, c);
-        llayout->addWidget(_phone = new PhoneDumper, r++, c);
+        int rr = 0, rc = 3;
+        llayout->addWidget(new QLabel("Dossiers"), rr++, rc, 1, 1);
+        llayout->addWidget(_buttons.data = new QPushButton("Local"), rr++, rc);
+        llayout->addWidget(_buttons.phone = new QPushButton("Phone"), rr++, rc);
 
-        llayout->addWidget(new QWidget, 0, 4, -1, 1);
+
+        llayout->addWidget(_phone = new PhoneDumper,
+                           std::max(lr, rr)+1, 0, 1, -1);
+
+//        llayout->addWidget(new QWidget, 0, 4, -1, 1);
 
         for (QLabel *l: { _labels.pull, _labels.compile,
                           _labels.deploy, _labels.push  })

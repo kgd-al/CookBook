@@ -15,9 +15,6 @@ private:
   QTableView *_table;
 
   void showRecipe (const QModelIndex &index);
-
-  void resizeEvent(QResizeEvent *e) override;
-  void updateSize (void);
 };
 
 } // end of namespace gui

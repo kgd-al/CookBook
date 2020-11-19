@@ -1,4 +1,5 @@
 #include <QJsonArray>
+#include <QJsonDocument>
 #include <QPainter>
 #include <QMimeData>
 
@@ -6,24 +7,14 @@
 
 #include <QDebug>
 
-QDataStream& operator>> (QDataStream &stream, db::ID &id) {
-  return stream >> (std::underlying_type<db::ID>::type&)id;
-}
-
 namespace db {
 
-QByteArray toByteArray (const QSet<ID> &set) {
-  QByteArray array;
-  QDataStream stream (&array, QIODevice::WriteOnly);
-  stream << set;
-  return array;
+QByteArray toByteArray (const QJsonArray &jarray) {
+  return QJsonDocument(jarray).toBinaryData();
 }
 
-QSet<ID> fromByteArray(const QByteArray &array) {
-  QSet<db::ID> set;
-  QDataStream stream (array);
-  stream >> set;
-  return set;
+QJsonArray fromByteArray(const QByteArray &barray) {
+  return QJsonDocument::fromBinaryData(barray).array();
 }
 
 RecipesModel::RecipesModel(void) {}
@@ -122,13 +113,15 @@ QMimeData* RecipesModel::mimeData(const QModelIndexList &indexes) const {
 
   QSet<ID> ids;
   for (const QModelIndex &i: indexes) ids.insert(ID(i.data(IDRole).toInt()));
+  QJsonArray jarray;
+  for (ID id: ids)  jarray.append(id);
 #ifndef NDEBUG
-  auto idsBA = toByteArray(ids);
-  auto ids2 = fromByteArray(idsBA);
-  Q_ASSERT(ids == ids2);
+  auto jarrayBA = toByteArray(jarray);
+  auto jarray2 = fromByteArray(jarrayBA);
+  Q_ASSERT(jarray == jarray2);
 #endif
-  qDebug() << "MimeData for " << indexes << " = " << ids;
-  d->setData(Recipe::MimeType, toByteArray(ids));
+  qDebug() << "MimeData for " << indexes << " = " << jarray;
+  d->setData(Recipe::MimeType, toByteArray(jarray));
   return d;
 }
 
