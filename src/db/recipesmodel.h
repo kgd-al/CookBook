@@ -6,8 +6,8 @@
 
 namespace db {
 
-QByteArray toByteArray (const QSet<db::ID> &set);
-QSet<db::ID> fromByteArray (const QByteArray &array);
+QByteArray toByteArray (const QJsonArray &array);
+QJsonArray fromByteArray (const QByteArray &array);
 
 class RecipesModel : public BaseModel<Recipe> {
 public:

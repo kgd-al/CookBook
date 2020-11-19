@@ -521,7 +521,10 @@ void Recipe::setReadOnly(bool ro) {
 }
 
 bool Recipe::hasSibling (int dir) {
-  return _index.isValid() && nextRow(_index, dir).isValid();
+  if (!_index.isValid())  return false;
+  auto sibling = nextRow(_index, dir);
+  if (!sibling.isValid()) return false;
+  return sibling.data(db::IDRole).toInt() > 0;
 }
 
 void Recipe::setIndex(QModelIndex index) {

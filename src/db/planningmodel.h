@@ -11,7 +11,10 @@ class PlanningModel : public QAbstractTableModel {
 public:
   static constexpr int ROWS = 3;
   static constexpr auto MergeAction = Qt::DropAction((Qt::ActionMask+1)>>1);
-  using IDSet = QSet<db::ID>;
+  static constexpr auto JsonRole = IDRole+1;
+
+  static QIcon recipeLinkIcon (void);
+  static QIcon rawTextIcon (void);
 
   int rowCount(const QModelIndex& = QModelIndex()) const override;
   int columnCount(const QModelIndex& = QModelIndex()) const override;
@@ -40,6 +43,8 @@ public:
   bool setData(const QModelIndex &index, const QVariant &value,
                int role) override;
 
+  void addItem (const QModelIndex &index, const QString &item);
+
   void clearOld (void);
 
   void fromJson (const QJsonArray &j);
@@ -52,7 +57,5 @@ private:
 };
 
 } // end of namespace db
-
-Q_DECLARE_METATYPE(db::PlanningModel::IDSet)
 
 #endif // PLANNINGMODEL_H

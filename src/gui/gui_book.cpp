@@ -150,8 +150,8 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 #ifndef Q_OS_ANDROID
   gui::restore(settings, "vsplitter", _vsplitter);
   gui::restore(settings, "hsplitter", _hsplitter);
-  _hsplitter->setVisible(true);
-  _recipes->setVisible(true);
+//  _hsplitter->setVisible(true); /// TODO Remove
+//  _recipes->setVisible(true); /// TODO Remove
 #else
   _splitter->setSizes({M, M});
   _filter->hide();
