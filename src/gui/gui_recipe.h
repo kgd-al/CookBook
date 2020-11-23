@@ -75,7 +75,9 @@ private:
 #endif
 
   GUIList *_ingredients, *_steps;
+#ifndef Q_OS_ANDROID
   ListControls *_icontrols, *_scontrols;
+#endif
 
   QTextEdit *_notes;
 

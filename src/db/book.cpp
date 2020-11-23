@@ -33,6 +33,7 @@ QModelIndex Book::addRecipe(Recipe &&r) {
 }
 
 bool Book::close (QWidget *widget) {
+#ifndef Q_OS_ANDROID
   if (!_modified) return true;
   auto ret = QMessageBox::warning(widget, "Confirmez",
                                   "Sauvegarder les changements?",
@@ -48,8 +49,13 @@ bool Book::close (QWidget *widget) {
   default:
     return false;
   }
+#else
+  (void)widget;
+  return true;
+#endif
 }
 
+#ifndef Q_OS_ANDROID
 bool Book::autosave(bool spontaneous) {
   // Nothing to save
   if (!_modified) return true;
@@ -89,6 +95,7 @@ bool Book::save(void) {
   setModified(false);
   return true;
 }
+#endif
 
 bool Book::load (void) {
   QFile loadFile (monitoredPath());

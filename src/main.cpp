@@ -68,7 +68,7 @@ int main(int argc, char *argv[]) {
   QApplication::setOrganizationName("almann");
   QApplication::setApplicationName("cookbook");
   QApplication::setApplicationDisplayName("CookBook");
-  QApplication::setApplicationVersion("1.0.0");
+  QApplication::setApplicationVersion("1.0.9a");
   QApplication::setDesktopFileName(
     QApplication::organizationName() + "-" + QApplication::applicationName()
     + ".desktop");
@@ -118,7 +118,7 @@ int main(int argc, char *argv[]) {
               "qt", "_",
               QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
     qDebug() << ">> ok";
-    app .installTranslator(&qtTranslator);
+    app.installTranslator(&qtTranslator);
   }
 
   QTranslator qtBaseTranslator;

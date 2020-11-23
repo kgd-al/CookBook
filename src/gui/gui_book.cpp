@@ -74,9 +74,7 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 
   connect(_recipes, &QTableView::activated, this, &Book::showRecipe);
 
-#ifndef Q_OS_ANDROID
   _planning = new PlanningView;
-#endif
 
   buildLayout();
 
@@ -100,13 +98,17 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 //                        QKeySequence("Ctrl+Shift+S"));
 #endif
 
-      m_book->addAction(QIcon::fromTheme(""), "&Filtrer",
-                        this, &Book::toggleFilterArea,
-                        QKeySequence("Ctrl+F"));
+      QAction *filterAction =
+        m_book->addAction(QIcon::fromTheme(""), "&Filtrer",
+                          this, &Book::toggleFilterArea,
+                          QKeySequence("Ctrl+F"));
+      filterAction->setCheckable(true);
 
-      m_book->addAction(QIcon::fromTheme(""), "P&lanning",
-                        this, &Book::togglePlanningArea,
-                        QKeySequence("Ctrl+L"));
+      QAction *planningAction =
+        m_book->addAction(QIcon::fromTheme(""), "P&lanning",
+                          this, &Book::togglePlanningArea,
+                          QKeySequence("Ctrl+L"));
+      planningAction->setCheckable(true);
 
 #ifndef Q_OS_ANDROID
     QMenu *m_recipes = bar->addMenu("Recipes");
@@ -128,14 +130,15 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
       m_other->addAction("Bug tracker", [] {
         QDesktopServices::openUrl(QUrl("https://github.com/kgd-al/CookBook/issues"));
       });
-      m_other->addAction("About", this, &Book::showAbout);
+      m_other->addAction("About", this, &Book::showAbout,
+                         QKeySequence("Ctrl+?"));
 
 #else
+      m_book->addAction("About", this, &Book::showAbout);
+
 //  grabGesture(android::SingleFingerSwipeRecognizer::type());
   QScroller::grabGesture(_recipes, QScroller::LeftMouseButtonGesture);
 #endif
-
-  statusBar();  // Invoke now to make space
 
   auto &settings = localSettings(this);
 
@@ -152,12 +155,26 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
   gui::restore(settings, "hsplitter", _hsplitter);
 //  _hsplitter->setVisible(true); /// TODO Remove
 //  _recipes->setVisible(true); /// TODO Remove
-#else
-  _splitter->setSizes({M, M});
-  _filter->hide();
-#endif
-
   gui::restoreGeometry(this, settings);
+  filterAction->setChecked(_filter->isVisible());
+  planningAction->setChecked(_planning->isVisible());
+
+#else
+  QSize ss = QGuiApplication::primaryScreen()->size();
+  auto M = qMax(ss.width(), ss.height());
+  _innerSplitter->setSizes({M, M});
+
+  bool showPlanning = settings.value("planning").toBool();
+  connect(planningAction, &QAction::toggled,
+          [filterAction] (bool t) {
+      filterAction->setEnabled(!t);
+  });
+
+  showPlanningArea(showPlanning);
+  _filter->hide();
+  filterAction->setChecked(false);
+  planningAction->setChecked(showPlanning);
+#endif
 }
 
 void Book::buildLayout(void) {
@@ -172,10 +189,13 @@ void Book::buildLayout(void) {
     _vsplitter->addWidget(_planning);
   setCentralWidget(_vsplitter);
 #else
-  _splitter = new QSplitter (Qt::Vertical);
-    _splitter->addWidget(_recipes);
-    _splitter->addWidget(_filter);
-  setCentralWidget(_splitter);
+  _outterSplitter = new QSplitter (Qt::Vertical);
+    _innerSplitter = new QSplitter (Qt::Vertical);
+      _innerSplitter->addWidget(_recipes);
+      _innerSplitter->addWidget(_filter);
+    _outterSplitter->addWidget(_innerSplitter);
+    _outterSplitter->addWidget(_planning);
+  setCentralWidget(_outterSplitter);
 #endif
 }
 
@@ -283,18 +303,15 @@ void Book::setAutoTitle(void) {
 //}
 
 void Book::closeEvent(QCloseEvent *e) {
-  auto &book = db::Book::current();
-
 #ifndef Q_OS_ANDROID
+  auto &book = db::Book::current();
   if (!book.close(this)) {
     e->ignore();
     return;
   } else
     e->accept();
+
 #else
-  const bool confirm = true;
-  const QString msg = "Quitter?";
-  auto b2 = QMessageBox::NoButton;
   auto ret = QMessageBox::warning(this, "Confirmez", "Quitter?",
                                   QMessageBox::Yes, QMessageBox::No);
   switch (ret) {
@@ -312,45 +329,28 @@ void Book::closeEvent(QCloseEvent *e) {
 #ifndef Q_OS_ANDROID
   gui::save(settings, "vsplitter", _vsplitter);
   gui::save(settings, "hsplitter", _hsplitter);
-#endif
   gui::saveGeometry(this, settings);
-}
-
-#ifdef Q_OS_ANDROID
-bool Book::event(QEvent *event) {
-  if (event->type() == QEvent::Gesture) {
-    auto *ge = dynamic_cast<QGestureEvent*>(event);
-    auto q = qDebug().nospace();
-    q << ge << "\n";
-    if (auto *g = ge->gesture(android::SingleFingerSwipeRecognizer::type())) {
-      auto sg = static_cast<android::ExtendedSwipeGesture*>(g);
-      q << "\tExtendedSwipeGesture: " << sg->dx() << ", " << sg->dy() << "\n";
-      if (sg->state() == Qt::GestureFinished) {
-        if (sg->dy() > 100)
-          showFilterArea(false);
-        else if (sg->dy() < -100)
-          showFilterArea(true);
-      }
-    }
-    return true;
-
-  } else
-    return QMainWindow::event(event);
-}
+#else
+  settings.setValue("planning", _planning->isVisible());
 #endif
+}
 
 void Book::toggleFilterArea(void) {
-  auto q = qDebug().nospace();
-  q << "filter visible? " << _filter->geometry().isValid();
   _filter->setVisible(!_filter->isVisible());
-  q << " >> " << _filter->geometry().isValid();
 }
 
 void Book::togglePlanningArea(void) {
-  auto q = qDebug().nospace();
-  q << "planning visible? " << _planning->geometry().isValid();
-  _planning->setVisible(!_planning->isVisible());
-  q << " >> " << _planning->geometry().isValid();
+  showPlanningArea(!_planning->isVisible());
+}
+
+void Book::showPlanningArea(bool show) {
+#ifndef Q_OS_ANDROID
+  _planning->setVisible(show);
+
+#else
+  _outterSplitter->widget(0)->setVisible(!show);
+  _outterSplitter->widget(1)->setVisible(show);
+#endif
 }
 
 } // end of namespace gui

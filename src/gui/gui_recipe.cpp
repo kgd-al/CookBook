@@ -258,7 +258,9 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
       _ingredients->setWordWrap(true);
       _ingredients->setMinimumWidth(100);
       ilayout->addWidget(_ingredients);
+#ifndef Q_OS_ANDROID
       ilayout->addWidget(_icontrols = new ListControls(_ingredients));
+#endif
     iholder->setLayout(ilayout);
 
     QWidget *nholder = new QWidget;
@@ -278,7 +280,9 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
       _steps->setMinimumWidth(100);
       _steps->setWordWrap(true);
       slayout->addWidget(_steps);
+#ifndef Q_OS_ANDROID
       slayout->addWidget(_scontrols = new ListControls(_steps));
+#endif
     sholder->setLayout(slayout);
 
     makeLayout(mainLayout, {
@@ -505,11 +509,12 @@ void Recipe::setReadOnly(bool ro) {
   _portionsLabel->setEdit(!ro);
 
   _ingredients->setDragEnabled(!ro);
-  _icontrols->setVisible(!ro);
   _steps->setDragEnabled(!ro);
-  _scontrols->setVisible(!ro);
 
 #ifndef Q_OS_ANDROID
+  _icontrols->setVisible(!ro);
+  _scontrols->setVisible(!ro);
+
   updateNavigation();
 
   if (ro) _toggle->setText("Modifier");

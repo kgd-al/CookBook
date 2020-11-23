@@ -3,15 +3,15 @@
 #include <QApplication>
 #include <QPalette>
 #include <QStyle>
+#include <QFontMetrics>
 
 #include "planningmodel.h"
 #include "book.h"
+#include "settings.h"
 
 #include <QDebug>
 
 namespace db {
-
-static constexpr int DAYS_RANGE = 7;
 
 std::array<QString, PlanningModel::ROWS> hheaders {
   "Midi", "Goûter", "Soir"
@@ -30,6 +30,8 @@ struct PlanningModel::Data {
   struct Item {
     using ptr_t = QSharedPointer<Item>;
     enum Type { RECIPE, STRING };
+
+    virtual ~Item (void) {}
 
     virtual Type type (void) const = 0;
     virtual QString data (void) const = 0;
@@ -110,6 +112,8 @@ struct PlanningModel::Data {
   std::array<PSet, ROWS> data;
 
   Data (const QDate &d) : date(d) {}
+  Data (const QJsonValue &j)
+    : Data(QDate::fromString(j.toString(), Qt::ISODate)) {}
 
   bool empty (void) const {
     return std::all_of(data.begin(), data.end(),
@@ -118,13 +122,13 @@ struct PlanningModel::Data {
 
   QJsonArray toJson (void) const {
     QJsonArray j;
-    j.append(date.toString());
+    j.append(date.toString(Qt::ISODate));
     for (const PSet &recipes: data) j.append(toJson(recipes));
     return j;
   }
 
   static Data_ptr fromJson (const QJsonArray &j) {
-    auto d = Data_ptr::create(QDate::fromString(j.first().toString()));
+    auto d = Data_ptr::create(j.first());
     Q_ASSERT(j.size() == ROWS+1);
     for (int i=0; i<ROWS; i++)
       fromJson(j[i+1].toArray(), d->data[i]);
@@ -151,6 +155,16 @@ QDate fakeToday (void) {
   return today();//.addDays(4);
 }
 
+PlanningModel::PlanningModel (void) {
+#ifndef Q_OS_ANDROID
+  connect(Settings::instance(), &Settings::settingChanged,
+          [this] (Settings::Type type, const QVariant&) {
+    if (type == Settings::PLANNING_WINDOW)  populateModel();
+  });
+#endif
+}
+
+#ifndef Q_OS_ANDROID
 int PlanningModel::rowCount(const QModelIndex&) const {
   return ROWS;
 }
@@ -159,17 +173,39 @@ int PlanningModel::columnCount(const QModelIndex&) const {
   return _data.size();
 }
 
-QVariant PlanningModel::headerData(int section, Qt::Orientation orientation,
-                                   int role) const {
-  if (role != Qt::DisplayRole)  return QVariant();
-  if (orientation == Qt::Vertical)  return hheaders.at(section);
-  auto date = _data.at(section)->date;
+#else
+
+int PlanningModel::rowCount(const QModelIndex&) const {
+  return (ROWS+2) * _data.size() - 1;
+}
+
+int PlanningModel::columnCount(const QModelIndex&) const {
+  return 1;
+}
+
+#endif
+
+QString formatDate (const QDate &date) {
   auto diff = fakeToday().daysTo(date);
-  if (0 <= diff && diff < DAYS_RANGE)
+  if (diff < 0)
+    return QString::number(diff);
+  else if (diff == 0)
+    return QObject::tr("Aujourd'hui");
+  else if (diff < 7)
     return date.toString("dddd");
   else
-    return ((diff > 0) ? "+" : "") + QString::number(diff);
+    return date.toString("dddd d");
 }
+
+#ifndef Q_OS_ANDROID
+QVariant PlanningModel::headerData(int section, Qt::Orientation orientation,
+                                   int role) const {
+
+  if (role != Qt::DisplayRole)  return QVariant();
+  if (orientation == Qt::Vertical)  return hheaders.at(section);
+  return formatDate(_data.at(section)->date);
+}
+#endif
 
 template <typename Set>
 QString formatRecipeList (const Set &set,
@@ -193,10 +229,26 @@ QVariant decoration (const Set &set) {
 }
 
 QVariant PlanningModel::data (const QModelIndex &i, int role) const {
-  auto cellData = [this] (const QModelIndex &i) {
-    return _data.at(i.column())->data.at(i.row());
+#ifndef Q_OS_ANDROID
+  auto dayData = [this] (const QModelIndex &i) {
+    return _data.at(i.column());
   };
+  auto cellData = [dayData] (const QModelIndex &i) {
+    return dayData(i)->data.at(i.row());
+  };
+#else
+  auto dayData = [this] (const QModelIndex &i) {
+    return _data.at(i.row() / (ROWS+2));
+  };
+  auto cellData = [dayData] (const QModelIndex &i) {
+    return dayData(i)->data.at(i.row() % (ROWS+2) - 1);
+  };
+  bool dateCell = ((i.row() % (ROWS+2)) == 0);
+  bool separator = ((i.row() % (ROWS+2)) == ROWS+1);
+#endif
+
   switch (role) {
+#ifndef Q_OS_ANDROID
   case Qt::DisplayRole:
     return formatRecipeList(cellData(i), " & ");
   case Qt::ToolTipRole:
@@ -205,9 +257,48 @@ QVariant PlanningModel::data (const QModelIndex &i, int role) const {
     return decoration(cellData(i));
   case Qt::ForegroundRole:
     return QApplication::palette().color(
-      _data.at(i.column())->date < db::fakeToday() ? QPalette::Disabled
-                                                   : QPalette::Active,
+      dayData(i)->date < db::fakeToday() ? QPalette::Disabled
+                                         : QPalette::Active,
       QPalette::WindowText);
+
+#else
+  case Qt::DisplayRole:
+    if (separator)
+      return QVariant();
+    else if (dateCell)
+      return formatDate(dayData(i)->date);
+    else
+      return formatRecipeList(cellData(i), "\n");
+
+  case Qt::DecorationRole:
+    return (separator || dateCell) ? QVariant() : decoration(cellData(i));
+
+  case Qt::FontRole: {
+    QFont f;
+    if (dateCell) f.setBold(true);
+    return f;
+  }
+
+  case Qt::TextAlignmentRole:
+    return dateCell ? Qt::AlignCenter : Qt::AlignLeft;
+
+  case Qt::ForegroundRole: {
+    auto c = QApplication::palette().color(QPalette::Active,
+                                           QPalette::WindowText);
+    if (dayData(i)->date < db::fakeToday()) c = c.darker();
+    return c;
+  }
+  case Qt::BackgroundRole: {
+    auto c = dateCell? QApplication::palette().alternateBase()
+                     : QApplication::palette().base();
+    if (dayData(i)->date < db::fakeToday()) c = c.color().lighter();
+    return c;
+  }
+  case Qt::SizeHintRole:
+    if (!separator) return QVariant();
+    return QSize(0, .5*QApplication::fontMetrics().height());
+#endif
+
   case IDRole:
     Q_ASSERT(false);
     break;
@@ -216,11 +307,14 @@ QVariant PlanningModel::data (const QModelIndex &i, int role) const {
     for (const auto &item: cellData(i)) jarray.append(item->toJson());
     return jarray;
   }
+
+
   default:
     return QVariant();
   }
 }
 
+#ifndef Q_OS_ANDROID
 Qt::ItemFlags PlanningModel::flags (const QModelIndex &index) const {
   auto f = QAbstractItemModel::flags(index) | Qt::ItemIsDropEnabled;
   if (!index.data().toString().isEmpty()) f |= Qt::ItemIsDragEnabled;
@@ -249,6 +343,10 @@ bool PlanningModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
   auto q = qDebug().nospace();
   q << "dropMimeData(" << data << " " << action << " " << row << " " << column
     << " " << parent << ")\n";
+  if (!parent.isValid()) {
+    q << ">> Invalid index. Aborting\n";
+    return false;
+  }
   QJsonArray jarray = fromByteArray(data->data(Recipe::MimeType));
   q << "input: " << jarray << "\n";
   if (action & MergeAction) {
@@ -258,7 +356,7 @@ bool PlanningModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
   }
   auto r = setData(parent, jarray, JsonRole);
   if (!r) return false;
-  if (action != Qt::MoveAction) return false;
+  if (action != Qt::MoveAction) return true;
   QModelIndex srcIndex = data->property("src").toModelIndex();
   return setData(srcIndex, QVariant(), JsonRole);
 }
@@ -294,8 +392,9 @@ void PlanningModel::clearOld(void) {
     endRemoveColumns();
     emit dataChanged(index(0, 0), index(ROWS, old-1));
   }
-  Q_ASSERT(DAYS_RANGE == _data.size());
+  Q_ASSERT(Settings::value<int>(Settings::PLANNING_WINDOW) == _data.size());
 }
+#endif
 
 void PlanningModel::fromJson (const QJsonArray &j) {
   beginResetModel();
@@ -308,10 +407,22 @@ void PlanningModel::fromJson (const QJsonArray &j) {
 
   q << "Read " << _data.size() << " items\n";
 
+  endResetModel();
+
+#ifndef Q_OS_ANDROID
+  populateModel();
+#endif
+}
+
+#ifndef Q_OS_ANDROID
+void PlanningModel::populateModel(void) {
+  beginResetModel();
+  auto prevsize = _data.size();
   QDate today = db::fakeToday();
+  int range = Settings::value<int>(Settings::PLANNING_WINDOW);
   int offset = 0;
   while (offset < _data.size() && _data[offset]->date < today)  offset++;
-  for (int i=0; i<DAYS_RANGE; i++) {
+  for (int i=0; i<range; i++) {
     int j = offset+i;
     QDate date = today.addDays(i);
     if (j >= _data.size()  // Not present
@@ -319,7 +430,14 @@ void PlanningModel::fromJson (const QJsonArray &j) {
       _data.insert(j, Data_ptr::create(date));
   }
 
-  q << "Final size: " << _data.size() << "\n";
+  int i=_data.size()-1;
+  while (i >= 0 && today.addDays(range) <= _data[i]->date) {
+    if (_data[i]->empty()) _data.removeAt(i);
+    i--;
+  }
+
+  qDebug() << "Model size after auto-populate: " << _data.size() << "(+"
+           << (_data.size() - prevsize) << ")";
   endResetModel();
 }
 
@@ -329,6 +447,20 @@ QJsonArray PlanningModel::toJson (void) const {
     if (!d->empty())
       j.append(d->toJson());
   return j;
+}
+#endif
+
+QModelIndex PlanningModel::todayOrLatter (void) const {
+  for (int i=0; i<_data.size(); i++) {
+    if (_data[i]->date == today()) {
+#ifndef Q_OS_ANDROID
+      return index(0, i);
+#else
+      return index(i*(ROWS+2), 0);
+#endif
+    }
+  }
+  return QModelIndex();
 }
 
 } // end of namespace db

@@ -23,10 +23,12 @@ public:
 
   QModelIndex addRecipe (Recipe &&r);
 
-  bool close (QWidget *widget = nullptr);
+  bool load (void);
+#ifndef Q_OS_ANDROID
   bool autosave (bool spontaneous);
   bool save (void);
-  bool load (void);
+#endif
+  bool close (QWidget *widget = nullptr);
 
   bool isModified (void) {
     return _modified;
