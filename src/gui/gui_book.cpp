@@ -137,7 +137,7 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
       m_book->addAction("About", this, &Book::showAbout);
 
 //  grabGesture(android::SingleFingerSwipeRecognizer::type());
-  QScroller::grabGesture(_recipes, QScroller::LeftMouseButtonGesture);
+  android::enableTouchScrolling(_recipes);
 #endif
 
   auto &settings = localSettings(this);

@@ -362,8 +362,8 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
   gui::restore(settings, "vsplitter", _vsplitter);
   gui::restore(settings, "hsplitter", _hsplitter);
 #else
-  QScroller::grabGesture(_ingredients, QScroller::LeftMouseButtonGesture);
-  QScroller::grabGesture(_steps, QScroller::LeftMouseButtonGesture);
+  android::enableTouchScrolling(_ingredients);
+  android::enableTouchScrolling(_steps);
   QScroller::grabGesture(_notes, QScroller::LeftMouseButtonGesture);
   androidKeepScreenOn(true);
 #endif

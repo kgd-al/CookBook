@@ -12,6 +12,7 @@
 
 #include "planningview.h"
 #include "gui_recipe.h"
+#include "androidspecifics.hpp"
 #include "../db/book.h"
 
 #include <QDebug>
@@ -262,7 +263,8 @@ PlanningView::PlanningView(QWidget *parent) : QDialog(parent) {
   _table->horizontalHeader()->setStretchLastSection(true);
   _table->horizontalHeader()->hide();
   _table->verticalHeader()->hide();
-  QScroller::grabGesture(_table, QScroller::LeftMouseButtonGesture);
+
+  android::enableTouchScrolling(_table);
 
   QFont f = _table->font();
   f.setPixelSize(1.5*f.pixelSize());
