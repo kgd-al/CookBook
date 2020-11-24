@@ -392,7 +392,6 @@ void PlanningModel::clearOld(void) {
     endRemoveColumns();
     emit dataChanged(index(0, 0), index(ROWS, old-1));
   }
-  Q_ASSERT(Settings::value<int>(Settings::PLANNING_WINDOW) == _data.size());
 }
 #endif
 
