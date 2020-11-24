@@ -112,7 +112,6 @@ struct PhoneDumper : public QWidget {
 
     if (findDevices() != 0)
       qWarning("Failed to detect mtp devices");
-//    send->setEnabled(_cbox->currentIndex() >= 0);
   }
 
   ~PhoneDumper(void) {
@@ -233,8 +232,7 @@ private:
             << "\tiid: " << s.target->item_id << "\n"
             << "\tpid: " << s.target->parent_id << "\n"
             << "\tsid: " << s.target->storage_id << "\n"
-            << "\ttype: " << s.target->filetype << "\n"
-            << "\n\tssid: " << s.storage->id << "\n";
+            << "\ttype: " << s.target->filetype << "\n";
 
         d.storages.push_back(s);
       }
@@ -244,13 +242,13 @@ private:
     }
 
     free(rawdevices);
+    updateState(nullptr);
     return 0;
   }
 
   bool sendToPhone (void) {
-    auto q = qDebug().nospace();
-    q << "Trying to send " << db::Book::monitoredPath()
-      << " to device " << device()->name << " " << storage()->name << "\n";
+    qDebug() << "Trying to send " << db::Book::monitoredPath()
+             << " to device " << device()->name << " " << storage()->name;
     auto source = db::Book::monitoredPath();
     QFileInfo sourceInfo (source);
     LIBMTP_file_t *file = target();
@@ -261,11 +259,12 @@ private:
       file->filetype = LIBMTP_FILETYPE_UNKNOWN;
       file->parent_id = 0;
       file->storage_id = storage()->storage->id;
-      q << ">> Creating new file from extrapolated metadata\n";
+      qDebug() << ">> Creating new file from extrapolated metadata";
 
     } else {
+      qDebug() << ">> Deleting existing target file and using its metadata";
       LIBMTP_Delete_Object(device()->device, file->item_id);
-      q << ">> Deleting existing target file and using its metadata\n";
+      file->filesize = localFileInfo().size();
     }
 
     auto r = LIBMTP_Send_File_From_File(device()->device,
@@ -278,14 +277,20 @@ private:
 
     } else {
       _log->setText("File successfully sent");
+      storage()->target =
+        LIBMTP_Get_Filemetadata(device()->device, file->item_id);
+      auto newSize = target()->filesize;
+      auto expectedSize = localFileInfo().size();
+      Q_ASSERT(newSize == expectedSize);
       updateState(nullptr);
     }
 
-    if (file != target()) LIBMTP_destroy_file_t(file);
+//    if (file != target()) LIBMTP_destroy_file_t(file);
     return true;
   }
 
   void updateState (QWidget *source) {
+    qDebug() << "Updating state";
     if (source == _deviceCBox) {
       _storageCBox->clear();
       int i = _deviceCBox->currentIndex();
@@ -314,6 +319,7 @@ private:
             << remoteModification().toString()
             << ")";
         _rlabel->setText(filedata);
+        qDebug() << "Remote: " << filedata;
 
         auto lm = localModification(), rm = remoteModification();
         if (rm < lm)
@@ -328,10 +334,15 @@ private:
     if (!error.isEmpty())  _log->setText(error);
 
     _send->setEnabled(error.isEmpty());
+    qDebug() << "Send enabled?" << _send->isEnabled();
+  }
+
+  QFileInfo localFileInfo (void) const {
+    return QFileInfo(db::Book::monitoredPath());
   }
 
   QDateTime localModification (void) const {
-    return QFileInfo(db::Book::monitoredPath()).lastModified();
+    return localFileInfo().lastModified();
   }
 
   QDateTime remoteModification (void) {

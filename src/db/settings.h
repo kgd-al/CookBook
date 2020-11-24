@@ -14,6 +14,8 @@ public:
     FONT,
 
     MODAL_IMANAGER, MODAL_REPAIRS, MODAL_SETTINGS,
+
+    PLANNING_WINDOW
   };
   Q_ENUM(Type)
 
@@ -31,7 +33,12 @@ public:
 
   static const Data& data (Type t);
 
-  static void settingChanged (Type t, const QVariant &newValue);
+  static void updateSetting (Type t, const QVariant &newValue);
+
+  static const Settings* instance(void);
+
+signals:
+  void settingChanged (Type t, const QVariant &newValue) const;
 };
 
 } // end of namespace db

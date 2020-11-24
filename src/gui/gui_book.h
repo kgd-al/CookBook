@@ -33,15 +33,12 @@ private:
 #ifndef Q_OS_ANDROID
   QSplitter *_hsplitter, *_vsplitter;
 #else
-  QSplitter *_splitter;
+  QSplitter *_outterSplitter, *_innerSplitter;
 #endif
 
   QTableView *_recipes;
   FilterView *_filter;
-
-#ifndef Q_OS_ANDROID
   PlanningView *_planning;
-#endif
 
   void buildLayout (void);
 
@@ -63,11 +60,9 @@ private:
 //  void setModified (bool m);
 
   void toggleFilterArea (void);
-  void togglePlanningArea (void);
 
-#ifdef Q_OS_ANDROID
-  bool event (QEvent *event) override;
-#endif
+  void togglePlanningArea (void);
+  void showPlanningArea (bool show);
 };
 
 } // end of namespace gui

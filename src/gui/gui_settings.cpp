@@ -4,6 +4,7 @@
 #include <QCheckBox>
 #include <QToolButton>
 #include <QDialogButtonBox>
+#include <QSpinBox>
 
 #include <QApplication>
 #include <QFontDialog>
@@ -27,7 +28,7 @@ QWidget* factory (SettingsView *settings, db::Settings::Type stype) {
     auto cb = new QCheckBox (data.displayName);
     cb->setChecked(db::Settings::value<bool>(stype));
     SettingsView::connect(cb, &QCheckBox::clicked, [settings, stype, cb] {
-      db::Settings::settingChanged(stype, cb->isChecked());
+      db::Settings::updateSetting(stype, cb->isChecked());
     });
     return cb;
 
@@ -51,11 +52,25 @@ QWidget* factory (SettingsView *settings, db::Settings::Type stype) {
       font = QFontDialog::getFont(&ok, font, holder);
       if (ok) {
         QApplication::setFont(font);
-        db::Settings::settingChanged(stype, font);
+        db::Settings::updateSetting(stype, font);
         flabel->setText(description(font));
       }
     });
 
+    return holder;
+
+  } else if (QVariant::Int == dtype) {
+    QWidget *holder = new QWidget;
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->addWidget(new QLabel(data.displayName));
+    auto sb = new QSpinBox;
+    sb->setValue(db::Settings::value<int>(stype));
+    SettingsView::connect(sb, QOverload<int>::of(&QSpinBox::valueChanged),
+                          [settings, stype] (int value) {
+      db::Settings::updateSetting(stype, value);
+    });
+    layout->addWidget(sb);
+    holder->setLayout(layout);
     return holder;
 
   } else

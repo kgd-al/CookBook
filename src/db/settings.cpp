@@ -19,7 +19,9 @@ const Settings::Data& Settings::data (Settings::Type type) {
     {  Settings::MODAL_REPAIRS, { "Réparation",            true } },
     { Settings::MODAL_SETTINGS, { "Configuration",         true } },
 
+    { Settings::PLANNING_WINDOW, { "Planning", 7 } },
   };
+
   return sdata.at(type);
 }
 
@@ -33,7 +35,7 @@ QVariant Settings::value (Type t) {
   return v;
 }
 
-void Settings::settingChanged(Type t, const QVariant &newValue) {
+void Settings::updateSetting(Type t, const QVariant &newValue) {
   qDebug() << "Setting" << t << "changed from" << value(t) << "to" << newValue;
   QSettings settings;
   settings.beginGroup("global-settings");
@@ -43,6 +45,12 @@ void Settings::settingChanged(Type t, const QVariant &newValue) {
   Q_ASSERT(prevValue.canConvert(newValue.type()));
 #endif
   settings.setValue(QMetaEnum::fromType<Type>().key(t), newValue);
+  emit instance()->settingChanged(t, newValue);
+}
+
+const Settings* Settings::instance (void) {
+  static Settings singleton;
+  return &singleton;
 }
 
 } // end of namespace db

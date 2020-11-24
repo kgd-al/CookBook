@@ -16,12 +16,16 @@ public:
   static QIcon recipeLinkIcon (void);
   static QIcon rawTextIcon (void);
 
+  PlanningModel (void);
+
   int rowCount(const QModelIndex& = QModelIndex()) const override;
   int columnCount(const QModelIndex& = QModelIndex()) const override;
 
+  QVariant data (const QModelIndex &index, int role) const override;
+
+#ifndef Q_OS_ANDROID
   QVariant headerData(int section, Qt::Orientation orientation,
                       int role) const override;
-  QVariant data (const QModelIndex &index, int role) const override;
 
   Qt::DropActions supportedDragActions(void) const override {
     return Qt::MoveAction;
@@ -46,14 +50,24 @@ public:
   void addItem (const QModelIndex &index, const QString &item);
 
   void clearOld (void);
+#endif
 
   void fromJson (const QJsonArray &j);
+
+#ifndef Q_OS_ANDROID
   QJsonArray toJson (void) const;
+#endif
+
+  QModelIndex todayOrLatter (void) const;
 
 private:
   struct Data;
   using Data_ptr = QSharedPointer<Data>;
   QList<Data_ptr> _data;
+
+#ifndef Q_OS_ANDROID
+  void populateModel (void);
+#endif
 };
 
 } // end of namespace db

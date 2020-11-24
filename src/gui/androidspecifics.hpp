@@ -8,6 +8,9 @@
 #include <QGestureRecognizer>
 #include <QtMath>
 
+#include <QAbstractItemView>
+#include <QScroller>
+
 namespace android {
 
 class ExtendedSwipeGesture : public QGesture {
@@ -90,6 +93,12 @@ private:
     return Ignore;
   }
 };
+
+template <typename T>
+void enableTouchScrolling (T *view) {
+  QScroller::grabGesture(view, QScroller::LeftMouseButtonGesture);
+  view->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+}
 
 } // end of namespace android
 

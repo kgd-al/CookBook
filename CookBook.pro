@@ -38,7 +38,9 @@ QMAKE_EXTRA_TARGETS += metatarget
 
 CONFIG += c++11
 
+!android {
 LIBS += -lmtp
+}
 
 SOURCES += \
     src/db/book.cpp \
@@ -48,21 +50,15 @@ SOURCES += \
     src/db/recipedata.cpp \
     src/db/recipesmodel.cpp \
     src/db/unitsmodel.cpp \
-    src/gui/common.cpp \
     src/gui/gui_book.cpp \
     src/gui/gui_recipe.cpp \
-    src/gui/ingrediententrydialog.cpp \
-    src/gui/ingredientsmanager.cpp \
-    src/gui/listcontrols.cpp \
-    src/gui/repairsmanager.cpp \
-    src/gui/updatemanager.cpp \
-    src/main.cpp \
     src/gui/filterview.cpp \
     src/gui/about.cpp \
     src/gui/planningview.cpp \
     src/db/planningmodel.cpp \
     src/db/settings.cpp \
-    src/gui/gui_settings.cpp
+    src/gui/gui_settings.cpp \
+    src/main.cpp
 
 HEADERS += \
     src/db/book.h \
@@ -74,14 +70,8 @@ HEADERS += \
     src/db/unitsmodel.h \
     src/gui/androidspecifics.hpp \
     src/gui/autofiltercombobox.hpp \
-    src/gui/common.h \
     src/gui/gui_book.h \
     src/gui/gui_recipe.h \
-    src/gui/ingrediententrydialog.h \
-    src/gui/ingredientsmanager.h \
-    src/gui/listcontrols.h \
-    src/gui/repairsmanager.h \
-    src/gui/updatemanager.h \
     src/gui/filterview.h \
     src/db/basemodel.hpp \
     src/gui/about.h \
@@ -102,5 +92,23 @@ DISTFILES += \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
     android/gradlew.bat
+
+!android {
+SOURCES += \
+    src/gui/ingredientsmanager.cpp \
+    src/gui/listcontrols.cpp \
+    src/gui/repairsmanager.cpp \
+    src/gui/updatemanager.cpp \
+    src/gui/ingrediententrydialog.cpp \
+    src/gui/common.cpp
+
+HEADERS += \
+    src/gui/common.h \
+    src/gui/ingrediententrydialog.h \
+    src/gui/ingredientsmanager.h \
+    src/gui/listcontrols.h \
+    src/gui/repairsmanager.h \
+    src/gui/updatemanager.h
+}
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
