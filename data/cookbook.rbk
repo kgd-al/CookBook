@@ -10,7 +10,7 @@
             2,
             "oeuf",
             1,
-            8
+            9
         ],
         [
             3,
@@ -76,13 +76,13 @@
             16,
             "pain de mie",
             3,
-            2
+            3
         ],
         [
             17,
             "oignon",
             2,
-            12
+            14
         ],
         [
             18,
@@ -202,7 +202,7 @@
             43,
             "pomme de terre",
             3,
-            2
+            3
         ],
         [
             44,
@@ -274,7 +274,7 @@
             56,
             "huile",
             9,
-            12
+            14
         ],
         [
             57,
@@ -322,7 +322,7 @@
             64,
             "tomate",
             2,
-            1
+            2
         ],
         [
             65,
@@ -340,7 +340,7 @@
             67,
             "vinaigre",
             5,
-            1
+            2
         ],
         [
             68,
@@ -437,31 +437,39 @@
             "brick",
             3,
             1
+        ],
+        [
+            86,
+            "béchamel",
+            8,
+            1
+        ],
+        [
+            87,
+            "jambon",
+            1,
+            1
+        ],
+        [
+            88,
+            "emmental",
+            3,
+            1
+        ],
+        [
+            90,
+            "harangs fumés",
+            1,
+            1
+        ],
+        [
+            92,
+            "salade",
+            2,
+            1
         ]
     ],
     "planning": [
-        [
-            "2020-11-24",
-            [
-            ],
-            [
-            ],
-            [
-                4,
-                2,
-                "foo"
-            ]
-        ],
-        [
-            "2020-11-27",
-            [
-            ],
-            [
-                "Crèpes"
-            ],
-            [
-            ]
-        ]
     ],
     "recipes": [
         {
@@ -2775,18 +2783,183 @@
             "title": "Semoule au lait",
             "type": 3,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 4,
+            "duration": 1,
+            "id": 33,
+            "ing": [
+                [
+                    0,
+                    [
+                        8,
+                        8,
+                        16,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        13,
+                        86,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        4,
+                        8,
+                        87,
+                        "blanc"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        17,
+                        "petit"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        70,
+                        1,
+                        88,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        56,
+                        "végétale"
+                    ]
+                ]
+            ],
+            "notes": "- A dégustre avec une salade.",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Faire revenir les oignons à la poële avec l'huile.",
+                "Faire un montage : pain de mie, béchamel, jambon, oignons, pain de mie, béchamel, emmental.",
+                "Mettre au four 15 min à 160°C jusqu'à ce qu'il soient dorés sans que le dessous soit brûlé."
+            ],
+            "t-portions": "croques-monsieur",
+            "title": "Croques-Monsieur",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 2,
+            "id": 34,
+            "ing": [
+                [
+                    0,
+                    [
+                        4,
+                        2,
+                        43,
+                        "moyenne, rouges ou blanches"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        21,
+                        90,
+                        "sans arrêtes"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        2,
+                        "durs"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        64,
+                        "grosse"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        22,
+                        92,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        17,
+                        "frais, petit"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        56,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        67,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- Décorer avec des oignons frais",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Faire cuire les pommes de terre à l'eau entières pendant 45 minutes.",
+                "Faire une salade avec tous les ingrédients. Avec les pommes de terre encore chaudes, c'est mieux."
+            ],
+            "t-portions": "personnes",
+            "title": "Salade de pommes de terre et de harengs fumés",
+            "type": 2,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            38
+            39
         ],
         [
             2,
             "Ø",
-            49
+            54
         ],
         [
             3,
@@ -2801,7 +2974,7 @@
         [
             5,
             "cas",
-            27
+            30
         ],
         [
             6,
@@ -2816,7 +2989,7 @@
         [
             8,
             "tranche",
-            3
+            5
         ],
         [
             9,
@@ -2841,7 +3014,7 @@
         [
             13,
             "litre",
-            2
+            3
         ],
         [
             14,
@@ -2871,6 +3044,16 @@
         [
             20,
             "portions",
+            1
+        ],
+        [
+            21,
+            "paquet",
+            1
+        ],
+        [
+            22,
+            "poignée",
             1
         ]
     ]
