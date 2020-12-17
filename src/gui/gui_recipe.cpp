@@ -593,10 +593,34 @@ void Recipe::editIngredient(void) {
     item->ing = d.ingredient();
 }
 
+QString multiLineText (QWidget *parent, const QString &title,
+                       const QString &msg, const QString &contents,
+                       bool &ok) {
+
+  QDialog d (parent);
+  auto *layout = new QVBoxLayout;
+  auto *edit = new QTextEdit;
+  auto *controls = new QDialogButtonBox (QDialogButtonBox::Ok
+                                         | QDialogButtonBox::Cancel);
+
+  layout->addWidget(new QLabel(msg));
+  layout->addWidget(edit);
+  layout->addWidget(controls);
+  d.setLayout(layout);
+
+  d.setWindowTitle(title);
+  edit->setText(contents);
+
+  QObject::connect(controls, &QDialogButtonBox::accepted, &d, &QDialog::accept);
+  QObject::connect(controls, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+
+  ok = (d.exec() == QDialog::Accepted);
+  return edit->toPlainText();
+}
+
 void Recipe::addStep(void) {
   bool ok = false;
-  QString string = QInputDialog::getMultiLineText(
-    _steps, "Saisissez", "Nouvelle étape", "", &ok);
+  QString string = multiLineText(_steps, "Saisissez", "Nouvelle étape", "", ok);
   if (ok && !string.isEmpty())  addStep(string);
 }
 #endif
@@ -612,8 +636,9 @@ void Recipe::editStep(void) {
   auto item = static_cast<StepListItem*>(_steps->currentItem());
   QString step = item->step();
   bool ok = false;
-  step = QInputDialog::getMultiLineText(
-        _steps, "Saisissez", "Mise à jour", step, &ok);
+//  step = QInputDialog::getMultiLineText(
+//        _steps, "Saisissez", "Mise à jour", step, &ok);
+  step = multiLineText(_steps, "Saisissez", "Mise à jour", step, ok);
   if (ok && !step.isEmpty())  item->setStep(step);
 }
 #endif
