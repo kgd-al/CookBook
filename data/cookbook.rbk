@@ -4,13 +4,13 @@
             1,
             "farine",
             3,
-            11
+            15
         ],
         [
             2,
             "oeuf",
             1,
-            10
+            11
         ],
         [
             3,
@@ -52,19 +52,19 @@
             9,
             "sauce soja",
             5,
-            2
+            5
         ],
         [
             10,
             "eau",
             6,
-            9
+            11
         ],
         [
             11,
             "sel",
             5,
-            11
+            13
         ],
         [
             13,
@@ -86,9 +86,9 @@
         ],
         [
             18,
-            "champignons",
+            "champignon",
             2,
-            3
+            4
         ],
         [
             19,
@@ -136,7 +136,7 @@
             31,
             "sucre",
             4,
-            9
+            12
         ],
         [
             32,
@@ -154,7 +154,7 @@
             34,
             "levure",
             5,
-            3
+            5
         ],
         [
             36,
@@ -190,7 +190,7 @@
             41,
             "bouillon",
             6,
-            1
+            2
         ],
         [
             42,
@@ -244,7 +244,7 @@
             50,
             "ail",
             2,
-            5
+            7
         ],
         [
             51,
@@ -274,13 +274,13 @@
             56,
             "huile",
             9,
-            18
+            21
         ],
         [
             57,
             "olive",
             2,
-            1
+            2
         ],
         [
             58,
@@ -292,7 +292,7 @@
             59,
             "porc",
             1,
-            1
+            2
         ],
         [
             60,
@@ -322,7 +322,7 @@
             64,
             "tomate",
             2,
-            3
+            4
         ],
         [
             65,
@@ -484,7 +484,7 @@
             95,
             "origan",
             2,
-            1
+            2
         ],
         [
             96,
@@ -549,14 +549,14 @@
         [
             107,
             "parmesan",
-            3,
-            1
+            8,
+            2
         ],
         [
             108,
             "concentré de tomate",
             2,
-            1
+            2
         ],
         [
             109,
@@ -567,6 +567,42 @@
         [
             110,
             "canelle",
+            5,
+            1
+        ],
+        [
+            112,
+            "pâte",
+            3,
+            0
+        ],
+        [
+            113,
+            "pâte",
+            3,
+            1
+        ],
+        [
+            114,
+            "soja",
+            2,
+            1
+        ],
+        [
+            115,
+            "sake",
+            10,
+            1
+        ],
+        [
+            117,
+            "sauce Worcestershire",
+            5,
+            1
+        ],
+        [
+            118,
+            "sauce d'huître",
             5,
             1
         ]
@@ -3635,18 +3671,456 @@
             "title": "Tortillas",
             "type": 1,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 3,
+            "id": 42,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        59,
+                        "tranché"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        113,
+                        "capellini"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        4,
+                        2,
+                        18,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        22,
+                        114,
+                        "frais"
+                    ]
+                ],
+                [
+                    2,
+                    "Pour la marinade du porc"
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        5,
+                        9,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        115,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        117,
+                        ""
+                    ]
+                ],
+                [
+                    2,
+                    "Pour la marinade des champignons"
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        5,
+                        9,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        50,
+                        "semoule"
+                    ]
+                ],
+                [
+                    2,
+                    "Pour le bouillon (par bol)"
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        9,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.25,
+                        2,
+                        41,
+                        "cube, poulet"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        118,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        56,
+                        "sésame"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        50,
+                        "semoule"
+                    ]
+                ]
+            ],
+            "notes": "- Mettre des herbes pour décorer.",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Faire les marinades et cuire les oeufs la veille.",
+                "Préparer le bouillon dans les bols.",
+                "Faire cuire les pâtes et mettre de l'eau à bouillir pour les bols.",
+                "Dresser."
+            ],
+            "t-portions": "bols",
+            "title": "Ramen express",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 0,
+            "duration": 1,
+            "id": 43,
+            "ing": [
+            ],
+            "notes": "",
+            "regimen": 1,
+            "status": 1,
+            "steps": [
+            ],
+            "t-portions": "",
+            "title": "Poudre de pinrlinpinpin",
+            "type": 1,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 44,
+            "ing": [
+                [
+                    2,
+                    "Pour le levain"
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        2,
+                        1,
+                        "blé"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        2,
+                        10,
+                        "chaude"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        21,
+                        34,
+                        "boulangère"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    2,
+                    "Pour la pâte"
+                ],
+                [
+                    0,
+                    [
+                        0.25,
+                        2,
+                        56,
+                        "olive"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        1,
+                        "blé"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        11,
+                        "fin"
+                    ]
+                ]
+            ],
+            "notes": "- Pour la farine de le pâte c'est selon l'absorption : de 3 à 4 verres",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Faire une pâte liquide avec tous les ingrédients du levain. Attendre 10/15 minutes que le mélange mousse.",
+                "Ajouter tous les ingrédients de la pâte jusqu'à ce que celle-ci soit souple.",
+                "On peut l'utiliser tout de suite, puis attendre une nouvelle pousse de 20 minutes avant de la cuire."
+            ],
+            "t-portions": "personnes",
+            "title": "Pâte magique",
+            "type": 1,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 2,
+            "id": 45,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        1,
+                        "blé"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        12,
+                        10,
+                        "tiède"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        11,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Mélanger les ingrédients dans un saladier les ingrédients avec des baguettes. Cela doit donner une sorte de crumble.",
+                "Pétrir à la main jusqu'à obtenir une boule lisse.",
+                "Mettre la boule dans un sac congélation et l'aplatir avec un rouleau à pâtisserie. On ne l'étale surtout pas.",
+                "Répéter l'opération 7 fois.",
+                "Laisser reposer au moins 2 heures à température ambiante.",
+                "Fleurer un plan avec de la fécule et abaisser la pâte à 2mm. La replier en 3, tout en fleurant, et faire des lanières de 2mm.",
+                "Faire cuire dans une eau bouillante pendant 15 min.",
+                "Mettre dans une eau glacée pour stopper la cuisson."
+            ],
+            "t-portions": "personnes",
+            "title": "Udon",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 1,
+            "duration": 1,
+            "id": 46,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        1,
+                        "blé, T65"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        2,
+                        2,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        11,
+                        34,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        9,
+                        57,
+                        "noires"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        29,
+                        64,
+                        "pelées"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        29,
+                        108,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        11,
+                        107,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        95,
+                        "sec"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        12,
+                        56,
+                        "olive"
+                    ]
+                ]
+            ],
+            "notes": "- Mettre une boîte de thon",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Mixer tous les ingrédients avec un mixeur à pied mais mettre de côté la levure et les olives.",
+                "Ajouter les 2 ingrédients manquants et mélanger à la cuillère.",
+                "Faire cuire au four pendent 40 minutes à 180°C."
+            ],
+            "t-portions": "cake",
+            "title": "Cake tomate parmesan",
+            "type": 2,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            45
+            49
         ],
         [
             2,
             "Ø",
-            63
+            70
         ],
         [
             3,
@@ -3661,7 +4135,7 @@
         [
             5,
             "cas",
-            38
+            46
         ],
         [
             6,
@@ -3681,22 +4155,22 @@
         [
             9,
             "boîte",
-            3
+            4
         ],
         [
             10,
             "cac",
-            8
+            15
         ],
         [
             11,
             "sachet",
-            5
+            7
         ],
         [
             12,
             "ml",
-            10
+            12
         ],
         [
             13,
@@ -3731,12 +4205,12 @@
         [
             21,
             "paquet",
-            1
+            2
         ],
         [
             22,
             "poignée",
-            1
+            2
         ],
         [
             23,
@@ -3762,6 +4236,16 @@
             27,
             "boule",
             1
+        ],
+        [
+            28,
+            "df",
+            0
+        ],
+        [
+            29,
+            "petite boîte",
+            2
         ]
     ]
 }
