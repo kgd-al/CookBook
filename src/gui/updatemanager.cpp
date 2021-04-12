@@ -280,7 +280,7 @@ private:
       storage()->target =
         LIBMTP_Get_Filemetadata(device()->device, file->item_id);
       auto newSize = target()->filesize;
-      auto expectedSize = localFileInfo().size();
+      decltype(newSize) expectedSize = localFileInfo().size();
       Q_ASSERT(newSize == expectedSize);
       updateState(nullptr);
     }
@@ -479,7 +479,7 @@ UpdateManager::UpdateManager(QWidget *parent) : QDialog(parent) {
 
   auto &settings = localSettings(this);
   gui::restoreGeometry(this, settings);
-  _splitter->restoreState(settings.value("splitter").toByteArray());
+  gui::restore(settings, "splitter", _splitter);
   _scale->setValue(settings.value("scale", 1).toFloat());
 
   connect(_scale, &QDoubleSpinBox::editingFinished,
@@ -647,7 +647,7 @@ UpdateManager::process(ProgressLabel *monitor, float progress,
 void UpdateManager::closeEvent(QCloseEvent *e) {
   auto &settings = localSettings(this);
   gui::saveGeometry(this, settings);
-  settings.setValue("splitter", _splitter->saveState());
+  gui::save(settings, "splitter", _splitter);
   QDialog::closeEvent(e);
 }
 

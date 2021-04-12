@@ -268,6 +268,7 @@ Recipe::Recipe(QWidget *parent) : QDialog(parent) {
       nlayout->addWidget(new QLabel ("Notes:"));
       _notes = new QTextEdit;
       _notes->setMinimumWidth(100);
+      _notes->setTextInteractionFlags(Qt::LinksAccessibleByMouse);  /// TODO Does not seem to work
       nlayout->addWidget(_notes);
     nholder->setLayout(nlayout);
 

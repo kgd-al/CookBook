@@ -309,9 +309,10 @@ QVariant PlanningModel::data (const QModelIndex &i, int role) const {
   }
 
 
-  default:
-    return QVariant();
+  default: break;
   }
+
+  return QVariant();
 }
 
 #ifndef Q_OS_ANDROID

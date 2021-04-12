@@ -223,9 +223,9 @@ struct RecipeFilter : public QSortFilterProxyModel {
 
 //    auto q = qDebug().nospace();
 
-//#define TEST(NAME) \
-//  q << #NAME << " [" << (NAME? "on " : "off") << "]: " << NAME.data
-
+/*#define TEST(NAME) \
+  q << #NAME << " [" << (NAME? "on " : "off") << "]: " << NAME.data
+*/
 //    TEST(title) << " !C " << r.title << "? " << !r.title.contains(title.data)
 //                << "\n";
     if (title && !title.data.isEmpty()
