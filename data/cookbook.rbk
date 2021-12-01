@@ -4,13 +4,13 @@
             1,
             "farine",
             3,
-            15
+            20
         ],
         [
             2,
             "oeuf",
             1,
-            11
+            13
         ],
         [
             3,
@@ -52,19 +52,19 @@
             9,
             "sauce soja",
             5,
-            5
+            6
         ],
         [
             10,
             "eau",
             6,
-            11
+            16
         ],
         [
             11,
             "sel",
             5,
-            13
+            14
         ],
         [
             13,
@@ -88,7 +88,7 @@
             18,
             "champignon",
             2,
-            4
+            5
         ],
         [
             19,
@@ -136,13 +136,13 @@
             31,
             "sucre",
             4,
-            12
+            16
         ],
         [
             32,
             "beurre",
             9,
-            6
+            8
         ],
         [
             33,
@@ -154,13 +154,13 @@
             34,
             "levure",
             5,
-            5
+            7
         ],
         [
             36,
             "avoine",
             3,
-            2
+            3
         ],
         [
             37,
@@ -172,7 +172,7 @@
             38,
             "noix de coco",
             2,
-            1
+            2
         ],
         [
             39,
@@ -190,7 +190,7 @@
             41,
             "bouillon",
             6,
-            2
+            3
         ],
         [
             42,
@@ -220,7 +220,7 @@
             46,
             "carotte",
             2,
-            4
+            5
         ],
         [
             47,
@@ -244,7 +244,7 @@
             50,
             "ail",
             2,
-            7
+            6
         ],
         [
             51,
@@ -268,13 +268,13 @@
             54,
             "semoule",
             3,
-            2
+            3
         ],
         [
             56,
             "huile",
             9,
-            21
+            23
         ],
         [
             57,
@@ -286,13 +286,13 @@
             58,
             "chou",
             2,
-            1
+            2
         ],
         [
             59,
             "porc",
             1,
-            2
+            3
         ],
         [
             60,
@@ -364,7 +364,7 @@
             71,
             "courgette",
             2,
-            2
+            3
         ],
         [
             72,
@@ -472,19 +472,19 @@
             93,
             "graine de lupin",
             2,
-            1
+            0
         ],
         [
             94,
             "coulis de tomates",
             2,
-            1
+            0
         ],
         [
             95,
             "origan",
             2,
-            2
+            1
         ],
         [
             96,
@@ -532,7 +532,7 @@
             104,
             "fromage",
             8,
-            1
+            2
         ],
         [
             105,
@@ -568,7 +568,7 @@
             110,
             "canelle",
             5,
-            1
+            2
         ],
         [
             112,
@@ -604,6 +604,54 @@
             118,
             "sauce d'huître",
             5,
+            1
+        ],
+        [
+            119,
+            "basilic",
+            2,
+            1
+        ],
+        [
+            120,
+            "cacahuète",
+            7,
+            1
+        ],
+        [
+            121,
+            "fruit",
+            2,
+            1
+        ],
+        [
+            122,
+            "merguez",
+            1,
+            1
+        ],
+        [
+            123,
+            "raisin",
+            2,
+            1
+        ],
+        [
+            124,
+            "amande",
+            7,
+            1
+        ],
+        [
+            125,
+            "gingembre",
+            2,
+            1
+        ],
+        [
+            129,
+            "rhum",
+            10,
             1
         ]
     ],
@@ -1080,8 +1128,8 @@
                 [
                     0,
                     [
-                        60,
-                        1,
+                        120,
+                        2,
                         31,
                         "poudre"
                     ]
@@ -1134,7 +1182,7 @@
             ],
             "notes": "- Mettre du sucre vanillé pour plus de goût.",
             "regimen": 2,
-            "status": 2,
+            "status": 3,
             "steps": [
                 "Mélanger les ingrédients secs (farine, sucre, levure, sel) dans un saladier.",
                 "Ajouter et mélanger les oeufs et le beurre jusqu'à obtenir une pâte homogène.",
@@ -1313,7 +1361,7 @@
             "t-portions": "yaourts",
             "title": "Yaourts natures",
             "type": 1,
-            "used": 3
+            "used": 4
         },
         {
             "basic": true,
@@ -2992,7 +3040,7 @@
                     ]
                 ]
             ],
-            "notes": "- A dégustre avec une salade.",
+            "notes": "- A déguster avec une salade.",
             "regimen": 1,
             "status": 3,
             "steps": [
@@ -3093,99 +3141,6 @@
             ],
             "t-portions": "personnes",
             "title": "Salade de pommes de terre et de harengs fumés",
-            "type": 2,
-            "used": 0
-        },
-        {
-            "basic": false,
-            "d-portions": 6,
-            "duration": 1,
-            "id": 35,
-            "ing": [
-                [
-                    0,
-                    [
-                        1,
-                        23,
-                        93,
-                        ""
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        24,
-                        94,
-                        "petite"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        2,
-                        2,
-                        ""
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        7,
-                        3,
-                        ""
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        2,
-                        5,
-                        56,
-                        ""
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        3,
-                        19,
-                        50,
-                        ""
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        5,
-                        95,
-                        "lyophilisé"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        5,
-                        68,
-                        "lyophilisé"
-                    ]
-                ]
-            ],
-            "notes": "- trouver un bon accompagnement",
-            "regimen": 2,
-            "status": 2,
-            "steps": [
-                "Bien rincer et faire cuire les graines de lupin pendant une heure (sans sel).",
-                "Mixer tous les ingrédients avec un mixeur plongeant.",
-                "Mettre dans des timbales.",
-                "Faire cuire 30 minutes au four au bain-marie à 180°C (thermostat 4.5)."
-            ],
-            "t-portions": "timbales",
-            "title": "Timbales de graines de lupin à la tomate",
             "type": 2,
             "used": 0
         },
@@ -3850,23 +3805,6 @@
             "used": 0
         },
         {
-            "basic": false,
-            "d-portions": 0,
-            "duration": 1,
-            "id": 43,
-            "ing": [
-            ],
-            "notes": "",
-            "regimen": 1,
-            "status": 1,
-            "steps": [
-            ],
-            "t-portions": "",
-            "title": "Poudre de pinrlinpinpin",
-            "type": 1,
-            "used": 0
-        },
-        {
             "basic": true,
             "d-portions": 2,
             "duration": 1,
@@ -4109,18 +4047,651 @@
             "title": "Cake tomate parmesan",
             "type": 2,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 47,
+            "ing": [
+                [
+                    0,
+                    [
+                        1,
+                        30,
+                        119,
+                        "frais"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        120,
+                        "grillées"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        104,
+                        "parmesan,poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        4,
+                        5,
+                        56,
+                        "olive"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Tout mixer."
+            ],
+            "t-portions": "personnes",
+            "title": "Sauce pesto",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 48,
+            "ing": [
+                [
+                    0,
+                    [
+                        1,
+                        7,
+                        54,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        300,
+                        1,
+                        41,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Mettre le bouillon dans une boîte et le faire bouillir au micro-ondes.\n",
+                "Rajouter la semoule, fermer la boîte et attendre 5 minutes."
+            ],
+            "t-portions": "personnes",
+            "title": "Semoule",
+            "type": 2,
+            "used": 1
+        },
+        {
+            "basic": false,
+            "d-portions": 4,
+            "duration": 1,
+            "id": 49,
+            "ing": [
+                [
+                    0,
+                    [
+                        500,
+                        1,
+                        121,
+                        "frais"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        125,
+                        1,
+                        1,
+                        "T65"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        125,
+                        1,
+                        32,
+                        "demi-sel"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        60,
+                        2,
+                        36,
+                        "flocons"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        125,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        110,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        22,
+                        38,
+                        "râpée"
+                    ]
+                ]
+            ],
+            "notes": "- Le beurre doit être à temprérature ambiante.",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Mettre la farine, le beurre mou, l'avoine, le sucre, la canelle et la nois de coco dans un saladier.",
+                "Effriter avec les doigts jusqu'à obtenir des petites boules.",
+                "Mettre les fruits coupés en dès (pas trop petits) au fond du moule à gâteau.",
+                "Mettre le mélange obtenu au-dessus sur les fruits.",
+                "Mettre au four 30min à 180°C."
+            ],
+            "t-portions": "personnes",
+            "title": "Crumble aux flocons d'avoine et au fruits",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 2,
+            "id": 50,
+            "ing": [
+                [
+                    0,
+                    [
+                        600,
+                        12,
+                        10,
+                        "salée"
+                    ]
+                ],
+                [
+                    1,
+                    48
+                ],
+                [
+                    0,
+                    [
+                        6,
+                        2,
+                        122,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        71,
+                        "cubes"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        22,
+                        123,
+                        "sec"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        68,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- Eventuellement, rajouter de la tomate.",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Mettre les merguez et les courgettes coupées en cubes dans 600 ml d'eau salée.",
+                "Faire la semoule avec 300ml du bouillon obtenu.",
+                "Couper les merguez zn rondelles.",
+                "Mettre les raisins secs à tremper dans du bouillon.",
+                "Faire revenir le tout dans une poële avec un peur de thym."
+            ],
+            "t-portions": "personnes",
+            "title": "Merguez, semoule, courgettes et raisins secs",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 4,
+            "duration": 1,
+            "id": 52,
+            "ing": [
+                [
+                    1,
+                    11
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        31,
+                        1,
+                        "T65"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        2,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        31,
+                        124,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        31,
+                        56,
+                        "colza"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        11,
+                        34,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        11,
+                        31,
+                        "vanillé"
+                    ]
+                ]
+            ],
+            "notes": "- 1 pot de yaourt de 125g",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Tout mélanger dans un saladier.",
+                "Faire cuire au four pendant 30min à 180°C."
+            ],
+            "t-portions": "parts",
+            "title": "Gâteau au yaourt de Timoté",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 2,
+            "duration": 2,
+            "id": 53,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        1,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        2,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        10,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- Mettre de l'eau à l'oeil selon le type de farine",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Mettre la farine dans un saladier.",
+                "Mettre un oeuf et effriter avec de la farine.",
+                "Ajouter de l'eau petit à petit jusqu'à obtenir une boule de pâte lisse.",
+                "Couper les pâtes avec la machine et les faire cuire 10min dans un grand volume d'eau salée."
+            ],
+            "t-portions": "personnes",
+            "title": "Pâtes maison",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 0,
+            "duration": 1,
+            "id": 54,
+            "ing": [
+            ],
+            "notes": "",
+            "regimen": 1,
+            "status": 1,
+            "steps": [
+            ],
+            "t-portions": "",
+            "title": "Poudre de pinrlinpinpin",
+            "type": 1,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 24,
+            "duration": 2,
+            "id": 55,
+            "ing": [
+                [
+                    2,
+                    "Pour la pâte :"
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        1,
+                        "T65"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        10,
+                        32,
+                        10,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ],
+                [
+                    2,
+                    "Pour la farce :"
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        1,
+                        59,
+                        "haché"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        46,
+                        "moyenne, hachée"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        22,
+                        58,
+                        "haché"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        18,
+                        "moyen, frais, haché"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        26,
+                        125,
+                        "frais, haché"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        56,
+                        "sésame"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        9,
+                        ""
+                    ]
+                ],
+                [
+                    2,
+                    "Pour la cuisson :"
+                ],
+                [
+                    0,
+                    [
+                        10,
+                        32,
+                        10,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- A manger avec de la sauce douce piquante",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Faire la pâte en mettant la farine et le sel dans un saladier et en ajoutant petit à petit l'eau. Bien pétrir. Laisser reposer une heure au moins.",
+                "Faire la farce en hachant tout dans un mixeur.",
+                "Diviser la boule de pâte en 24 et les passer dans la machine à pâte (position 8).",
+                "Prendre chaque morceau de pâte et les garnir d'une cuillère à café de farce et faire des ravioli.",
+                "Mettre les ravioli dans une poële huilée et commencer à les faire griller.",
+                "Ajouter les 10cl d'eau et couvrir les gyozas. Baisser le feu à moyen et les cuire 10 minutes jusqu'à l'évaporation totale de l'eau."
+            ],
+            "t-portions": "gyozas",
+            "title": "Gyozas",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 6,
+            "duration": 2,
+            "id": 56,
+            "ing": [
+                [
+                    2,
+                    "Pour le gâteau :"
+                ],
+                [
+                    0,
+                    [
+                        120,
+                        1,
+                        1,
+                        "T65"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        150,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        2,
+                        2,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        1,
+                        32,
+                        "salé"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        5,
+                        3,
+                        "tiède"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        11,
+                        34,
+                        "chimique"
+                    ]
+                ],
+                [
+                    2,
+                    "Pour le sirop :"
+                ],
+                [
+                    0,
+                    [
+                        25,
+                        32,
+                        10,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        10,
+                        32,
+                        129,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        25,
+                        32,
+                        31,
+                        "canne, liquide"
+                    ]
+                ]
+            ],
+            "notes": "- Avec une bombe de chantilly\n- Avec des fruits frais",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Blanchir les jaunes d'oeufs et le sucre.\n",
+                "Ajouter le lait tiède, le beurre fondu, la farine et la levure.",
+                "Battre les blancs en neige et les ajouter à la pâte.",
+                "Faire cuire à 180°C pendant 25 minutes."
+            ],
+            "t-portions": "personnes",
+            "title": "Baba au rhum",
+            "type": 3,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            49
+            59
         ],
         [
             2,
             "Ø",
-            70
+            80
         ],
         [
             3,
@@ -4130,12 +4701,12 @@
         [
             4,
             "pincée",
-            13
+            15
         ],
         [
             5,
             "cas",
-            46
+            47
         ],
         [
             6,
@@ -4160,17 +4731,17 @@
         [
             10,
             "cac",
-            15
+            17
         ],
         [
             11,
             "sachet",
-            7
+            10
         ],
         [
             12,
             "ml",
-            12
+            13
         ],
         [
             13,
@@ -4200,7 +4771,7 @@
         [
             19,
             "gousse",
-            3
+            2
         ],
         [
             21,
@@ -4210,17 +4781,17 @@
         [
             22,
             "poignée",
-            2
+            5
         ],
         [
             23,
             "bocal",
-            1
+            0
         ],
         [
             24,
             "brique",
-            1
+            0
         ],
         [
             25,
@@ -4230,7 +4801,7 @@
         [
             26,
             "rondelle",
-            1
+            2
         ],
         [
             27,
@@ -4246,6 +4817,21 @@
             29,
             "petite boîte",
             2
+        ],
+        [
+            30,
+            "bouquet",
+            1
+        ],
+        [
+            31,
+            "pot",
+            3
+        ],
+        [
+            32,
+            "cl",
+            5
         ]
     ]
 }
