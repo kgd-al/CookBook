@@ -136,13 +136,13 @@
             31,
             "sucre",
             4,
-            16
+            17
         ],
         [
             32,
             "beurre",
             9,
-            8
+            9
         ],
         [
             33,
@@ -328,7 +328,7 @@
             65,
             "pomme",
             2,
-            2
+            4
         ],
         [
             66,
@@ -1427,7 +1427,7 @@
             "t-portions": "pâte",
             "title": "Pâte à tarte",
             "type": 1,
-            "used": 1
+            "used": 2
         },
         {
             "basic": true,
@@ -4680,18 +4680,81 @@
             "title": "Baba au rhum",
             "type": 3,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 6,
+            "duration": 1,
+            "id": 57,
+            "ing": [
+                [
+                    1,
+                    12
+                ],
+                [
+                    0,
+                    [
+                        4,
+                        2,
+                        65,
+                        "grosse"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        300,
+                        1,
+                        65,
+                        "compote"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        40,
+                        1,
+                        32,
+                        "salé"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        22,
+                        31,
+                        "poudre, canne"
+                    ]
+                ]
+            ],
+            "notes": "- Ajouter de la cannelle",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Sortir la pâte à tarte du frigo losqu'elle est bien froide.",
+                "Etaler de la compote comme fond de tarte.",
+                "Mettre par-dessus les pommes coupées en lamelles. Elles doivent tout recouvrir.",
+                "Ajouter le beurre en petits cubes de manière aléatoire sur les lamelles.",
+                "Finir en saupoudrant de sucre.",
+                "Mettre au four à 190°C pendant au moins 45 minutes voire une heure jusqu'à ce qu'elle soit bien dorée."
+            ],
+            "t-portions": "personnes",
+            "title": "Tarte aux pommes",
+            "type": 3,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            59
+            61
         ],
         [
             2,
             "Ø",
-            80
+            81
         ],
         [
             3,
@@ -4781,7 +4844,7 @@
         [
             22,
             "poignée",
-            5
+            6
         ],
         [
             23,
