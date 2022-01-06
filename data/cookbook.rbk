@@ -4,19 +4,19 @@
             1,
             "farine",
             3,
-            20
+            25
         ],
         [
             2,
             "oeuf",
             1,
-            13
+            17
         ],
         [
             3,
             "lait",
             8,
-            10
+            12
         ],
         [
             4,
@@ -52,19 +52,19 @@
             9,
             "sauce soja",
             5,
-            6
+            7
         ],
         [
             10,
             "eau",
             6,
-            16
+            20
         ],
         [
             11,
             "sel",
             5,
-            14
+            15
         ],
         [
             13,
@@ -88,7 +88,7 @@
             18,
             "champignon",
             2,
-            5
+            6
         ],
         [
             19,
@@ -106,7 +106,7 @@
             26,
             "mirin",
             6,
-            1
+            2
         ],
         [
             27,
@@ -136,13 +136,13 @@
             31,
             "sucre",
             4,
-            17
+            19
         ],
         [
             32,
             "beurre",
             9,
-            9
+            11
         ],
         [
             33,
@@ -154,7 +154,7 @@
             34,
             "levure",
             5,
-            7
+            8
         ],
         [
             36,
@@ -220,7 +220,7 @@
             46,
             "carotte",
             2,
-            5
+            6
         ],
         [
             47,
@@ -274,7 +274,7 @@
             56,
             "huile",
             9,
-            23
+            24
         ],
         [
             57,
@@ -328,7 +328,7 @@
             65,
             "pomme",
             2,
-            4
+            5
         ],
         [
             66,
@@ -406,7 +406,7 @@
             79,
             "crème fraîche",
             9,
-            2
+            3
         ],
         [
             80,
@@ -580,7 +580,7 @@
             113,
             "pâte",
             3,
-            1
+            2
         ],
         [
             114,
@@ -640,7 +640,7 @@
             124,
             "amande",
             7,
-            1
+            2
         ],
         [
             125,
@@ -652,6 +652,18 @@
             129,
             "rhum",
             10,
+            1
+        ],
+        [
+            130,
+            "ciboule",
+            2,
+            1
+        ],
+        [
+            131,
+            "vanille",
+            5,
             1
         ]
     ],
@@ -3581,7 +3593,7 @@
         },
         {
             "basic": true,
-            "d-portions": 6,
+            "d-portions": 4,
             "duration": 1,
             "id": 41,
             "ing": [
@@ -4278,6 +4290,15 @@
                         68,
                         ""
                     ]
+                ],
+                [
+                    0,
+                    [
+                        300,
+                        12,
+                        10,
+                        ""
+                    ]
                 ]
             ],
             "notes": "- Eventuellement, rajouter de la tomate.",
@@ -4418,23 +4439,6 @@
             "t-portions": "personnes",
             "title": "Pâtes maison",
             "type": 2,
-            "used": 0
-        },
-        {
-            "basic": false,
-            "d-portions": 0,
-            "duration": 1,
-            "id": 54,
-            "ing": [
-            ],
-            "notes": "",
-            "regimen": 1,
-            "status": 1,
-            "steps": [
-            ],
-            "t-portions": "",
-            "title": "Poudre de pinrlinpinpin",
-            "type": 1,
             "used": 0
         },
         {
@@ -4743,18 +4747,423 @@
             "title": "Tarte aux pommes",
             "type": 3,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 58,
+            "ing": [
+                [
+                    2,
+                    "Pour 1 grande galette :"
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        1,
+                        "T65"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        20,
+                        32,
+                        10,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        400,
+                        1,
+                        18,
+                        "émincés"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        1,
+                        46,
+                        "râpées"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        1,
+                        130,
+                        "emincé"
+                    ]
+                ],
+                [
+                    2,
+                    "Pour la sauce : "
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        9,
+                        "salée"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        26,
+                        "vinaigre de riz"
+                    ]
+                ]
+            ],
+            "notes": "- remplacer la ciboule par un petit oignon",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+            ],
+            "t-portions": "personnes",
+            "title": "Crêpe coréenne aux champignons (Beoseot-jeon)",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 60,
+            "ing": [
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+            ],
+            "t-portions": "personnes",
+            "title": "Pâtes chèvre et tomate",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 61,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        1,
+                        "T65, T110"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        2,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        7,
+                        10,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Effriter l'oeuf avec la farine.",
+                "Ajouter de l'eau jusqu'à former une boule de pâte lisse.",
+                "Fariner la pâte et la passer dans la machine à pâtes (cran 5, 6).",
+                "Bien séparer les pâtes et les réserver dans un plat.",
+                "Faire cuire pendant 10 minutes dans un grand volume d'eau bouillante bien salée."
+            ],
+            "t-portions": "personnes",
+            "title": "Pâtes",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 62,
+            "ing": [
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        113,
+                        "feuilletées"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        124,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        2,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        75,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        75,
+                        1,
+                        32,
+                        "salé, mou"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        79,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- Les zestes et le jus d'une orange",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Melanger tous les ingrédients de la farce.",
+                "Dans un moule à tarte mettre la première pâte feuilletée.",
+                "Verser la frangipane.",
+                "Mettre la seconde pâte feuilletée. Décorer avec une lame de rasoir. Dorer avec un oeuf battu ou du lait.",
+                "Faire cuire pendant 30 minutes à 180°C."
+            ],
+            "t-portions": "personnes",
+            "title": "Galette des rois",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 6,
+            "duration": 1,
+            "id": 63,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        1,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        125,
+                        2,
+                        32,
+                        "salé, mou"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        2,
+                        2,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        5,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        11,
+                        34,
+                        "chimique"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        14,
+                        131,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        4,
+                        2,
+                        65,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Eplucher les pommes et les couper en gros morceaux.",
+                "Mélanger tous les autres ingrédients dans une jatte.",
+                "Ajouter les pommes.",
+                "Verser la pâte dans un moule à manqué et mettre au  four à 180°C pendant 45 minutes."
+            ],
+            "t-portions": "parts",
+            "title": "Gâteau de Mme Milasso",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 6,
+            "duration": 2,
+            "id": 64,
+            "ing": [
+                [
+                    0,
+                    [
+                        75,
+                        1,
+                        1,
+                        "blé noir"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        75,
+                        1,
+                        1,
+                        "T65, T80"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        2,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        25,
+                        32,
+                        10,
+                        "tiède ou froid"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        15,
+                        32,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        33,
+                        56,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Tout mettre dans une jatte et mixer au batteur électrique.",
+                "Laisser reposer au moins une heure."
+            ],
+            "t-portions": "galettes",
+            "title": "Galettes au sarrasin",
+            "type": 1,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            61
+            73
         ],
         [
             2,
             "Ø",
-            81
+            88
         ],
         [
             3,
@@ -4764,12 +5173,12 @@
         [
             4,
             "pincée",
-            15
+            16
         ],
         [
             5,
             "cas",
-            47
+            51
         ],
         [
             6,
@@ -4779,7 +5188,7 @@
         [
             7,
             "verre",
-            16
+            17
         ],
         [
             8,
@@ -4799,12 +5208,12 @@
         [
             11,
             "sachet",
-            10
+            11
         ],
         [
             12,
             "ml",
-            13
+            14
         ],
         [
             13,
@@ -4814,7 +5223,7 @@
         [
             14,
             "pointe",
-            5
+            6
         ],
         [
             15,
@@ -4894,7 +5303,12 @@
         [
             32,
             "cl",
-            5
+            8
+        ],
+        [
+            33,
+            "cs",
+            1
         ]
     ]
 }
