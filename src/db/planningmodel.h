@@ -60,8 +60,8 @@ public:
 
   QModelIndex todayOrLatter (void) const;
 
-private:
   struct Data;
+private:
   using Data_ptr = QSharedPointer<Data>;
   QList<Data_ptr> _data;
 

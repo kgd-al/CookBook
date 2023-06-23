@@ -22,6 +22,8 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 
+#include <QCloseEvent>
+
 #ifdef Q_OS_ANDROID
 #include <QScroller>
 #include "androidspecifics.hpp"

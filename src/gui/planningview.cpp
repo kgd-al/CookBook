@@ -9,6 +9,7 @@
 #include <QInputDialog>
 #include <QJsonArray>
 #include <QScroller>
+#include <QWheelEvent>
 
 #include "planningview.h"
 #include "gui_recipe.h"

@@ -3,6 +3,8 @@
 #include <QJsonDocument>
 #include <QMessageBox>
 
+#include <QFile>
+
 #include "book.h"
 #include "recipesmodel.h"
 #include "settings.h"

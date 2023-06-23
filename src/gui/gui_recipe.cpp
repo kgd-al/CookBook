@@ -12,6 +12,9 @@
 #include <QInputDialog>
 #include <QMessageBox>
 
+#include <QKeyEvent>
+#include <QCloseEvent>
+
 #ifdef Q_OS_ANDROID
 #include <QtAndroidExtras>
 #include "androidspecifics.hpp"

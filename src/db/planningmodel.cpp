@@ -95,7 +95,7 @@ struct PlanningModel::Data {
       return lhs.text < rhs.text;
     }
 
-    bool operator() (const Item::ptr_t &lhs, const Item::ptr_t &rhs) {
+    bool operator() (const Item::ptr_t &lhs, const Item::ptr_t &rhs) const {
       if (lhs->type() != rhs->type()) return lhs->type() < rhs->type();
 
       else if (lhs->type() == Item::RECIPE)
