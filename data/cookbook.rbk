@@ -4,13 +4,13 @@
             1,
             "farine",
             3,
-            25
+            26
         ],
         [
             2,
             "oeuf",
             1,
-            17
+            18
         ],
         [
             3,
@@ -40,7 +40,7 @@
             7,
             "noix",
             7,
-            1
+            2
         ],
         [
             8,
@@ -136,13 +136,13 @@
             31,
             "sucre",
             4,
-            19
+            20
         ],
         [
             32,
             "beurre",
             9,
-            11
+            12
         ],
         [
             33,
@@ -166,7 +166,7 @@
             37,
             "cacao",
             5,
-            1
+            2
         ],
         [
             38,
@@ -664,6 +664,12 @@
             131,
             "vanille",
             5,
+            1
+        ],
+        [
+            132,
+            "chocolat",
+            4,
             1
         ]
     ],
@@ -5152,18 +5158,105 @@
             "title": "Galettes au sarrasin",
             "type": 1,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 9,
+            "duration": 1,
+            "id": 65,
+            "ing": [
+                [
+                    0,
+                    [
+                        150,
+                        1,
+                        132,
+                        "dessert"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        150,
+                        1,
+                        32,
+                        "salé"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        85,
+                        1,
+                        1,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        1,
+                        37,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        2,
+                        2,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        180,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        125,
+                        1,
+                        7,
+                        "haché"
+                    ]
+                ]
+            ],
+            "notes": "- 2 cuissons possibles :\n1) 40 minutes à 160°C\n2) 20 minutes à 220°C",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Faire fondre le beurre et le chocolat ensemble.",
+                "Dans un autre saladier, tamiser la farine et le cacao.",
+                "Dans un troisième saladier, passer au batteur électrique les oeufs et le sucre jusqu'à ce que le mélange soit mousseux et ait doublé.",
+                "Incorporer le chocolat et le beurre fondus au mélange précédant.",
+                "Incorporer les poudres ensuite.",
+                "Mettre les noix dans le mélange.",
+                "Mettre dans un moule carré et faire cuire au four."
+            ],
+            "t-portions": "parts",
+            "title": "Brownie",
+            "type": 3,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            74
+            80
         ],
         [
             2,
             "Ø",
-            87
+            88
         ],
         [
             3,
