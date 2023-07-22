@@ -10,7 +10,7 @@
             2,
             "oeuf",
             1,
-            18
+            19
         ],
         [
             3,
@@ -22,7 +22,7 @@
             4,
             "yaourt",
             8,
-            1
+            2
         ],
         [
             5,
@@ -52,7 +52,7 @@
             9,
             "sauce soja",
             5,
-            7
+            8
         ],
         [
             10,
@@ -136,7 +136,7 @@
             31,
             "sucre",
             4,
-            20
+            21
         ],
         [
             32,
@@ -292,7 +292,7 @@
             59,
             "porc",
             1,
-            3
+            4
         ],
         [
             60,
@@ -340,7 +340,7 @@
             67,
             "vinaigre",
             5,
-            2
+            3
         ],
         [
             68,
@@ -670,6 +670,12 @@
             132,
             "chocolat",
             4,
+            1
+        ],
+        [
+            133,
+            "ketchup",
+            5,
             1
         ]
     ],
@@ -1445,7 +1451,7 @@
             "t-portions": "pâte",
             "title": "Pâte à tarte",
             "type": 1,
-            "used": 2
+            "used": 3
         },
         {
             "basic": true,
@@ -5245,18 +5251,124 @@
             "title": "Brownie",
             "type": 3,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 66,
+            "ing": [
+                [
+                    0,
+                    [
+                        4,
+                        5,
+                        133,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        4,
+                        5,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        5,
+                        67,
+                        "riz"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        5,
+                        9,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- Remplacer le vinaigre de riz par du vinaigre de vin blanc",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Mélanger tous les ingrédients dans un poële (idéalement le même qui a cuit la viande au préalable) et cuire jusqu'à ce que le sucre fonde. Rajouter la viande."
+            ],
+            "t-portions": "personnes",
+            "title": "Sauce aigre douce",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 6,
+            "duration": 1,
+            "id": 67,
+            "ing": [
+                [
+                    1,
+                    12
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        59,
+                        "poitrine nature ou fumée"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        300,
+                        1,
+                        4,
+                        "nature ou à la grecque"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        2,
+                        2,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Faire revenir le porc jusqu'à ce qu'il soit bien grillé.",
+                "Mélanger tous les autres ingédients puis ajouter les morceaux de porc sans oublier le gras.",
+                "Sortir la pâte à tarte au dernier moment du réfrigérateur et mettre l'appareil dedans.",
+                "Enfourner à 180°C pendant 45 minutes."
+            ],
+            "t-portions": "parts",
+            "title": "Quiche",
+            "type": 2,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            80
+            82
         ],
         [
             2,
             "Ø",
-            88
+            89
         ],
         [
             3,
@@ -5271,7 +5383,7 @@
         [
             5,
             "cas",
-            51
+            55
         ],
         [
             6,
