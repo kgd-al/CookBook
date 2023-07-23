@@ -52,7 +52,7 @@
             9,
             "sauce soja",
             5,
-            8
+            9
         ],
         [
             10,
@@ -64,7 +64,7 @@
             11,
             "sel",
             5,
-            16
+            17
         ],
         [
             13,
@@ -136,7 +136,7 @@
             31,
             "sucre",
             4,
-            21
+            22
         ],
         [
             32,
@@ -274,7 +274,7 @@
             56,
             "huile",
             9,
-            25
+            27
         ],
         [
             57,
@@ -469,18 +469,6 @@
             2
         ],
         [
-            93,
-            "graine de lupin",
-            2,
-            0
-        ],
-        [
-            94,
-            "coulis de tomates",
-            2,
-            0
-        ],
-        [
             95,
             "origan",
             2,
@@ -509,12 +497,6 @@
             "pain à burger",
             3,
             1
-        ],
-        [
-            100,
-            "steaks hachés",
-            1,
-            0
         ],
         [
             102,
@@ -568,18 +550,6 @@
             110,
             "canelle",
             5,
-            2
-        ],
-        [
-            112,
-            "pâte",
-            3,
-            0
-        ],
-        [
-            113,
-            "pâte",
-            3,
             2
         ],
         [
@@ -681,6 +651,36 @@
         [
             134,
             "polenta",
+            3,
+            1
+        ],
+        [
+            135,
+            "aubergine",
+            2,
+            1
+        ],
+        [
+            136,
+            "miso",
+            5,
+            1
+        ],
+        [
+            137,
+            "coriandre",
+            2,
+            1
+        ],
+        [
+            138,
+            "sésame",
+            7,
+            1
+        ],
+        [
+            139,
+            "pâte",
             3,
             1
         ]
@@ -3677,7 +3677,7 @@
                     [
                         200,
                         1,
-                        113,
+                        139,
                         "capellini"
                     ]
                 ],
@@ -4931,7 +4931,7 @@
                     [
                         2,
                         2,
-                        113,
+                        139,
                         "feuilletées"
                     ]
                 ],
@@ -5432,6 +5432,121 @@
             "title": "Polenta",
             "type": 2,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 69,
+            "ing": [
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        135,
+                        "belles"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        56,
+                        "tournesol"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ],
+                [
+                    2,
+                    "Pour la sauce :"
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        136,
+                        "pâte"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        10,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        9,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        56,
+                        "sésame"
+                    ]
+                ],
+                [
+                    2,
+                    "Décoration :"
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        137,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        138,
+                        "graines"
+                    ]
+                ]
+            ],
+            "notes": "- Manger avec du riz blanc\n- La peau se mange !",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Couper les aubergines  en deux et faire des croisillons profonds à l'intérieur sans casser les aubergines.",
+                "Mettre deux pincées de sel fin à l'intérieur et les laisser dégorger pendant 10 minutes environ.",
+                "Faire la sauce pendant ce temps-là : bien mélanger tous les ingrédients.",
+                "Absorber le liquide les aubergines avec du papier essuie-tout.",
+                "Les faire griller à la poële bien chaude avec de l'huile de tournesol : commencer par la face avec les croisillons. Les aubergines doivent dorer.",
+                "Quand les deux faces sont bien cuites les mettre sur une plaque qui va au four.",
+                "Bien les badigeonner de sauce et bien insister sur les croisillons : on tout mettre.",
+                "Enfourner les aubergines pendant 10 min 220°C pour qu'elle caramélisent.",
+                "Les servir en mettant la décoration dessus."
+            ],
+            "t-portions": "personnes",
+            "title": "Aubergines Umami",
+            "type": 2,
+            "used": 0
         }
     ],
     "units": [
@@ -5443,7 +5558,7 @@
         [
             2,
             "Ø",
-            89
+            91
         ],
         [
             3,
@@ -5453,12 +5568,12 @@
         [
             4,
             "pincée",
-            17
+            18
         ],
         [
             5,
             "cas",
-            56
+            61
         ],
         [
             6,
@@ -5483,7 +5598,7 @@
         [
             10,
             "cac",
-            18
+            19
         ],
         [
             11,
@@ -5536,21 +5651,6 @@
             6
         ],
         [
-            23,
-            "bocal",
-            0
-        ],
-        [
-            24,
-            "brique",
-            0
-        ],
-        [
-            25,
-            "boules",
-            0
-        ],
-        [
             26,
             "rondelle",
             2
@@ -5559,11 +5659,6 @@
             27,
             "boule",
             1
-        ],
-        [
-            28,
-            "df",
-            0
         ],
         [
             29,
@@ -5589,11 +5684,6 @@
             33,
             "cs",
             1
-        ],
-        [
-            34,
-            "caf",
-            0
         ]
     ]
 }
