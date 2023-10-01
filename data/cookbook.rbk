@@ -4,7 +4,7 @@
             1,
             "farine",
             3,
-            26
+            27
         ],
         [
             2,
@@ -16,7 +16,7 @@
             3,
             "lait",
             8,
-            12
+            13
         ],
         [
             4,
@@ -58,13 +58,13 @@
             10,
             "eau",
             6,
-            21
+            22
         ],
         [
             11,
             "sel",
             5,
-            17
+            19
         ],
         [
             13,
@@ -136,7 +136,7 @@
             31,
             "sucre",
             4,
-            22
+            23
         ],
         [
             32,
@@ -160,13 +160,13 @@
             36,
             "avoine",
             3,
-            3
+            5
         ],
         [
             37,
             "cacao",
             5,
-            2
+            3
         ],
         [
             38,
@@ -220,7 +220,7 @@
             46,
             "carotte",
             2,
-            6
+            7
         ],
         [
             47,
@@ -256,7 +256,7 @@
             52,
             "miel",
             4,
-            2
+            3
         ],
         [
             53,
@@ -346,7 +346,7 @@
             68,
             "thym",
             2,
-            4
+            5
         ],
         [
             69,
@@ -586,13 +586,13 @@
             120,
             "cacahuète",
             7,
-            1
+            2
         ],
         [
             121,
             "fruit",
             2,
-            1
+            2
         ],
         [
             122,
@@ -682,6 +682,12 @@
             139,
             "pâte",
             3,
+            1
+        ],
+        [
+            140,
+            "légume",
+            2,
             1
         ]
     ],
@@ -3378,7 +3384,7 @@
                     ]
                 ]
             ],
-            "notes": "",
+            "notes": "- Remplacer la sauce moutarde par du beurre fondu avec des épices mexicaines.\n- Ajouter du fromage type gouda ou chèvre en tranches.",
             "regimen": 1,
             "status": 3,
             "steps": [
@@ -4696,7 +4702,9 @@
                 "Blanchir les jaunes d'oeufs et le sucre.\n",
                 "Ajouter le lait tiède, le beurre fondu, la farine et la levure.",
                 "Battre les blancs en neige et les ajouter à la pâte.",
-                "Faire cuire à 180°C pendant 25 minutes."
+                "Faire cuire à 180°C pendant 25 minutes.",
+                "Faire le sirop à la casserole et le faire réduire un peu.",
+                "Imbiber le gâteau de sirop, il doit tout absorber."
             ],
             "t-portions": "personnes",
             "title": "Baba au rhum",
@@ -5547,18 +5555,218 @@
             "title": "Aubergines Umami",
             "type": 2,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 4,
+            "duration": 1,
+            "id": 70,
+            "ing": [
+                [
+                    0,
+                    [
+                        100,
+                        1,
+                        36,
+                        "flocons"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        4,
+                        5,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        4,
+                        5,
+                        37,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        4,
+                        5,
+                        120,
+                        "beurre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        90,
+                        12,
+                        10,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- Attention à ne pas casser le mixeur...",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Tout mixer jusqu'à obtenir une boule pâteuse (type pâte de datte).",
+                "Faire des petites boules ou aplatie et faire des petits carrés.",
+                "Enfourner de 30 à 45 minutes à 150°C pour que les céréales déssèchent."
+            ],
+            "t-portions": "bols",
+            "title": "Céréales du matin au chocolat",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 1,
+            "duration": 1,
+            "id": 71,
+            "ing": [
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        36,
+                        "flocons"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        121,
+                        "bananes, poires, mangue fruits rouges, pomme..."
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        140,
+                        "épinards, pak-choï, tomate..."
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        6,
+                        3,
+                        "coco, vache, végétal"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        52,
+                        "optionel"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Mixer le tout et boire bien frais"
+            ],
+            "t-portions": "tasse",
+            "title": "Morning Smoothie",
+            "type": 1,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 3,
+            "duration": 1,
+            "id": 72,
+            "ing": [
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        46,
+                        "grosses"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        150,
+                        1,
+                        1,
+                        "à l'oeil"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        68,
+                        "séché"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ]
+            ],
+            "notes": "- On peut remplacer la farine par de la fécule. C'est plus joli mais c'est plus élastique.\n\n- On peut rajouter du cucrcuma pour une belle couleur orangée.\n\n- Peut se servir avec du beurre ou une sauce.\n\n- Idée de sauce : 2 cuillères à soupe de sauce soja, du paprika (ou poudre de chili), 1 cuillère à café de beurre d'arachide et 1 cuillère à soupe d'huile neutre. Faire chauffer le tout dans une casserole et rallonger avec de l'eau de cuisson des globules afin d'obtenir une sauce crémeuse (pas trop sèche mais pas une soupe non plus).",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Eplucher et couper les carottes en fines rondelles.",
+                "Les mettre dans une boîte qui va au micro-ondes entr'ouverte avec 20ml d'eau.",
+                "Les cuire dans celui-ci 7 minutes à 700 Watts.",
+                "Lorsque les carottes sont tendres, les réduire en purée avec le thym (prendre un mixeur plongeant).",
+                "Rajouter le sel et la farine petit à petit jusqu'à faire une belle boule de pâte pas collante.",
+                "Laisser reposer la pâte 10 minutes.",
+                "Pendant ce temps-là, mettre à bouillr une cocotte d'eau.",
+                "Faire des boules avec la pâte, les aplatir légèrement et appuyer au milieu avec son petit doigt afin de faire un globule. Faire des globules avec toute la pâte.",
+                "Mettre les globules à cuire dans l'eau bouillante pendant 5 minutes (ça varie selon la taille et le nombres de globules).",
+                "Les égoutter et servir."
+            ],
+            "t-portions": "personnes",
+            "title": "Globules de carottes",
+            "type": 2,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            84
+            86
         ],
         [
             2,
             "Ø",
-            91
+            94
         ],
         [
             3,
@@ -5568,17 +5776,17 @@
         [
             4,
             "pincée",
-            18
+            21
         ],
         [
             5,
             "cas",
-            61
+            65
         ],
         [
             6,
             "portion",
-            2
+            3
         ],
         [
             7,
@@ -5598,7 +5806,7 @@
         [
             10,
             "cac",
-            19
+            20
         ],
         [
             11,
@@ -5608,7 +5816,7 @@
         [
             12,
             "ml",
-            14
+            15
         ],
         [
             13,
