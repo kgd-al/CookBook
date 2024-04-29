@@ -4,7 +4,7 @@
             1,
             "farine",
             3,
-            27
+            29
         ],
         [
             2,
@@ -52,19 +52,19 @@
             9,
             "sauce soja",
             5,
-            9
+            10
         ],
         [
             10,
             "eau",
             6,
-            22
+            23
         ],
         [
             11,
             "sel",
             5,
-            19
+            20
         ],
         [
             13,
@@ -82,7 +82,7 @@
             17,
             "oignon",
             2,
-            16
+            17
         ],
         [
             18,
@@ -106,13 +106,13 @@
             26,
             "mirin",
             6,
-            2
+            3
         ],
         [
             27,
             "dashi",
             5,
-            1
+            2
         ],
         [
             28,
@@ -124,7 +124,7 @@
             29,
             "graine de courge",
             7,
-            1
+            2
         ],
         [
             30,
@@ -136,13 +136,13 @@
             31,
             "sucre",
             4,
-            23
+            25
         ],
         [
             32,
             "beurre",
             9,
-            12
+            13
         ],
         [
             33,
@@ -154,13 +154,13 @@
             34,
             "levure",
             5,
-            8
+            9
         ],
         [
             36,
             "avoine",
             3,
-            5
+            6
         ],
         [
             37,
@@ -280,7 +280,7 @@
             57,
             "olive",
             2,
-            2
+            3
         ],
         [
             58,
@@ -298,7 +298,7 @@
             60,
             "boeuf",
             1,
-            2
+            3
         ],
         [
             61,
@@ -688,6 +688,24 @@
             140,
             "légume",
             2,
+            1
+        ],
+        [
+            141,
+            "graine de lin",
+            7,
+            1
+        ],
+        [
+            142,
+            "graine de sésame",
+            7,
+            1
+        ],
+        [
+            143,
+            "graine de pavot",
+            7,
             1
         ]
     ],
@@ -5755,18 +5773,268 @@
             "title": "Globules de carottes",
             "type": 2,
             "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 15,
+            "duration": 1,
+            "id": 73,
+            "ing": [
+                [
+                    0,
+                    [
+                        240,
+                        1,
+                        1,
+                        "blanche"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        113,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        227,
+                        1,
+                        32,
+                        "salé"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        8,
+                        1,
+                        11,
+                        "fin"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Mettre le beurrre à température ambiante.",
+                "Dans une jatte, mélanger la farine, le sucre et le sel.",
+                "Découper les beurre en cubes et le mettre dans la jatte."
+            ],
+            "t-portions": "gâteaux",
+            "title": "Shortbreads",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 1,
+            "duration": 1,
+            "id": 74,
+            "ing": [
+                [
+                    0,
+                    [
+                        60,
+                        1,
+                        1,
+                        "blanche"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        20,
+                        1,
+                        36,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        30,
+                        1,
+                        29,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        10,
+                        1,
+                        141,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        10,
+                        1,
+                        142,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        10,
+                        1,
+                        143,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        34,
+                        34,
+                        "chimique"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        25,
+                        1,
+                        57,
+                        "huile"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        65,
+                        1,
+                        10,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Tout mélanger dans un saladier",
+                "Etaler la pâte entre deux feuilles de papier sulfurisé\n",
+                "Mettre au four 15-20 minutes à 180°C",
+                "Mettre sur une grille pour ne pas qu'il ramolissent"
+            ],
+            "t-portions": "plaque",
+            "title": "Crackers aux graines",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 0,
+            "duration": 1,
+            "id": 75,
+            "ing": [
+            ],
+            "notes": "- Se fait au volume, pas au poids\n- La version peut se faire sucrée avec des fruits, des noix, du chocolat...\n- Elle peut se faire faire aussi salée avec du fromage, du jambon, de l'ail, des noisettes....",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+            ],
+            "t-portions": "",
+            "title": "Porridge",
+            "type": 1,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 76,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        60,
+                        "tranché très fin 1mm"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        17,
+                        "petits ou un seul gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        27,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        5,
+                        9,
+                        "salée"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        26,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        31,
+                        "poudre"
+                    ]
+                ]
+            ],
+            "notes": "- Servir sur un bol de riz blanc\n\n- Si la viande est surgelée ou si elle rend de l'eau, le dashi en poudre suffit. Si elle est sèche, rajourter 20cl d'eau.\n\n- On peut rajouter de la coriandre fraîche pour servir.\n\n- Les oignons sont sucrés, Plus il y en a, moins il faut mettre de sucre.\n\n- Traditionellement, on le sert avec un oeuf poché dessus et du gingembre mariné.",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Faire revenir le boeuf et les oignons dans une poële. ",
+                "Rajouter le dashi, la sauc soja le mirin est le sucre.",
+                "Attendre que cela fasse une jolie sauce. les piognons doivent être tendres et la viande cuite.",
+                "Servir immédiatemment."
+            ],
+            "t-portions": "bol",
+            "title": "Gyudon",
+            "type": 2,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            86
+            99
         ],
         [
             2,
             "Ø",
-            94
+            95
         ],
         [
             3,
@@ -5781,7 +6049,7 @@
         [
             5,
             "cas",
-            65
+            69
         ],
         [
             6,
@@ -5891,6 +6159,11 @@
         [
             33,
             "cs",
+            1
+        ],
+        [
+            34,
+            "cc",
             1
         ]
     ]
