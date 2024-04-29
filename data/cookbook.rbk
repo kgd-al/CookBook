@@ -4,7 +4,7 @@
             1,
             "farine",
             3,
-            29
+            30
         ],
         [
             2,
@@ -58,13 +58,13 @@
             10,
             "eau",
             6,
-            23
+            24
         ],
         [
             11,
             "sel",
             5,
-            20
+            21
         ],
         [
             13,
@@ -136,7 +136,7 @@
             31,
             "sucre",
             4,
-            25
+            26
         ],
         [
             32,
@@ -154,7 +154,7 @@
             34,
             "levure",
             5,
-            9
+            11
         ],
         [
             36,
@@ -274,7 +274,7 @@
             56,
             "huile",
             9,
-            27
+            29
         ],
         [
             57,
@@ -5635,7 +5635,7 @@
                     ]
                 ]
             ],
-            "notes": "- Attention à ne pas casser le mixeur...",
+            "notes": "- Attention à ne pas casser le mixeur... Le mieux, c'est de mixer les flocons d'avoine  et de rajouter tous les autres ingrédients secs ensuite et bien mélanger. Puis ajouter l'eau et le beurre de cacahuètes en dernier et bien pétrir le tout.",
             "regimen": 3,
             "status": 3,
             "steps": [
@@ -6023,13 +6023,111 @@
             "title": "Gyudon",
             "type": 2,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 6,
+            "duration": 2,
+            "id": 77,
+            "ing": [
+                [
+                    0,
+                    [
+                        250,
+                        1,
+                        1,
+                        "blanche"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        125,
+                        1,
+                        10,
+                        "tiède"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        15,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2.5,
+                        1,
+                        34,
+                        "boulanger"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2.5,
+                        1,
+                        34,
+                        "instantanée"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        56,
+                        "tournesol"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        56,
+                        "sésame"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ]
+            ],
+            "notes": "- Le plus simple : faire la pâte la veille et la mettre directement au réfrigérateur. Le lendemain, la sortir deux heure avant utilisation. Faire les galettes ensuite et reprendre la ",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Mettre la levure de boulanger dans l'eau tiède avec le sucre pendant 15 minutes. Attention ça mousse.",
+                "Dans un saladier mettre la farine, le sel, la levure instantanée. Mélanger puis ajouter l'eau avec la levure de boulanger.",
+                "Pétrir à la main. Quand la boule se forme, ajouter l'huile de tournesol.",
+                "Pétrir à nouveau. Quand la boule est belle mettre dans dans une boîté hermétique fermée (pour ne pas qu'elle se dessèche) et laisser doubler de volume.",
+                "Dégazer la pâte et faire 6 boules égales.",
+                "Etaler les boules en galette de 10 cm.",
+                "Badigeonner chaque galette d'huile de sésame et les replier en deux (en forme de demi-lune). L'huile doit être être à l'intérieur du chausson.",
+                "Mettre les bao sur des carrés de papier sulfurisé dans le panier vapeur et les laisser pousser pendant 20 minutes.",
+                "Faire cuire à la vapeur pendant 8 minutes. ATTENDRE 10 MINUTES POUR OUVRIR LE PANIER VAPEUR !"
+            ],
+            "t-portions": "buns",
+            "title": "Bao buns",
+            "type": 1,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            99
+            104
         ],
         [
             2,
@@ -6044,7 +6142,7 @@
         [
             4,
             "pincée",
-            21
+            22
         ],
         [
             5,
@@ -6074,7 +6172,7 @@
         [
             10,
             "cac",
-            20
+            22
         ],
         [
             11,
