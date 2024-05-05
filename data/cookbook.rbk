@@ -172,7 +172,7 @@
             38,
             "noix de coco",
             2,
-            2
+            3
         ],
         [
             39,
@@ -274,7 +274,7 @@
             56,
             "huile",
             9,
-            29
+            30
         ],
         [
             57,
@@ -640,7 +640,7 @@
             132,
             "chocolat",
             4,
-            1
+            2
         ],
         [
             133,
@@ -707,9 +707,25 @@
             "graine de pavot",
             7,
             1
+        ],
+        [
+            144,
+            "lait concentré",
+            4,
+            1
         ]
     ],
     "planning": [
+        [
+            "2024-05-05",
+            [
+                "Ramen"
+            ],
+            [
+            ],
+            [
+            ]
+        ]
     ],
     "recipes": [
         {
@@ -6121,13 +6137,73 @@
             "title": "Bao buns",
             "type": 1,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 12,
+            "duration": 1,
+            "id": 78,
+            "ing": [
+                [
+                    0,
+                    [
+                        250,
+                        1,
+                        38,
+                        "rapée"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        250,
+                        1,
+                        144,
+                        "sucré"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        132,
+                        "noir ou lait"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        56,
+                        "neutre"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Faire fondre le chocolat en morceaux au micro ondes (remuer toutes les trente seconde) avec l'huile.",
+                "Mettre le chocolat dans un bol.",
+                "Mélanger la noix de coco avec le lait concenré sucré.",
+                "Faire des barres  allongées à la main.",
+                "Mettre les barres une demie heure au congélateur.",
+                "Tremper les barres dans le chocolat (qui est tiède ou froid) et les poser sur une plaque de papier sulfurisé.",
+                "Mettre au réfrigérateur toute une nuit."
+            ],
+            "t-portions": "bounties",
+            "title": "Bounty",
+            "type": 3,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            104
+            107
         ],
         [
             2,
@@ -6147,7 +6223,7 @@
         [
             5,
             "cas",
-            69
+            70
         ],
         [
             6,
