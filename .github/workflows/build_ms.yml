@@ -1,0 +1,21 @@
+name: Compilation (Windows)
+
+on:
+    push:
+        branches: [ "master" ]
+
+env:
+    BUILD_CONFIGURATION: Release
+
+jobs:
+    build:
+        runs-on: windows-latest
+
+steps:
+- name: (1) Checkout
+  uses: actions/checkout@v3
+
+- name: (1.1) Debug output
+  run: |
+    ls
+    tree
