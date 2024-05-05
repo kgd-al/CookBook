@@ -279,7 +279,7 @@ void RepairsManager::checkAll(void) {
           << "    " << tr("déclaré") << ": " << p.first->used << "\n"
           << "     " << tr("trouvé") << ": " << p.second << "\n"
           << "  " << tr("variation") << ": "
-          << forcesign << (p.first->used - p.second) << "\n";
+          << Qt::forcesign << (p.first->used - p.second) << "\n";
     }
   }
 
@@ -291,7 +291,7 @@ void RepairsManager::checkAll(void) {
           << "    " << tr("déclaré") << ": " << p.first->used << "\n"
           << "     " << tr("trouvé") << ": " << p.second << "\n"
           << "  " << tr("variation") << ": "
-          << forcesign << (p.first->used - p.second) << "\n";
+          << Qt::forcesign << (p.first->used - p.second) << "\n";
     }
   }
 
@@ -303,7 +303,7 @@ void RepairsManager::checkAll(void) {
                   << "    " << tr("déclaré") << ": " << p.first->used << "\n"
                   << "     " << tr("trouvé") << ": " << p.second << "\n"
                   << "  " << tr("variation") << ": "
-                  << forcesign << (p.first->used - p.second) << "\n";
+                  << Qt::forcesign << (p.first->used - p.second) << "\n";
     }
   }
 

@@ -205,12 +205,11 @@ void PlanningTableView::wheelEvent(QWheelEvent *e) {
 //  qDebug() << verticalScrollBar()->isVisible();
   if (!verticalScrollBar()->isVisible()) {
     // transform vertical scroll into horizontal
-    QPoint invertedDelta (e->angleDelta().y(), e->angleDelta().x());
-    QWheelEvent e2 (e->posF(), e->globalPosF(),
-                    e->pixelDelta(), invertedDelta,
-                    e->delta(), Qt::Horizontal,
+    QWheelEvent e2 (e->position(), e->globalPosition(),
+                    QPoint(e->pixelDelta().y(), e->pixelDelta().x()),
+                    QPoint(e->angleDelta().y(), e->angleDelta().x()),
                     e->buttons(), e->modifiers(), e->phase(),
-                    e->source(), e->inverted());
+                    e->inverted(), e->source());
 //    qDebug() << e << "\n>> " << &e2;
     return VerticallyConcentratedTable::wheelEvent(&e2);
   } else {

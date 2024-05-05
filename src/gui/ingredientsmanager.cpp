@@ -82,7 +82,7 @@ struct UsageStatsPopup : public QDialog {
     _table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _table->setSortingEnabled(true);
-    _table->sortByColumn(0);
+    _table->sortByColumn(0, Qt::DescendingOrder);
     layout->addWidget(_table);
     setLayout(layout);
   }
@@ -94,7 +94,7 @@ struct UsageStatsPopup : public QDialog {
 
   void exec (const QPoint &pos, const QString &unit) {
     _label->setText("Utilisation(s) de " + unit + ":");
-    _table->sortByColumn(0);
+    _table->sortByColumn(0, Qt::DescendingOrder);
     move(pos);
     adjustSize();
     QDialog::exec();

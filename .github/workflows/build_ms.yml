@@ -19,3 +19,5 @@ jobs:
       run: |
         ls
         tree
+
+    # qt5-qmake qtbase5-dev libmtp-dev

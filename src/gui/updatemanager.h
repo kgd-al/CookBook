@@ -53,7 +53,7 @@ private:
                      const QString &program, const QString &arguments,
                      const QString &relativeWorkPath = ".") {
     return process(monitor, progress,
-                   program, arguments.split(' ', QString::SkipEmptyParts),
+                   program, arguments.split(' ', Qt::SkipEmptyParts),
                    relativeWorkPath);
   }
 

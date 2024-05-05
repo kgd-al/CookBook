@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QMainWindow>
 #include <QStatusBar>
+#include <QRandomGenerator>
 
 #include "filterview.h"
 #include "autofiltercombobox.hpp"
@@ -174,12 +175,11 @@ struct RecipeFilter : public QSortFilterProxyModel {
 
   static constexpr int RandomRole = db::RecipesModel::SortRole+1;
 
-  RecipeFilter (void) {
-    qsrand(QDateTime::currentMSecsSinceEpoch());
-  }
+  RecipeFilter (void) = default;
 
   QMap<db::ID, int> shuffled_ids;
   void shuffle (void) {
+    auto rng = QRandomGenerator::global();
     QList<db::ID> ids;
     for (QModelIndex i=index(0,0); i.isValid(); i=i.sibling(i.row()+1,i.column())) {
       Q_ASSERT(i.isValid());
@@ -187,7 +187,7 @@ struct RecipeFilter : public QSortFilterProxyModel {
     }
 
     for (int i=ids.size()-1; i>0; i--) {
-      int j = qrand()%(i+1);
+      int j = rng->bounded(0, i+1);
       std::swap(ids[i], ids[j]);
     }
 

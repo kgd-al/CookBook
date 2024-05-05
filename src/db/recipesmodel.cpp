@@ -1,5 +1,6 @@
 #include <QJsonArray>
-#include <QJsonDocument>
+#include <QCborArray>
+#include <QCborValue>
 #include <QPainter>
 #include <QMimeData>
 
@@ -10,11 +11,11 @@
 namespace db {
 
 QByteArray toByteArray (const QJsonArray &jarray) {
-  return QJsonDocument(jarray).toBinaryData();
+  return QCborValue(QCborArray::fromJsonArray(jarray)).toCbor();
 }
 
 QJsonArray fromByteArray(const QByteArray &barray) {
-  return QJsonDocument::fromBinaryData(barray).array();
+  return QCborValue::fromCbor(barray).toJsonValue().toArray();
 }
 
 RecipesModel::RecipesModel(void) {}
