@@ -45,6 +45,9 @@ jobs:
         echo ">> Configuring:"
         qmake ${{ github.workspace }}/CookBook.pro
         echo "======================================"
+        echo ">> Makefile:"
+        cat Makefile
+        echo "======================================"
         echo ">> Building:"
         make -j
         echo "======================================"
