@@ -43,12 +43,12 @@ jobs:
         cat ${{ github.workspace }}/CookBook.pro | nl
         echo "======================================"
         echo ">> Configuring:"
-        qmake ${{ github.workspace }}/CookBook.pro
+        qmake -spec win32-g++ ${{ github.workspace }}/CookBook.pro
         echo "======================================"
         echo ">> Makefile:"
-        cat Makefile | nl
-        cat Makefile.Debug | nl
-        cat Makefile.Release | nl
+        #cat Makefile | nl
+        #cat Makefile.Debug | nl
+        #cat Makefile.Release | nl
         echo "======================================"
         echo ">> Building:"
         make -j
