@@ -28,7 +28,12 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        cache: true
+        cache:        true
+        host:         windows
+        target:       desktop
+        arch:         win64_msvc2019_64
+        dir:          ${{ runner.temp }}
+        setup-python: false
 
     - name: Set QTDIR and QtToolsPath
       shell: bash
@@ -49,7 +54,9 @@ jobs:
         cat ${{ github.workspace }}/CookBook.pro | nl
         echo "======================================"
         echo ">> Configuring:"
+        nmake clean
         qmake -spec win32-g++ ${{ github.workspace }}/CookBook.pro
+        nmake
         echo "======================================"
         echo ">> Makefile:"
         #cat Makefile | nl
