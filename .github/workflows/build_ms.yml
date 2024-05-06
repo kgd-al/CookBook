@@ -22,6 +22,8 @@ jobs:
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
+      with:
+        cache: true
 
     - name: Print Qt version information
       run: |
@@ -31,7 +33,7 @@ jobs:
       run: |
         mkdir -p ${{ runner.temp }}\build
         cd ${{ runner.temp }}\build
-        qmake ../CookBook.pro
+        qmake {{ github.workspace }}/CookBook.pro
         make -j
 
     # qt5-qmake qtbase5-dev libmtp-dev
