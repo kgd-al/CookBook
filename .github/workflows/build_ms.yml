@@ -47,6 +47,8 @@ jobs:
         echo "======================================"
         echo ">> Makefile:"
         cat Makefile | nl
+        cat Makefile.Debug | nl
+        cat Makefile.Release | nl
         echo "======================================"
         echo ">> Building:"
         make -j
