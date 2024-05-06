@@ -40,13 +40,13 @@ jobs:
         cd ${{ runner.temp }}\build
         echo "======================================"
         echo ">> QMake pro file:"
-        cat ${{ github.workspace }}/CookBook.pro
+        cat ${{ github.workspace }}/CookBook.pro | nl
         echo "======================================"
         echo ">> Configuring:"
         qmake ${{ github.workspace }}/CookBook.pro
         echo "======================================"
         echo ">> Makefile:"
-        cat Makefile
+        cat Makefile | nl
         echo "======================================"
         echo ">> Building:"
         make -j
