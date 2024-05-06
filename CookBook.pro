@@ -26,10 +26,12 @@ DEFINES += \
 
 METADATA=src/gui/about_metadata.h
 metatarget.target=$$METADATA
-metatarget.commands='"$$PWD/meta.sh" "$$PWD/$$METADATA"'
+metatarget.commands='cd $$PWD; ./meta.sh "$$METADATA"'
 metatarget.depends=FORCE
 PRE_TARGETDEPS += $$METADATA
 QMAKE_EXTRA_TARGETS += metatarget
+
+message("Working directory is $$PWD")
 
 # You can also make your code fail to compile if you use deprecated APIs.
 # In order to do so, uncomment the following line.
