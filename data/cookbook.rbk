@@ -52,13 +52,13 @@
             10,
             "eau",
             6,
-            26
+            27
         ],
         [
             11,
             "sel",
             5,
-            23
+            24
         ],
         [
             13,
@@ -250,7 +250,7 @@
             52,
             "miel",
             4,
-            4
+            3
         ],
         [
             53,
@@ -586,7 +586,7 @@
             121,
             "fruit",
             2,
-            3
+            2
         ],
         [
             122,
@@ -772,7 +772,7 @@
             155,
             "légume",
             2,
-            1
+            0
         ]
     ],
     "planning": [
@@ -7130,69 +7130,6 @@
             "basic": false,
             "d-portions": 1,
             "duration": 1,
-            "id": 97,
-            "ing": [
-                [
-                    0,
-                    [
-                        2,
-                        5,
-                        36,
-                        "flocon"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        2,
-                        121,
-                        "bananes, poires, kiwi, mangue, fruits rouges, pommes..."
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        6,
-                        155,
-                        "épinards, pak-choï, tomate..."
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        6,
-                        3,
-                        "coco, vache, végétal"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        5,
-                        52,
-                        "optionel"
-                    ]
-                ]
-            ],
-            "notes": "",
-            "regimen": 2,
-            "status": 3,
-            "steps": [
-                "Mixer le tout et boire bien frais"
-            ],
-            "t-portions": "tasse",
-            "title": "Morning smothie",
-            "type": 3,
-            "used": 0
-        },
-        {
-            "basic": false,
-            "d-portions": 1,
-            "duration": 1,
             "id": 98,
             "ing": [
                 [
@@ -7251,6 +7188,62 @@
             "title": "Morning smothie",
             "type": 3,
             "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 1,
+            "duration": 1,
+            "id": 99,
+            "ing": [
+                [
+                    0,
+                    [
+                        0.33,
+                        38,
+                        10,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.33,
+                        38,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.33,
+                        38,
+                        36,
+                        "flocons"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin ou gros mais pas trop"
+                    ]
+                ]
+            ],
+            "notes": "- Se fait au volume, pas au poids\n\n- La version peut se faire sucrée avec des fruits, des noix, du chocolat...\n\n- Elle peut se faire faire aussi salée avec du fromage, du jambon, de l'ail, des noisettes....\n\n- LAVER LA CASSEROLE TOUT DE SUITE, SINON ON NE PEUT PAS LA RAVOIR.",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Mettre le lait et l'au à bouillir. Ajouter le sel.",
+                "Lorsque ça bout mettre les flocons d'avoine. Remuer sans s'arrêter jusqu'à obtenir la consistence voulue (plus ou moins pâteuse).",
+                "Servir et mettre ce que l'on veut dessus."
+            ],
+            "t-portions": "bol",
+            "title": "Porridge",
+            "type": 1,
+            "used": 0
         }
     ],
     "units": [
@@ -7262,7 +7255,7 @@
         [
             2,
             "Ø",
-            102
+            101
         ],
         [
             3,
@@ -7272,17 +7265,17 @@
         [
             4,
             "pincée",
-            23
+            24
         ],
         [
             5,
             "cas",
-            79
+            77
         ],
         [
             6,
             "portion",
-            4
+            2
         ],
         [
             7,
@@ -7403,6 +7396,11 @@
             37,
             "cube",
             1
+        ],
+        [
+            38,
+            "tasse",
+            3
         ]
     ]
 }
