@@ -4,37 +4,25 @@
             1,
             "farine",
             3,
-<<<<<<< Updated upstream
-            30
-=======
-            31
->>>>>>> Stashed changes
+            35
         ],
         [
             2,
             "oeuf",
             1,
-<<<<<<< Updated upstream
-            19
-=======
-            22
->>>>>>> Stashed changes
+            23
         ],
         [
             3,
             "lait",
             8,
-            13
+            14
         ],
         [
             4,
             "yaourt",
             8,
-<<<<<<< Updated upstream
-            2
-=======
             3
->>>>>>> Stashed changes
         ],
         [
             5,
@@ -49,15 +37,6 @@
             1
         ],
         [
-<<<<<<< Updated upstream
-            7,
-            "noix",
-            7,
-            2
-        ],
-        [
-=======
->>>>>>> Stashed changes
             8,
             "soba au sarrasin",
             3,
@@ -67,31 +46,19 @@
             9,
             "sauce soja",
             5,
-<<<<<<< Updated upstream
             10
-=======
-            8
->>>>>>> Stashed changes
         ],
         [
             10,
             "eau",
             6,
-<<<<<<< Updated upstream
-            24
-=======
-            23
->>>>>>> Stashed changes
+            27
         ],
         [
             11,
             "sel",
             5,
-<<<<<<< Updated upstream
-            21
-=======
-            18
->>>>>>> Stashed changes
+            24
         ],
         [
             13,
@@ -109,11 +76,7 @@
             17,
             "oignon",
             2,
-<<<<<<< Updated upstream
-            17
-=======
             21
->>>>>>> Stashed changes
         ],
         [
             18,
@@ -137,7 +100,7 @@
             26,
             "mirin",
             6,
-            3
+            4
         ],
         [
             27,
@@ -155,7 +118,7 @@
             29,
             "graine de courge",
             7,
-            2
+            3
         ],
         [
             30,
@@ -167,17 +130,13 @@
             31,
             "sucre",
             4,
-            26
+            31
         ],
         [
             32,
             "beurre",
             9,
-<<<<<<< Updated upstream
-            13
-=======
-            14
->>>>>>> Stashed changes
+            15
         ],
         [
             33,
@@ -189,33 +148,25 @@
             34,
             "levure",
             5,
-<<<<<<< Updated upstream
-            11
-=======
-            10
->>>>>>> Stashed changes
+            13
         ],
         [
             36,
             "avoine",
             3,
-<<<<<<< Updated upstream
-            6
-=======
-            4
->>>>>>> Stashed changes
+            7
         ],
         [
             37,
             "cacao",
             5,
-            3
+            5
         ],
         [
             38,
             "noix de coco",
             2,
-            3
+            4
         ],
         [
             39,
@@ -263,7 +214,7 @@
             46,
             "carotte",
             2,
-            7
+            8
         ],
         [
             47,
@@ -317,11 +268,7 @@
             56,
             "huile",
             9,
-<<<<<<< Updated upstream
-            30
-=======
-            28
->>>>>>> Stashed changes
+            34
         ],
         [
             57,
@@ -393,11 +340,7 @@
             68,
             "thym",
             2,
-<<<<<<< Updated upstream
             5
-=======
-            4
->>>>>>> Stashed changes
         ],
         [
             69,
@@ -637,7 +580,7 @@
             120,
             "cacahuète",
             7,
-            2
+            3
         ],
         [
             121,
@@ -689,27 +632,12 @@
         ],
         [
             132,
-<<<<<<< Updated upstream
-            "chocolat",
-            4,
-=======
             "pois chiches",
             3,
->>>>>>> Stashed changes
             2
         ],
         [
             133,
-<<<<<<< Updated upstream
-            "ketchup",
-            5,
-            1
-        ],
-        [
-            134,
-            "polenta",
-            3,
-=======
             "chapelure",
             3,
             2
@@ -718,21 +646,10 @@
             134,
             "végétaline",
             9,
->>>>>>> Stashed changes
             1
         ],
         [
             135,
-<<<<<<< Updated upstream
-            "aubergine",
-            2,
-            1
-        ],
-        [
-            136,
-            "miso",
-            5,
-=======
             "poulet",
             1,
             2
@@ -741,83 +658,40 @@
             136,
             "lardons",
             1,
->>>>>>> Stashed changes
             1
         ],
         [
             137,
-<<<<<<< Updated upstream
-            "coriandre",
-            2,
-=======
             "pâte",
             3,
->>>>>>> Stashed changes
             1
         ],
         [
             138,
-<<<<<<< Updated upstream
-            "sésame",
-            7,
-=======
             "blanc d'oeuf",
             1,
->>>>>>> Stashed changes
             1
         ],
         [
             139,
-<<<<<<< Updated upstream
-            "pâte",
-            3,
-=======
             "ciboulette",
             2,
->>>>>>> Stashed changes
             1
         ],
         [
             140,
-<<<<<<< Updated upstream
-            "légume",
-            2,
-=======
             "nuoc-mam",
             5,
->>>>>>> Stashed changes
             1
         ],
         [
             141,
-<<<<<<< Updated upstream
-            "graine de lin",
-            7,
-=======
             "vermicelles",
             3,
->>>>>>> Stashed changes
             1
         ],
         [
             142,
-<<<<<<< Updated upstream
-            "graine de sésame",
-            7,
-            1
-        ],
-        [
-            143,
-            "graine de pavot",
-            7,
-            1
-        ],
-        [
-            144,
-            "lait concentré",
-            4,
-            1
-=======
             "orange",
             2,
             0
@@ -826,7 +700,7 @@
             143,
             "coriandre",
             2,
-            0
+            1
         ],
         [
             144,
@@ -863,7 +737,66 @@
             "polenta",
             3,
             0
->>>>>>> Stashed changes
+        ],
+        [
+            150,
+            "aubergine",
+            2,
+            1
+        ],
+        [
+            151,
+            "miso",
+            5,
+            1
+        ],
+        [
+            152,
+            "sésame",
+            3,
+            1
+        ],
+        [
+            153,
+            "graine de lin",
+            7,
+            1
+        ],
+        [
+            154,
+            "graine de pavot",
+            7,
+            1
+        ],
+        [
+            155,
+            "légume",
+            2,
+            0
+        ],
+        [
+            156,
+            "lait concentré",
+            4,
+            1
+        ],
+        [
+            157,
+            "chocolat",
+            9,
+            2
+        ],
+        [
+            159,
+            "noix",
+            7,
+            1
+        ],
+        [
+            160,
+            "ketchup",
+            5,
+            1
         ]
     ],
     "planning": [
@@ -3528,11 +3461,7 @@
                     ]
                 ]
             ],
-<<<<<<< Updated upstream
-            "notes": "- Remplacer la sauce moutarde par du beurre fondu avec des épices mexicaines.\n- Ajouter du fromage type gouda ou chèvre en tranches.",
-=======
             "notes": "- Pour la sauce burger, c'est meilleur si on mélange du beurre et des épices mexicaines.",
->>>>>>> Stashed changes
             "regimen": 1,
             "status": 3,
             "steps": [
@@ -3831,11 +3760,7 @@
                     [
                         200,
                         1,
-<<<<<<< Updated upstream
-                        139,
-=======
                         132,
->>>>>>> Stashed changes
                         "capellini"
                     ]
                 ],
@@ -5104,11 +5029,7 @@
                     [
                         2,
                         2,
-<<<<<<< Updated upstream
-                        139,
-=======
                         137,
->>>>>>> Stashed changes
                         "feuilletées"
                     ]
                 ],
@@ -5350,19 +5271,6 @@
         },
         {
             "basic": false,
-<<<<<<< Updated upstream
-            "d-portions": 9,
-            "duration": 1,
-            "id": 65,
-            "ing": [
-                [
-                    0,
-                    [
-                        150,
-                        1,
-                        132,
-                        "dessert"
-=======
             "d-portions": 17,
             "duration": 2,
             "id": 66,
@@ -5378,60 +5286,29 @@
                         9,
                         132,
                         "moyenne, 265g"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        150,
-                        1,
-                        32,
-                        "salé"
-=======
                         1,
                         10,
                         80,
                         "madras"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        85,
-                        1,
-                        1,
-                        ""
-=======
                         1,
                         5,
                         50,
                         "poudre"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        50,
-                        1,
-                        37,
-                        "poudre"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        3,
-                        2,
-                        2,
-                        "gros"
-                    ]
-=======
                         1,
                         5,
                         133,
@@ -5441,65 +5318,19 @@
                 [
                     2,
                     "Pour la panure :"
->>>>>>> Stashed changes
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        180,
-                        1,
-                        31,
-                        "poudre"
-=======
                         100,
                         1,
                         133,
                         ""
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        125,
-                        1,
-                        7,
-                        "haché"
-                    ]
-                ]
-            ],
-            "notes": "- 2 cuissons possibles :\n1) 40 minutes à 160°C\n2) 20 minutes à 220°C",
-            "regimen": 2,
-            "status": 3,
-            "steps": [
-                "Faire fondre le beurre et le chocolat ensemble.",
-                "Dans un autre saladier, tamiser la farine et le cacao.",
-                "Dans un troisième saladier, passer au batteur électrique les oeufs et le sucre jusqu'à ce que le mélange soit mousseux et ait doublé.",
-                "Incorporer le chocolat et le beurre fondus au mélange précédant.",
-                "Incorporer les poudres ensuite.",
-                "Mettre les noix dans le mélange.",
-                "Mettre dans un moule carré et faire cuire au four."
-            ],
-            "t-portions": "parts",
-            "title": "Brownie",
-            "type": 3,
-            "used": 0
-        },
-        {
-            "basic": false,
-            "d-portions": 2,
-            "duration": 1,
-            "id": 66,
-            "ing": [
-                [
-                    0,
-                    [
-                        4,
-                        5,
-                        133,
-=======
                         50,
                         1,
                         1,
@@ -5512,29 +5343,12 @@
                         70,
                         12,
                         10,
->>>>>>> Stashed changes
                         ""
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        4,
-                        5,
-                        31,
-                        "poudre"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        3,
-                        5,
-                        67,
-                        "riz"
-                    ]
-=======
                         1,
                         10,
                         49,
@@ -5544,34 +5358,17 @@
                 [
                     2,
                     "Pour la friture :"
->>>>>>> Stashed changes
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        3,
-                        5,
-                        9,
-=======
                         1,
                         34,
                         134,
->>>>>>> Stashed changes
                         ""
                     ]
                 ]
             ],
-<<<<<<< Updated upstream
-            "notes": "- Remplacer le vinaigre de riz par du vinaigre de vin blanc",
-            "regimen": 3,
-            "status": 3,
-            "steps": [
-                "Mélanger tous les ingrédients dans un poële (idéalement le même qui a cuit la viande au préalable) et cuire jusqu'à ce que le sucre fonde. Rajouter la viande."
-            ],
-            "t-portions": "personnes",
-            "title": "Sauce aigre douce",
-=======
             "notes": "- Manger avec une sauce au yaourt et aux herbes ou du ketchup.",
             "regimen": 3,
             "status": 3,
@@ -5586,25 +5383,16 @@
             ],
             "t-portions": "nuggets",
             "title": "Nuggets de pois chiches",
->>>>>>> Stashed changes
             "type": 2,
             "used": 0
         },
         {
             "basic": false,
-<<<<<<< Updated upstream
-            "d-portions": 6,
-=======
             "d-portions": 2,
->>>>>>> Stashed changes
             "duration": 1,
             "id": 67,
             "ing": [
                 [
-<<<<<<< Updated upstream
-                    1,
-                    12
-=======
                     0,
                     [
                         2,
@@ -5621,79 +5409,28 @@
                         49,
                         "doux ou doux+fumé"
                     ]
->>>>>>> Stashed changes
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        200,
-                        1,
-                        59,
-                        "poitrine nature ou fumée"
-=======
                         1,
                         9,
                         108,
                         "petite"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        300,
-                        1,
-                        4,
-                        "nature ou à la grecque"
-=======
                         20,
                         1,
                         1,
                         "T65"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        3,
-                        2,
-                        2,
-                        ""
-                    ]
-                ]
-            ],
-            "notes": "",
-            "regimen": 1,
-            "status": 3,
-            "steps": [
-                "Faire revenir le porc jusqu'à ce qu'il soit bien grillé.",
-                "Mélanger tous les autres ingédients puis ajouter les morceaux de porc sans oublier le gras.",
-                "Sortir la pâte à tarte au dernier moment du réfrigérateur et mettre l'appareil dedans.",
-                "Enfourner à 180°C pendant 45 minutes."
-            ],
-            "t-portions": "parts",
-            "title": "Quiche",
-            "type": 2,
-            "used": 0
-        },
-        {
-            "basic": false,
-            "d-portions": 2,
-            "duration": 3,
-            "id": 68,
-            "ing": [
-                [
-                    0,
-                    [
-                        150,
-                        1,
-                        134,
-                        ""
-=======
                         2,
                         19,
                         50,
@@ -5707,21 +5444,14 @@
                         37,
                         41,
                         "poulet ou légumes"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        750,
-                        1,
-                        10,
-=======
                         1,
                         2,
                         17,
->>>>>>> Stashed changes
                         ""
                     ]
                 ],
@@ -5729,59 +5459,23 @@
                     0,
                     [
                         1,
-<<<<<<< Updated upstream
-                        4,
-                        11,
-                        "grosse, de mer"
-=======
                         2,
                         64,
                         "belle"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        2,
-                        10,
-                        68,
-                        ""
-=======
                         1,
                         2,
                         28,
                         "vert ou rouge"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        5,
-                        5,
-                        56,
-                        "tournesol"
-                    ]
-                ]
-            ],
-            "notes": "- Tester version tomates basilique\n- Servir avec une salade\n- Ne pas oublier la cuisson longues à la poële",
-            "regimen": 3,
-            "status": 3,
-            "steps": [
-                "Faire bouillir l'eau avec le sel.",
-                "Ajouter la polenta avec le thym en pluie et remuer. Cuire le temps indiqué sur le paquet sans jamais arrêter de remuer. Attention aux brûlures !",
-                "Le mélange doit bien épaissir avant d'enlever la casserole du feu.",
-                "Mettre du film alimentaire transparent dans un moule à cake et mettre l'appareil dedans.  Bien refermer le film alimentaire sur la polenta pour ne pas qu'elle dessèche.",
-                "Attendre que la polenta refroidisse (environ 2h) et la mettre au réfrigérateur tout la nuit.",
-                "Sortir la polenta et la couper en tranches. Mettre à frire dans une poële bien chaude avec un fond d'huile de tournesol.",
-                "Attention la cuisson est longue : au moins dix minutes de chaque côté ! "
-            ],
-            "t-portions": "personnes",
-            "title": "Polenta",
-=======
                         10,
                         32,
                         10,
@@ -5804,7 +5498,6 @@
             ],
             "t-portions": "personnes",
             "title": "Poulet à la Hongroise",
->>>>>>> Stashed changes
             "type": 2,
             "used": 0
         },
@@ -5815,36 +5508,8 @@
             "id": 69,
             "ing": [
                 [
-<<<<<<< Updated upstream
-                    0,
-                    [
-                        2,
-                        2,
-                        135,
-                        "belles"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        2,
-                        5,
-                        56,
-                        "tournesol"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        2,
-                        4,
-                        11,
-                        "fin"
-                    ]
-=======
                     1,
                     53
->>>>>>> Stashed changes
                 ],
                 [
                     2,
@@ -5853,65 +5518,24 @@
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        2,
-                        2,
-                        136,
-                        "pâte"
-=======
                         100,
                         1,
                         136,
                         "poitrine de porc découpée"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
                         2,
-<<<<<<< Updated upstream
-                        10,
-                        31,
-                        "poudre"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        2,
-                        5,
-                        9,
-                        ""
-=======
                         2,
                         2,
                         "très frais"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        1,
-                        5,
-                        56,
-                        "sésame"
-                    ]
-                ],
-                [
-                    2,
-                    "Décoration :"
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        5,
-                        137,
-                        ""
-=======
                         20,
                         32,
                         79,
@@ -5925,37 +5549,11 @@
                         2,
                         17,
                         "facultatif"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        1,
-                        5,
-                        138,
-                        "graines"
-                    ]
-                ]
-            ],
-            "notes": "- Manger avec du riz blanc\n- La peau se mange !",
-            "regimen": 3,
-            "status": 3,
-            "steps": [
-                "Couper les aubergines  en deux et faire des croisillons profonds à l'intérieur sans casser les aubergines.",
-                "Mettre deux pincées de sel fin à l'intérieur et les laisser dégorger pendant 10 minutes environ.",
-                "Faire la sauce pendant ce temps-là : bien mélanger tous les ingrédients.",
-                "Absorber le liquide les aubergines avec du papier essuie-tout.",
-                "Les faire griller à la poële bien chaude avec de l'huile de tournesol : commencer par la face avec les croisillons. Les aubergines doivent dorer.",
-                "Quand les deux faces sont bien cuites les mettre sur une plaque qui va au four.",
-                "Bien les badigeonner de sauce et bien insister sur les croisillons : on tout mettre.",
-                "Enfourner les aubergines pendant 10 min 220°C pour qu'elle caramélisent.",
-                "Les servir en mettant la décoration dessus."
-            ],
-            "t-portions": "personnes",
-            "title": "Aubergines Umami",
-=======
                         60,
                         1,
                         107,
@@ -5974,124 +5572,63 @@
             ],
             "t-portions": "personnes",
             "title": "Pâtes à la carbonara",
->>>>>>> Stashed changes
             "type": 2,
             "used": 0
         },
         {
             "basic": false,
-<<<<<<< Updated upstream
-            "d-portions": 4,
-            "duration": 1,
-            "id": 70,
-=======
             "d-portions": 9,
             "duration": 1,
             "id": 71,
->>>>>>> Stashed changes
             "ing": [
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        100,
-                        1,
-                        36,
-                        "flocons"
-=======
                         200,
                         1,
                         1,
                         "T65, T80, T110"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        4,
-                        5,
-                        31,
-                        "poudre"
-=======
                         150,
                         1,
                         88,
                         "râpé"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
                         4,
-<<<<<<< Updated upstream
-                        5,
-                        37,
-                        "poudre"
-=======
                         2,
                         2,
                         "moyens ou gros"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        4,
-                        5,
-                        120,
-                        "beurre"
-=======
                         250,
                         1,
                         4,
                         "nature, entier"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        1,
-                        4,
-                        11,
-                        "fin"
-=======
                         3,
                         5,
                         56,
                         "végétale"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        90,
-                        12,
-                        10,
-                        ""
-                    ]
-                ]
-            ],
-            "notes": "- Attention à ne pas casser le mixeur... Le mieux, c'est de mixer les flocons d'avoine  et de rajouter tous les autres ingrédients secs ensuite et bien mélanger. Puis ajouter l'eau et le beurre de cacahuètes en dernier et bien pétrir le tout.",
-            "regimen": 3,
-            "status": 3,
-            "steps": [
-                "Tout mixer jusqu'à obtenir une boule pâteuse (type pâte de datte).",
-                "Faire des petites boules ou aplatie et faire des petits carrés.",
-                "Enfourner de 30 à 45 minutes à 150°C pour que les céréales déssèchent."
-            ],
-            "t-portions": "bols",
-            "title": "Céréales du matin au chocolat",
-            "type": 3,
-=======
                         1,
                         11,
                         34,
@@ -6109,30 +5646,17 @@
             "t-portions": "muffins normaux",
             "title": "Muffins au fromage",
             "type": 2,
->>>>>>> Stashed changes
             "used": 0
         },
         {
             "basic": false,
-<<<<<<< Updated upstream
-            "d-portions": 1,
-            "duration": 1,
-            "id": 71,
-=======
             "d-portions": 4,
             "duration": 3,
             "id": 73,
->>>>>>> Stashed changes
             "ing": [
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        2,
-                        5,
-                        36,
-                        "flocons"
-=======
                         200,
                         1,
                         121,
@@ -6146,7 +5670,6 @@
                         1,
                         31,
                         "moins si les fruits sont bien sucrés"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
@@ -6154,10 +5677,6 @@
                     [
                         1,
                         2,
-<<<<<<< Updated upstream
-                        121,
-                        "bananes, poires, mangue fruits rouges, pomme..."
-=======
                         138,
                         ""
                     ]
@@ -6342,7 +5861,6 @@
                         13,
                         41,
                         "poulet, légumes"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
@@ -6350,10 +5868,6 @@
                     [
                         1,
                         2,
-<<<<<<< Updated upstream
-                        140,
-                        "épinards, pak-choï, tomate..."
-=======
                         46,
                         "moyenne, en cubes"
                     ]
@@ -6383,18 +5897,12 @@
                         5,
                         140,
                         ""
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
                         1,
-<<<<<<< Updated upstream
-                        6,
-                        3,
-                        "coco, vache, végétal"
-=======
                         10,
                         125,
                         "râpé"
@@ -6484,7 +5992,7 @@
                 "Cuire 40 minutes dans un four à 180°C. Manger tiède."
             ],
             "t-portions": "part",
-            "title": "Quiche lorraine allégée",
+            "title": "Quiche lorraine",
             "type": 2,
             "used": 0
         },
@@ -6519,7 +6027,6 @@
                         2,
                         17,
                         "petit"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
@@ -6527,10 +6034,6 @@
                     [
                         1,
                         10,
-<<<<<<< Updated upstream
-                        52,
-                        "optionel"
-=======
                         50,
                         "poudre ou dès"
                     ]
@@ -6627,7 +6130,6 @@
                         1,
                         32,
                         "salé, fondu"
->>>>>>> Stashed changes
                     ]
                 ]
             ],
@@ -6635,13 +6137,6 @@
             "regimen": 2,
             "status": 3,
             "steps": [
-<<<<<<< Updated upstream
-                "Mixer le tout et boire bien frais"
-            ],
-            "t-portions": "tasse",
-            "title": "Morning Smoothie",
-            "type": 1,
-=======
                 "Ecraser les pommes de terre froides avec un presse-purée.",
                 "Incorporer le lait.",
                 "Ajouter le sel et la moitié de la farine et pétrir à la main. Ajouter la seconde moitié et faire une belle pâte.",
@@ -6653,30 +6148,17 @@
             "t-portions": "galettes moyennes",
             "title": "Tottie scones (galettes de pomme de terre poëlées)",
             "type": 2,
->>>>>>> Stashed changes
             "used": 0
         },
         {
             "basic": false,
-<<<<<<< Updated upstream
-            "d-portions": 3,
-            "duration": 1,
-            "id": 72,
-=======
             "d-portions": 2,
             "duration": 1,
             "id": 84,
->>>>>>> Stashed changes
             "ing": [
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        2,
-                        2,
-                        46,
-                        "grosses"
-=======
                         200,
                         1,
                         60,
@@ -6721,18 +6203,11 @@
                         5,
                         26,
                         ""
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        150,
-                        1,
-                        1,
-                        "à l'oeil"
-=======
                         1,
                         10,
                         31,
@@ -6740,7 +6215,7 @@
                     ]
                 ]
             ],
-            "notes": "- A servir avec un bol de nouilles ou de riz",
+            "notes": "- A servir avec un bol de nouilles ou de riz\n\n- Si la viande est surgelée ou si elle rend de l'eau, le dashi en poudre suffit. Si elle est sèche, rajourter 15cl d'eau.\n\n- On peut rajouter de la coriandre fraîche pour servir.\n\n- Les oignons sont sucrés, Plus il y en a, moins il faut mettre de sucre.\n\n- Traditionellement, on le sert avec un oeuf poché dessus et du gingembre mariné.",
             "regimen": 1,
             "status": 3,
             "steps": [
@@ -6808,53 +6283,21 @@
                         2,
                         142,
                         "du Portugal, zestes+jus"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
                         1,
-<<<<<<< Updated upstream
-                        4,
-                        68,
-                        "séché"
-=======
                         5,
                         9,
                         ""
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
                         1,
-<<<<<<< Updated upstream
-                        4,
-                        11,
-                        "fin"
-                    ]
-                ]
-            ],
-            "notes": "- On peut remplacer la farine par de la fécule. C'est plus joli mais c'est plus élastique.\n\n- On peut rajouter du cucrcuma pour une belle couleur orangée.\n\n- Peut se servir avec du beurre ou une sauce.\n\n- Idée de sauce : 2 cuillères à soupe de sauce soja, du paprika (ou poudre de chili), 1 cuillère à café de beurre d'arachide et 1 cuillère à soupe d'huile neutre. Faire chauffer le tout dans une casserole et rallonger avec de l'eau de cuisson des globules afin d'obtenir une sauce crémeuse (pas trop sèche mais pas une soupe non plus).",
-            "regimen": 3,
-            "status": 3,
-            "steps": [
-                "Eplucher et couper les carottes en fines rondelles.",
-                "Les mettre dans une boîte qui va au micro-ondes entr'ouverte avec 20ml d'eau.",
-                "Les cuire dans celui-ci 7 minutes à 700 Watts.",
-                "Lorsque les carottes sont tendres, les réduire en purée avec le thym (prendre un mixeur plongeant).",
-                "Rajouter le sel et la farine petit à petit jusqu'à faire une belle boule de pâte pas collante.",
-                "Laisser reposer la pâte 10 minutes.",
-                "Pendant ce temps-là, mettre à bouillr une cocotte d'eau.",
-                "Faire des boules avec la pâte, les aplatir légèrement et appuyer au milieu avec son petit doigt afin de faire un globule. Faire des globules avec toute la pâte.",
-                "Mettre les globules à cuire dans l'eau bouillante pendant 5 minutes (ça varie selon la taille et le nombres de globules).",
-                "Les égoutter et servir."
-            ],
-            "t-portions": "personnes",
-            "title": "Globules de carottes",
-=======
                         10,
                         26,
                         ""
@@ -6874,64 +6317,36 @@
             ],
             "t-portions": "personnes",
             "title": "Blancs de poulet à l'orange",
->>>>>>> Stashed changes
             "type": 2,
             "used": 0
         },
         {
-<<<<<<< Updated upstream
-            "basic": true,
-            "d-portions": 15,
-            "duration": 1,
-            "id": 73,
-=======
             "basic": false,
             "d-portions": 2,
             "duration": 1,
             "id": 87,
->>>>>>> Stashed changes
             "ing": [
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        240,
-                        1,
-                        1,
-                        "blanche"
-=======
                         3,
                         2,
                         48,
                         "mûres"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        113,
-                        1,
-                        31,
-                        "poudre"
-=======
                         3,
                         5,
                         144,
                         "perles"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        227,
-                        1,
-                        32,
-                        "salé"
-=======
                         400,
                         12,
                         145,
@@ -6954,36 +6369,19 @@
                         5,
                         31,
                         "poudre"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        8,
-                        1,
-=======
                         1,
                         4,
->>>>>>> Stashed changes
                         11,
                         "fin"
                     ]
                 ]
             ],
             "notes": "",
-<<<<<<< Updated upstream
-            "regimen": 2,
-            "status": 3,
-            "steps": [
-                "Mettre le beurrre à température ambiante.",
-                "Dans une jatte, mélanger la farine, le sucre et le sel.",
-                "Découper les beurre en cubes et le mettre dans la jatte."
-            ],
-            "t-portions": "gâteaux",
-            "title": "Shortbreads",
-=======
             "regimen": 3,
             "status": 3,
             "steps": [
@@ -6994,35 +6392,11 @@
             ],
             "t-portions": "personnes",
             "title": "Perles de tapioca, lait de coco et bananes",
->>>>>>> Stashed changes
             "type": 3,
             "used": 0
         },
         {
             "basic": false,
-<<<<<<< Updated upstream
-            "d-portions": 1,
-            "duration": 1,
-            "id": 74,
-            "ing": [
-                [
-                    0,
-                    [
-                        60,
-                        1,
-                        1,
-                        "blanche"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        20,
-                        1,
-                        36,
-                        ""
-                    ]
-=======
             "d-portions": 2,
             "duration": 1,
             "id": 88,
@@ -7030,127 +6404,64 @@
                 [
                     1,
                     7
->>>>>>> Stashed changes
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        30,
-                        1,
-                        29,
-                        ""
-=======
                         1,
                         2,
                         33,
                         "jaune, entier"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        10,
-                        1,
-                        141,
-                        ""
-=======
                         1,
                         2,
                         17,
                         "en cubes"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        10,
-                        1,
-                        142,
-                        ""
-=======
                         2,
                         19,
                         50,
                         "en cubes"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        10,
-                        1,
-                        143,
-                        ""
-=======
                         1.5,
                         10,
                         146,
                         "séché"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        1,
-                        34,
-                        34,
-                        "chimique"
-=======
                         2,
                         5,
                         124,
                         "concassées"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        25,
-                        1,
-                        57,
-                        "huile"
-=======
                         1,
                         5,
                         31,
                         "cassonnade, poudre"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        65,
-                        1,
-                        10,
-                        ""
-                    ]
-                ]
-            ],
-            "notes": "",
-            "regimen": 3,
-            "status": 3,
-            "steps": [
-                "Tout mélanger dans un saladier",
-                "Etaler la pâte entre deux feuilles de papier sulfurisé\n",
-                "Mettre au four 15-20 minutes à 180°C",
-                "Mettre sur une grille pour ne pas qu'il ramolissent"
-            ],
-            "t-portions": "plaque",
-            "title": "Crackers aux graines",
-=======
                         2,
                         5,
                         56,
@@ -7170,64 +6481,27 @@
             ],
             "t-portions": "personnes",
             "title": "Riz au citron, au romarin et aux amandes",
->>>>>>> Stashed changes
             "type": 2,
             "used": 0
         },
         {
             "basic": false,
-<<<<<<< Updated upstream
-            "d-portions": 0,
-            "duration": 1,
-            "id": 75,
-            "ing": [
-            ],
-            "notes": "- Se fait au volume, pas au poids\n- La version peut se faire sucrée avec des fruits, des noix, du chocolat...\n- Elle peut se faire faire aussi salée avec du fromage, du jambon, de l'ail, des noisettes....",
-            "regimen": 2,
-            "status": 3,
-            "steps": [
-            ],
-            "t-portions": "",
-            "title": "Porridge",
-            "type": 1,
-            "used": 0
-        },
-        {
-            "basic": false,
-            "d-portions": 2,
-            "duration": 1,
-            "id": 76,
-=======
             "d-portions": 2,
             "duration": 2,
             "id": 89,
->>>>>>> Stashed changes
             "ing": [
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        200,
-                        1,
-                        60,
-                        "tranché très fin 1mm"
-=======
                         225,
                         1,
                         147,
                         "frais"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        2,
-                        2,
-                        17,
-                        "petits ou un seul gros"
-=======
                         100,
                         1,
                         1,
@@ -7241,80 +6515,38 @@
                         2,
                         2,
                         "gros"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        1,
-                        5,
-                        27,
-                        "poudre"
-=======
                         250,
                         1,
                         148,
                         ""
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        3,
-                        5,
-                        9,
-                        "salée"
-=======
                         60,
                         1,
                         107,
                         "ou peccorino"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        2,
-                        5,
-                        26,
-                        ""
-=======
                         0.5,
                         10,
                         72,
                         "poudre"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        1,
-                        5,
-                        31,
-                        "poudre"
-                    ]
-                ]
-            ],
-            "notes": "- Servir sur un bol de riz blanc\n\n- Si la viande est surgelée ou si elle rend de l'eau, le dashi en poudre suffit. Si elle est sèche, rajourter 20cl d'eau.\n\n- On peut rajouter de la coriandre fraîche pour servir.\n\n- Les oignons sont sucrés, Plus il y en a, moins il faut mettre de sucre.\n\n- Traditionellement, on le sert avec un oeuf poché dessus et du gingembre mariné.",
-            "regimen": 1,
-            "status": 3,
-            "steps": [
-                "Faire revenir le boeuf et les oignons dans une poële. ",
-                "Rajouter le dashi, la sauc soja le mirin est le sucre.",
-                "Attendre que cela fasse une jolie sauce. les piognons doivent être tendres et la viande cuite.",
-                "Servir immédiatemment."
-            ],
-            "t-portions": "bol",
-            "title": "Gyudon",
-=======
                         20,
                         1,
                         32,
@@ -7337,149 +6569,63 @@
             ],
             "t-portions": "personnes",
             "title": "Gnudi",
->>>>>>> Stashed changes
             "type": 2,
             "used": 0
         },
         {
             "basic": false,
-<<<<<<< Updated upstream
-            "d-portions": 6,
-            "duration": 2,
-            "id": 77,
-=======
             "d-portions": 2,
             "duration": 1,
             "id": 90,
->>>>>>> Stashed changes
             "ing": [
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        250,
-                        1,
-                        1,
-                        "blanche"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        125,
-                        1,
-                        10,
-                        "tiède"
-=======
                         150,
                         1,
                         149,
                         "jaune"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        15,
-                        1,
-                        31,
-                        "poudre"
-=======
                         1,
                         4,
                         11,
                         "gros"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        2.5,
-                        1,
-                        34,
-                        "boulanger"
-=======
                         1,
                         4,
                         68,
                         ""
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        2.5,
-                        1,
-                        34,
-                        "instantanée"
-=======
                         1,
                         4,
                         50,
                         "poudre"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        1,
-                        10,
-                        56,
-                        "tournesol"
-=======
                         750,
                         1,
                         10,
                         ""
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        1,
-                        10,
-                        56,
-                        "sésame"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        4,
-                        11,
-                        "fin"
-                    ]
-                ]
-            ],
-            "notes": "- Le plus simple : faire la pâte la veille et la mettre directement au réfrigérateur. Le lendemain, la sortir deux heure avant utilisation. Faire les galettes ensuite et reprendre la ",
-            "regimen": 3,
-            "status": 3,
-            "steps": [
-                "Mettre la levure de boulanger dans l'eau tiède avec le sucre pendant 15 minutes. Attention ça mousse.",
-                "Dans un saladier mettre la farine, le sel, la levure instantanée. Mélanger puis ajouter l'eau avec la levure de boulanger.",
-                "Pétrir à la main. Quand la boule se forme, ajouter l'huile de tournesol.",
-                "Pétrir à nouveau. Quand la boule est belle mettre dans dans une boîté hermétique fermée (pour ne pas qu'elle se dessèche) et laisser doubler de volume.",
-                "Dégazer la pâte et faire 6 boules égales.",
-                "Etaler les boules en galette de 10 cm.",
-                "Badigeonner chaque galette d'huile de sésame et les replier en deux (en forme de demi-lune). L'huile doit être être à l'intérieur du chausson.",
-                "Mettre les bao sur des carrés de papier sulfurisé dans le panier vapeur et les laisser pousser pendant 20 minutes.",
-                "Faire cuire à la vapeur pendant 8 minutes. ATTENDRE 10 MINUTES POUR OUVRIR LE PANIER VAPEUR !"
-            ],
-            "t-portions": "buns",
-            "title": "Bao buns",
-            "type": 1,
-=======
                         3,
                         5,
                         56,
@@ -7501,92 +6647,48 @@
             "t-portions": "personnes",
             "title": "Polenta",
             "type": 2,
->>>>>>> Stashed changes
             "used": 0
         },
         {
             "basic": false,
-<<<<<<< Updated upstream
-            "d-portions": 12,
-            "duration": 1,
-            "id": 78,
-=======
-            "d-portions": 18,
+            "d-portions": 24,
             "duration": 1,
             "id": 91,
->>>>>>> Stashed changes
             "ing": [
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        250,
-                        1,
-                        38,
-                        "rapée"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        250,
-                        1,
-                        144,
-                        "sucré"
-=======
                         340,
                         1,
                         1,
                         ""
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        200,
-                        1,
-                        132,
-                        "noir ou lait"
-=======
                         113,
                         1,
                         31,
                         "poudre"
->>>>>>> Stashed changes
                     ]
                 ],
                 [
                     0,
                     [
-<<<<<<< Updated upstream
-                        1,
-                        5,
-                        56,
-                        "neutre"
-                    ]
-                ]
-            ],
-            "notes": "",
-            "regimen": 2,
-            "status": 3,
-            "steps": [
-                "Faire fondre le chocolat en morceaux au micro ondes (remuer toutes les trente seconde) avec l'huile.",
-                "Mettre le chocolat dans un bol.",
-                "Mélanger la noix de coco avec le lait concenré sucré.",
-                "Faire des barres  allongées à la main.",
-                "Mettre les barres une demie heure au congélateur.",
-                "Tremper les barres dans le chocolat (qui est tiède ou froid) et les poser sur une plaque de papier sulfurisé.",
-                "Mettre au réfrigérateur toute une nuit."
-            ],
-            "t-portions": "bounties",
-            "title": "Bounty",
-=======
                         227,
                         1,
                         32,
                         "mou"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        8,
+                        1,
+                        11,
+                        "fin"
                     ]
                 ]
             ],
@@ -7602,8 +6704,795 @@
             ],
             "t-portions": "gateaux",
             "title": "Shortbreads",
->>>>>>> Stashed changes
             "type": 3,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 92,
+            "ing": [
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        150,
+                        "belles"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        56,
+                        "tournesol"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ],
+                [
+                    2,
+                    "Pour la sauce :"
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        10,
+                        151,
+                        "pâte"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        10,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        9,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        56,
+                        "sésame"
+                    ]
+                ],
+                [
+                    2,
+                    "Décoration :"
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        143,
+                        "fraîche, ciselée"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        152,
+                        "graines"
+                    ]
+                ]
+            ],
+            "notes": "- Manger avec du riz blanc\n- La peau se mange !",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Couper les aubergines  en deux et faire des croisillons profonds à l'intérieur sans casser les aubergines.",
+                "Mettre deux pincées de sel fin à l'intérieur et les laisser dégorger pendant 10 minutes environ.",
+                "Faire la sauce pendant ce temps-là : bien mélanger tous les ingrédients.",
+                "Absorber le liquide les aubergines avec du papier essuie-tout.",
+                "Les faire griller à la poële bien chaude avec de l'huile de tournesol : commencer par la face avec les croisillons. Les aubergines doivent dorer.",
+                "Quand les deux faces sont bien cuites les mettre sur une plaque qui va au four.",
+                "Bien les badigeonner de sauce et bien insister sur les croisillons : il faut tout mettre.",
+                "Enfourner les aubergines pendant 10 min 220°C pour qu'elle caramélisent.",
+                "Les servir en mettant la décoration dessus."
+            ],
+            "t-portions": "personnes",
+            "title": "Aubergines Umami",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 6,
+            "duration": 2,
+            "id": 93,
+            "ing": [
+                [
+                    0,
+                    [
+                        250,
+                        1,
+                        1,
+                        "blanche"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        125,
+                        1,
+                        10,
+                        "tiède"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        15,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2.5,
+                        1,
+                        34,
+                        "boulanger"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2.5,
+                        1,
+                        34,
+                        "instantanée"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        56,
+                        "tournesol"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        56,
+                        "sésame"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ]
+            ],
+            "notes": " Le plus simple : faire la pâte la veille et la mettre directement au réfrigérateur. Le lendemain, la sortir deux heure avant utilisation. Faire les galettes ensuite et reprendre la recette.",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Mettre la levure de boulanger dans l'eau tiède avec le sucre pendant 15 minutes. Attention ça mousse.",
+                "Dans un saladier mettre la farine, le sel, la levure instantanée. Mélanger puis ajouter l'eau avec la levure de boulanger.",
+                "Pétrir à la main. Quand la boule se forme, ajouter l'huile de tournesol.",
+                "Pétrir à nouveau. Quand la boule est belle mettre dans dans une boîté hermétique fermée (pour ne pas qu'elle se dessèche) et laisser doubler de volume.",
+                "Dégazer la pâte et faire 6 boules égales.",
+                "Etaler les boules en galette de 10 cm.",
+                "Badigeonner chaque galette d'huile de sésame et les replier en deux (en forme de demi-lune). L'huile doit être être à l'intérieur du chausson.",
+                "Mettre les bao sur des carrés de papier sulfurisé dans le panier vapeur et les laisser pousser pendant 20 minutes.",
+                "Faire cuire à la vapeur pendant 8 minutes. ATTENDRE 10 MINUTES POUR OUVRIR LE PANIER VAPEUR "
+            ],
+            "t-portions": "buns",
+            "title": "Japan pan",
+            "type": 1,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 1,
+            "duration": 1,
+            "id": 94,
+            "ing": [
+                [
+                    0,
+                    [
+                        60,
+                        1,
+                        1,
+                        "blanche"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        20,
+                        1,
+                        36,
+                        "flocons"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        30,
+                        1,
+                        29,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        10,
+                        1,
+                        153,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        10,
+                        1,
+                        154,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        34,
+                        "chimique"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        25,
+                        1,
+                        56,
+                        "olive"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        65,
+                        1,
+                        10,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Tout mélanger dans un saladier",
+                "Etaler la pâte entre deux feuilles de papier sulfurisé",
+                "Mettre au four 15-20 minutes à 180°C",
+                "Mettre sur une grille pour ne pas qu'il ramolissent"
+            ],
+            "t-portions": "plaque",
+            "title": "Crackers aux graines",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 6,
+            "duration": 1,
+            "id": 95,
+            "ing": [
+                [
+                    0,
+                    [
+                        150,
+                        1,
+                        36,
+                        "flocons"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        6,
+                        5,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        6,
+                        5,
+                        37,
+                        "poudre, non sucré"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        6,
+                        5,
+                        120,
+                        "beurre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        135,
+                        12,
+                        10,
+                        ""
+                    ]
+                ]
+            ],
+            "notes": "- Attention à ne pas casser le mixeur... Le mieux, c'est de mixer les flocons d'avoine  et de rajouter tous les autres ingrédients secs ensuite et bien mélanger. Puis ajouter l'eau et le beurre de cacahuètes en dernier et bien pétrir le tout.\n\n",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Tout mixer jusqu'à obtenir une boule pâteuse (type pâte de datte).",
+                "Faire des petites boules ou l'aplatir et faire des petits carrés.",
+                "Enfourner de 30 à 45 minutes à 150°C pour que les céréales déssèchent."
+            ],
+            "t-portions": "bols",
+            "title": "Céréales du matin au chocolat",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 96,
+            "ing": [
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        46,
+                        "moyenne"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        150,
+                        1,
+                        1,
+                        "à l'oeil"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        68,
+                        "séché"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ]
+            ],
+            "notes": "- On peut remplacer la farine par de la fécule. C'est plus joli mais c'est plus élastique.\n\n- On peut rajouter du cucrcuma pour une belle couleur orangée.\n\n- Peut se servir avec du beurre ou une sauce.",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Eplucher et couper les carottes en fines rondelles.",
+                "Les mettre dans une boîte qui va au micro-ondes entr'ouverte avec 20ml d'eau.",
+                "Les cuire dans celui-ci 7 minutes à 700 Watts.",
+                "Lorsque les carottes sont tendres, les réduire en purée avec le thym (prendre un mixeur plongeant).",
+                "Rajouter le sel et la farine petit à petit jusqu'à faire une belle boule de pâte pas collante.",
+                "Laisser reposer la pâte 10 minutes.",
+                "Pendant ce temps-là, mettre à bouillir une cocotte d'eau.",
+                "Faire des boules avec la pâte, les aplatir légèrement et appuyer au milieu avec son petit doigt afin de faire un globule. Faire des globules avec toute la pâte.",
+                "Mettre les globules à cuire dans l'eau bouillante pendant 5 minutes (ça varie selon la taille et le nombres de globules).",
+                "Les égoutter et servir."
+            ],
+            "t-portions": "personnes",
+            "title": "Globules de carottes",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 1,
+            "duration": 1,
+            "id": 98,
+            "ing": [
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        36,
+                        "flocons"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        121,
+                        "bananes, poires, kiwi, mangue, fruits rouges, pommes..."
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        6,
+                        155,
+                        "épinards, pak-choï, tomate..."
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        6,
+                        3,
+                        "coco, vache, végétal"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        52,
+                        "optionel"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Mixer le tout et boire bien frais"
+            ],
+            "t-portions": "tasse",
+            "title": "Morning smoothie",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": true,
+            "d-portions": 1,
+            "duration": 1,
+            "id": 99,
+            "ing": [
+                [
+                    0,
+                    [
+                        0.33,
+                        38,
+                        10,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.33,
+                        38,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.33,
+                        38,
+                        36,
+                        "flocons"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin ou gros mais pas trop"
+                    ]
+                ]
+            ],
+            "notes": "- Se fait au volume, pas au poids\n\n- La version peut se faire sucrée avec des fruits, des noix, du chocolat...\n\n- Elle peut se faire faire aussi salée avec du fromage, du jambon, de l'ail, des noisettes....\n\n- LAVER LA CASSEROLE TOUT DE SUITE, SINON ON NE PEUT PAS LA RAVOIR.",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Mettre le lait et l'au à bouillir. Ajouter le sel.",
+                "Lorsque ça bout mettre les flocons d'avoine. Remuer sans s'arrêter jusqu'à obtenir la consistence voulue (plus ou moins pâteuse).",
+                "Servir et mettre ce que l'on veut dessus."
+            ],
+            "t-portions": "bol",
+            "title": "Porridge",
+            "type": 1,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 12,
+            "duration": 2,
+            "id": 100,
+            "ing": [
+                [
+                    2,
+                    "Pour le coeur :"
+                ],
+                [
+                    0,
+                    [
+                        250,
+                        1,
+                        156,
+                        "sucré"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        250,
+                        1,
+                        38,
+                        "rapée"
+                    ]
+                ],
+                [
+                    2,
+                    "Pour le glaçage :"
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        157,
+                        "noir ou lait"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        56,
+                        "neutre"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Faire fondre le chocolat en morceaux au micro ondes (remuer toutes les trente secondes).",
+                "Mettre le chocolat dans un bol et remuer avec l'huile. Il servira à tremper les bounties.",
+                "Dans un autre saladier, mélanger la noix de coco avec le lait concenré sucré.",
+                "Faire des barres  allongées à la main.",
+                "Mettre les barres une demie-heure au congélateur.",
+                "Tremper les barres dans le chocolat (qui est tiède ou froid) et les poser sur une plaque de papier sulfurisé.",
+                "Mettre au réfrigérateur toute une nuit."
+            ],
+            "t-portions": "bounties",
+            "title": "Bounty",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 9,
+            "duration": 1,
+            "id": 101,
+            "ing": [
+                [
+                    2,
+                    "Premier saladier :"
+                ],
+                [
+                    0,
+                    [
+                        150,
+                        1,
+                        157,
+                        "dessert"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        150,
+                        1,
+                        32,
+                        "salé"
+                    ]
+                ],
+                [
+                    2,
+                    "Second saladier :"
+                ],
+                [
+                    0,
+                    [
+                        85,
+                        1,
+                        1,
+                        "blanche"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        1,
+                        37,
+                        "poudre, non sucré"
+                    ]
+                ],
+                [
+                    2,
+                    "Troisième saladier :"
+                ],
+                [
+                    0,
+                    [
+                        180,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        2,
+                        2,
+                        "gros"
+                    ]
+                ],
+                [
+                    2,
+                    "A ajouter à la pâte à gâteau finale :"
+                ],
+                [
+                    0,
+                    [
+                        125,
+                        1,
+                        159,
+                        "cerneaux hachés"
+                    ]
+                ]
+            ],
+            "notes": "- 2 cuissons possibles :\n1) 40 minutes à 160°C\n2) 20 minutes à 220°C",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Faire fondre le beurre et le chocolat ensemble.",
+                "Dans un autre saladier, tamiser la farine et le cacao.",
+                "Dans un troisième saladier, passer au batteur électrique les oeufs et le sucre jusqu'à ce que le mélange soit mousseux et ait doublé.",
+                "Incorporer le chocolat et le beurre fondus au mélange précédant.",
+                "Incorporer les poudres ensuite. En tournant délicatement.",
+                "Mettre les noix dans le mélange.",
+                "Mettre dans un moule carré et faire cuire au four."
+            ],
+            "t-portions": "parts",
+            "title": "Brownie",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 102,
+            "ing": [
+                [
+                    0,
+                    [
+                        4,
+                        5,
+                        160,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        4,
+                        5,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        5,
+                        26,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        3,
+                        5,
+                        9,
+                        "salé"
+                    ]
+                ]
+            ],
+            "notes": "",
+            "regimen": 3,
+            "status": 3,
+            "steps": [
+                "Si cette sauce va avec de la viande : faire fondre le sucre avec cette dernère ainsi elle va caraméliser. Ajouter le reste des ingrédients une fois la viande dorée.",
+                "Sinon tout mettre dans la poële jusqu'à ce que le sucre ait fondu."
+            ],
+            "t-portions": "personnes",
+            "title": "Sauce aigre douce",
+            "type": 2,
             "used": 0
         }
     ],
@@ -7611,61 +7500,37 @@
         [
             1,
             "g",
-<<<<<<< Updated upstream
-            107
-=======
-            106
->>>>>>> Stashed changes
+            130
         ],
         [
             2,
             "Ø",
-<<<<<<< Updated upstream
-            95
-=======
-            98
->>>>>>> Stashed changes
+            102
         ],
         [
             3,
             "lichette",
-<<<<<<< Updated upstream
-            2
-=======
             1
->>>>>>> Stashed changes
         ],
         [
             4,
             "pincée",
-<<<<<<< Updated upstream
-            22
-=======
-            18
->>>>>>> Stashed changes
+            24
         ],
         [
             5,
             "cas",
-            70
+            82
         ],
         [
             6,
             "portion",
-<<<<<<< Updated upstream
-            3
-=======
             2
->>>>>>> Stashed changes
         ],
         [
             7,
             "verre",
-<<<<<<< Updated upstream
-            17
-=======
             21
->>>>>>> Stashed changes
         ],
         [
             8,
@@ -7675,47 +7540,27 @@
         [
             9,
             "boîte",
-<<<<<<< Updated upstream
-            4
-=======
             6
->>>>>>> Stashed changes
         ],
         [
             10,
             "cac",
-<<<<<<< Updated upstream
-            22
-=======
-            25
->>>>>>> Stashed changes
+            30
         ],
         [
             11,
             "sachet",
-<<<<<<< Updated upstream
-            11
-=======
             13
->>>>>>> Stashed changes
         ],
         [
             12,
             "ml",
-<<<<<<< Updated upstream
-            15
-=======
-            18
->>>>>>> Stashed changes
+            19
         ],
         [
             13,
             "litre",
-<<<<<<< Updated upstream
-            3
-=======
             4
->>>>>>> Stashed changes
         ],
         [
             14,
@@ -7740,11 +7585,7 @@
         [
             19,
             "gousse",
-<<<<<<< Updated upstream
-            2
-=======
             4
->>>>>>> Stashed changes
         ],
         [
             21,
@@ -7754,11 +7595,7 @@
         [
             22,
             "poignée",
-<<<<<<< Updated upstream
-            6
-=======
             7
->>>>>>> Stashed changes
         ],
         [
             26,
@@ -7773,11 +7610,7 @@
         [
             29,
             "petite boîte",
-<<<<<<< Updated upstream
-            2
-=======
             1
->>>>>>> Stashed changes
         ],
         [
             30,
@@ -7787,26 +7620,16 @@
         [
             31,
             "pot",
-<<<<<<< Updated upstream
-            3
-=======
             4
->>>>>>> Stashed changes
         ],
         [
             32,
             "cl",
-<<<<<<< Updated upstream
-            8
-=======
             13
->>>>>>> Stashed changes
         ],
         [
             33,
             "cs",
-<<<<<<< Updated upstream
-=======
             1
         ],
         [
@@ -7822,13 +7645,12 @@
         [
             37,
             "cube",
->>>>>>> Stashed changes
             1
         ],
         [
-            34,
-            "cc",
-            1
+            38,
+            "tasse",
+            3
         ]
     ]
 }
