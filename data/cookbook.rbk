@@ -10,7 +10,7 @@
             2,
             "oeuf",
             1,
-            23
+            24
         ],
         [
             3,
@@ -46,7 +46,7 @@
             9,
             "sauce soja",
             5,
-            10
+            11
         ],
         [
             10,
@@ -118,7 +118,7 @@
             29,
             "graine de courge",
             7,
-            3
+            4
         ],
         [
             30,
@@ -214,7 +214,7 @@
             46,
             "carotte",
             2,
-            8
+            9
         ],
         [
             47,
@@ -238,7 +238,7 @@
             50,
             "ail",
             2,
-            10
+            11
         ],
         [
             51,
@@ -268,7 +268,7 @@
             56,
             "huile",
             9,
-            34
+            36
         ],
         [
             57,
@@ -442,7 +442,7 @@
             87,
             "jambon",
             1,
-            1
+            2
         ],
         [
             88,
@@ -694,7 +694,7 @@
             142,
             "orange",
             2,
-            0
+            1
         ],
         [
             143,
@@ -724,7 +724,7 @@
             147,
             "épinard",
             2,
-            1
+            2
         ],
         [
             148,
@@ -796,6 +796,24 @@
             160,
             "ketchup",
             5,
+            1
+        ],
+        [
+            161,
+            "quinoa",
+            3,
+            1
+        ],
+        [
+            162,
+            "feta",
+            8,
+            1
+        ],
+        [
+            164,
+            "petits pois",
+            2,
             1
         ]
     ],
@@ -1221,7 +1239,7 @@
             "t-portions": "personnes",
             "title": "Riz gluant",
             "type": 2,
-            "used": 6
+            "used": 7
         },
         {
             "basic": false,
@@ -7494,18 +7512,193 @@
             "title": "Sauce aigre douce",
             "type": 2,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 103,
+            "ing": [
+                [
+                    0,
+                    [
+                        150,
+                        1,
+                        161,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        142,
+                        "moyennes"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        1,
+                        147,
+                        "branches"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        1,
+                        162,
+                        "émietté"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        29,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        56,
+                        "olive"
+                    ]
+                ]
+            ],
+            "notes": "- On peut servir avec un oeuf au plat (sans graines de courges)",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Cuire le quinoa.",
+                "Faire revenir les épinards à la poële pendant trente secondes.",
+                "Couper les oranges en cubes.",
+                "Dresser : mettre le quinoa au fond d'un bol puis ajouter les épinards et la oranges. Ajouter la feta émiettée, les graines de courges. Enfin, arroser d'huile d'olive. Servir."
+            ],
+            "t-portions": "bols",
+            "title": "Bol de quinoa, féta et oranges",
+            "type": 2,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 2,
+            "duration": 1,
+            "id": 104,
+            "ing": [
+                [
+                    2,
+                    "A cuire au préalable et à laisser refroidir :"
+                ],
+                [
+                    1,
+                    7
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        7,
+                        164,
+                        "surgelés ou frais, pas en conserve"
+                    ]
+                ],
+                [
+                    2,
+                    "Garniture :"
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        87,
+                        "cubes ou tranches"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        2,
+                        2,
+                        "battus"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        46,
+                        "moyenne, en petits cubes"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        19,
+                        50,
+                        "frais, haché"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        9,
+                        "salée"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        2,
+                        5,
+                        56,
+                        "neutre"
+                    ]
+                ]
+            ],
+            "notes": "- Faire cuire le riz (un verre de riz cru) avec les petits pois SANS SEL (cf. la recette du riz gluant).\n\n- On peut remplacer le jambon par des crevettes pour une recette végétarienne. Dans ce cas, les ajouter après les carottes.\n\n- Décorer avec de la coriandre fraîche.",
+            "regimen": 1,
+            "status": 3,
+            "steps": [
+                "Faire cuire le riz et le petits pois à la manière du \"riz gluant\" SANS SEL. Laisser refroidir, on peut même le faire la veille.",
+                "Dans une poële, faire chauffer les deux cuillères à soupe d'huile. Ajouter les carottes puis l'ail haché. ",
+                "Laisser chauffer quelques minutes, rabattre les légumes d'un côté de la poële puis ajouter les oeufs battus.",
+                "Les oeufs doivent cuire en omelette. On en fera des gros morceaux avec la spatule.",
+                "Ajouter le riz PETIT A PETIT pour pouvoir le frire.",
+                "Ajouter la sauce soja et bien mélanger pour l'amalgamer.",
+                "Eteindre le feu losque tout est cuit, ajouter le jambon dessus, et mettre un couvercle sur la poële.",
+                "Attendre 5 minutes puis servir et manger immédiatement."
+            ],
+            "t-portions": "bols",
+            "title": "Riz cantonnais",
+            "type": 2,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            130
+            134
         ],
         [
             2,
             "Ø",
-            102
+            105
         ],
         [
             3,
@@ -7520,7 +7713,7 @@
         [
             5,
             "cas",
-            82
+            86
         ],
         [
             6,
@@ -7530,7 +7723,7 @@
         [
             7,
             "verre",
-            21
+            22
         ],
         [
             8,
@@ -7585,7 +7778,7 @@
         [
             19,
             "gousse",
-            4
+            5
         ],
         [
             21,
