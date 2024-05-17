@@ -54,7 +54,6 @@ jobs:
         cat ${{ github.workspace }}/CookBook.pro | nl
         echo "======================================"
         echo ">> Configuring:"
-        nmake clean
         qmake -spec win32-g++ ${{ github.workspace }}/CookBook.pro
         nmake
         echo "======================================"
