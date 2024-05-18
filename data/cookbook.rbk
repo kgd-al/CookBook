@@ -16,7 +16,7 @@
             3,
             "lait",
             8,
-            14
+            16
         ],
         [
             4,
@@ -52,13 +52,13 @@
             10,
             "eau",
             6,
-            27
+            28
         ],
         [
             11,
             "sel",
             5,
-            24
+            25
         ],
         [
             13,
@@ -154,13 +154,13 @@
             36,
             "avoine",
             3,
-            7
+            8
         ],
         [
             37,
             "cacao",
             5,
-            5
+            7
         ],
         [
             38,
@@ -250,7 +250,7 @@
             52,
             "miel",
             4,
-            3
+            4
         ],
         [
             53,
@@ -784,13 +784,13 @@
             157,
             "chocolat",
             9,
-            2
+            3
         ],
         [
             159,
             "noix",
             7,
-            1
+            2
         ],
         [
             160,
@@ -826,6 +826,18 @@
             166,
             "herbe",
             2,
+            1
+        ],
+        [
+            167,
+            "date",
+            4,
+            1
+        ],
+        [
+            168,
+            "café",
+            5,
             1
         ]
     ],
@@ -7791,13 +7803,164 @@
             "title": "Croquettes au thon",
             "type": 2,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 0.5,
+            "duration": 3,
+            "id": 106,
+            "ing": [
+                [
+                    0,
+                    [
+                        500,
+                        12,
+                        3,
+                        "vache"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        25,
+                        1,
+                        36,
+                        "flocons"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        1,
+                        159,
+                        "cacahuètes, noix, noisettes, noix de cajou..."
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        90,
+                        1,
+                        167,
+                        "dénoyautées"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "gros"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        37,
+                        "non sucré"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        45,
+                        1,
+                        157,
+                        "noir, en tablette"
+                    ]
+                ]
+            ],
+            "notes": "- On peut rajouter un peu de café pour renforcer le goût du chocolat.",
+            "regimen": 2,
+            "status": 1,
+            "steps": [
+                "Mettre le lait, l'avoine, les noix, les dates, le sel et le cacao dans une jatte. Ne pas mettre le chococlat pour l'instant.",
+                "Laisser reposer au moins une demie-heure pour ramollir les ingrédients secs.",
+                "Mixer le tout le plus finement possible.",
+                "Faire chauffer dans une casserole à feu doux (pour ne pas que cela brûle).",
+                "Lorsque l'appareil épaissit, retirer du feu et ajouter immédiatement le chocolat en morceaux. Il va fondre tout seul.",
+                "Bien remuer pour mélanger le chocolat avec le reste.",
+                "Attendre que le mélange tièdisse, mettre dans un bac avec un couvercle et mettre au congélateur au moins 6 heures.",
+                "Sortir 10 minutes avant dégustation pour qu'elle puisse ramollir."
+            ],
+            "t-portions": "l",
+            "title": "Glace au chocolat (diététique)",
+            "type": 3,
+            "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 1,
+            "duration": 1,
+            "id": 107,
+            "ing": [
+                [
+                    0,
+                    [
+                        200,
+                        12,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        12,
+                        10,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        37,
+                        "poudre, non sucré"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        168,
+                        "instantané"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        52,
+                        "liquide"
+                    ]
+                ]
+            ],
+            "notes": "- Peut se boire froid ou chaud.\n- On peut utiliser le mixer : mousse fine et condensée\n- On peut utiliser le fouet électrique : mousse aérée",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Mixer le tout dans un saladier jusqu'à tout amalgamer. "
+            ],
+            "t-portions": "boisson",
+            "title": "Boisson Starbucks",
+            "type": 3,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            136
+            140
         ],
         [
             2,
@@ -7812,12 +7975,12 @@
         [
             4,
             "pincée",
-            24
+            25
         ],
         [
             5,
             "cas",
-            87
+            88
         ],
         [
             6,
@@ -7842,7 +8005,7 @@
         [
             10,
             "cac",
-            31
+            34
         ],
         [
             11,
@@ -7852,7 +8015,7 @@
         [
             12,
             "ml",
-            19
+            22
         ],
         [
             13,
