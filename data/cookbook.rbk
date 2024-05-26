@@ -4,7 +4,7 @@
             1,
             "farine",
             3,
-            36
+            37
         ],
         [
             2,
@@ -130,13 +130,13 @@
             31,
             "sucre",
             4,
-            31
+            33
         ],
         [
             32,
             "beurre",
             9,
-            15
+            17
         ],
         [
             33,
@@ -148,19 +148,19 @@
             34,
             "levure",
             5,
-            14
+            15
         ],
         [
             36,
             "avoine",
             3,
-            8
+            7
         ],
         [
             37,
             "cacao",
             5,
-            7
+            6
         ],
         [
             38,
@@ -544,7 +544,7 @@
             110,
             "canelle",
             5,
-            2
+            3
         ],
         [
             114,
@@ -784,13 +784,13 @@
             157,
             "chocolat",
             9,
-            3
+            2
         ],
         [
             159,
             "noix",
             7,
-            2
+            1
         ],
         [
             160,
@@ -832,7 +832,7 @@
             167,
             "date",
             4,
-            1
+            0
         ],
         [
             168,
@@ -7806,94 +7806,6 @@
         },
         {
             "basic": false,
-            "d-portions": 0.5,
-            "duration": 3,
-            "id": 106,
-            "ing": [
-                [
-                    0,
-                    [
-                        500,
-                        12,
-                        3,
-                        "vache"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        25,
-                        1,
-                        36,
-                        "flocons"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        50,
-                        1,
-                        159,
-                        "cacahuètes, noix, noisettes, noix de cajou..."
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        90,
-                        1,
-                        167,
-                        "dénoyautées"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        4,
-                        11,
-                        "gros"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        1,
-                        5,
-                        37,
-                        "non sucré"
-                    ]
-                ],
-                [
-                    0,
-                    [
-                        45,
-                        1,
-                        157,
-                        "noir, en tablette"
-                    ]
-                ]
-            ],
-            "notes": "- On peut rajouter un peu de café pour renforcer le goût du chocolat.",
-            "regimen": 2,
-            "status": 1,
-            "steps": [
-                "Mettre le lait, l'avoine, les noix, les dates, le sel et le cacao dans une jatte. Ne pas mettre le chococlat pour l'instant.",
-                "Laisser reposer au moins une demie-heure pour ramollir les ingrédients secs.",
-                "Mixer le tout le plus finement possible.",
-                "Faire chauffer dans une casserole à feu doux (pour ne pas que cela brûle).",
-                "Lorsque l'appareil épaissit, retirer du feu et ajouter immédiatement le chocolat en morceaux. Il va fondre tout seul.",
-                "Bien remuer pour mélanger le chocolat avec le reste.",
-                "Attendre que le mélange tièdisse, mettre dans un bac avec un couvercle et mettre au congélateur au moins 6 heures.",
-                "Sortir 10 minutes avant dégustation pour qu'elle puisse ramollir."
-            ],
-            "t-portions": "l",
-            "title": "Glace au chocolat (diététique)",
-            "type": 3,
-            "used": 0
-        },
-        {
-            "basic": false,
             "d-portions": 1,
             "duration": 1,
             "id": 107,
@@ -7954,13 +7866,132 @@
             "title": "Boisson Starbucks",
             "type": 3,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 12,
+            "duration": 2,
+            "id": 108,
+            "ing": [
+                [
+                    2,
+                    "Pour la pâte :"
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        1,
+                        1,
+                        "blanche"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        100,
+                        1,
+                        32,
+                        "mou"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        10,
+                        32,
+                        3,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        0.5,
+                        11,
+                        34,
+                        "chimique"
+                    ]
+                ],
+                [
+                    2,
+                    "Pour la garniture :"
+                ],
+                [
+                    0,
+                    [
+                        20,
+                        1,
+                        32,
+                        "fondu"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        50,
+                        1,
+                        31,
+                        "poudre"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        10,
+                        110,
+                        "poudre"
+                    ]
+                ]
+            ],
+            "notes": "- Attention au lait : ajouter petit à petit pour faire une belle boule. S'il en reste, ce n'est pas grave.\n\n- Varier les farces : confitures, pâte à tartiner, dattes...",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Tamiser la farine dans un saladier et ajouter le beurre en cube.",
+                "Effriter les deux ingrédients comme pour un crumble.",
+                "Faire un puits au milieu du \"sable\" et ajouter : le sel, la levure et le sucre.",
+                "Mélanger grossièrement le tout.",
+                "Ajouter le lait petit à petit pour former une belle boule.",
+                "Abaisser la pâte en rond ou en rectangle d'un centimètre.",
+                "Badigeonner la pâte de beurre fondu.",
+                "Saupoudrer le beurre fondu du mélange sucre/canelle.",
+                "Rouler la pâte sans trop forcer.",
+                "Mettre le roulé au réfrigerateur pendant une heure. ",
+                "Couper des tranches de 2 cm et les disposer sur une plaque de cuisson recouverte de papier cuisson.",
+                "Enfourner à 180°C pendant 25 minutes ou jusqu'à ce que les fifi-figues soient dorés.",
+                "Mettre les gâteux à refroidir sur une grille."
+            ],
+            "t-portions": "gâteaux",
+            "title": "Fifi-figues",
+            "type": 3,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            140
+            141
         ],
         [
             2,
@@ -7980,7 +8011,7 @@
         [
             5,
             "cas",
-            88
+            87
         ],
         [
             6,
@@ -8005,17 +8036,17 @@
         [
             10,
             "cac",
-            34
+            35
         ],
         [
             11,
             "sachet",
-            14
+            15
         ],
         [
             12,
             "ml",
-            22
+            21
         ],
         [
             13,
@@ -8085,7 +8116,7 @@
         [
             32,
             "cl",
-            13
+            14
         ],
         [
             33,
