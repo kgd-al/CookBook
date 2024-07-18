@@ -91,13 +91,16 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 //                        QKeySequence("Ctrl+O"));
 
 #ifndef Q_OS_ANDROID
-      m_book->addAction(QIcon::fromTheme(""), "&Save",
+      m_book->addAction(QIcon::fromTheme("document-save"), "&Save",
                         [this] { overwriteRecipes(false); },
                         QKeySequence("Ctrl+S"));
 
 //      m_book->addAction(QIcon::fromTheme(""), "Save As",
 //                        [this] { saveRecipes(); },
 //                        QKeySequence("Ctrl+Shift+S"));
+      m_book->addAction(QIcon::fromTheme("document-print"), "&Print",
+                        [this] { printRecipes(); },
+                        QKeySequence("Ctrl+P"));
 #endif
 
       QAction *filterAction =
@@ -236,6 +239,10 @@ void Book::showRecipe(const QModelIndex &index) {
 #ifndef Q_OS_ANDROID
 bool Book::overwriteRecipes(bool spontaneous) {
   return db::Book::current().autosave(spontaneous);
+}
+
+bool Book::printRecipes(void) {
+  return db::Book::current().print();
 }
 #endif
 

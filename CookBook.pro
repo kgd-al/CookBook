@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += core gui
+QT += core gui printsupport #bluetooth
 
 android {
     QT += androidextras
@@ -46,6 +46,7 @@ LIBS += -lmtp
 
 SOURCES += \
     src/db/book.cpp \
+    src/db/pdfprint.cpp \
     src/db/ingredientlistentries.cpp \
     src/db/ingredientsmodel.cpp \
     src/db/recipe.cpp \

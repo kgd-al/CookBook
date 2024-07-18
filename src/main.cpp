@@ -166,5 +166,8 @@ int main(int argc, char *argv[]) {
   w.setWindowIcon(QIcon(":/icons/book.png"));
   w.show();
 
+  w.printRecipes();
+  return 42;
+
   return app.exec();
 }

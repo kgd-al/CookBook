@@ -2,14 +2,7 @@
 
 set -euo pipefail
 
-dir=build
-
-[ ! -d $dir ] && mkdir $dir
-cd $dir
-[ ! -f ../Makefile ] && qmake ../
-
-make
-cd ..
+./build.sh
 
 ddir="/home/$USER/.local/share/applications/"
 desktopname="cookbook.desktop"

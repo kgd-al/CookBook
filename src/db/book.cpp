@@ -132,8 +132,12 @@ bool Book::load (void) {
   return true;
 }
 
+QString Book::extension(void) {
+  return "rbk";
+}
+
 QString Book::monitoredName(void) {
-  return "cookbook.rbk";
+  return "cookbook." + extension();
 }
 
 QString Book::monitoredDir(void) {

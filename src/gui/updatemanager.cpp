@@ -197,9 +197,13 @@ private:
       return 1;
     case LIBMTP_ERROR_NONE:
       q << "Found " << numrawdevices << " device(s):\n";
-      for (int i = 0; i < numrawdevices; i++)
-        if (Device d = Device::makeFrom(rawdevices[i]))
+      for (int i = 0; i < numrawdevices; i++) {
+        if (Device d = Device::makeFrom(rawdevices[i])) {
           _devices.push_back(d);
+          q << "> " << d.name << "\n";
+        } else
+          q << "> Failed to access device " << i << "\n";
+      }
       break;
     case LIBMTP_ERROR_GENERAL:
     default:
@@ -331,7 +335,7 @@ private:
       }
     }
 
-    if (!error.isEmpty())  _log->setText(error);
+    _log->setText(error);
 
     _send->setEnabled(error.isEmpty());
     qDebug() << "Send enabled?" << _send->isEnabled();

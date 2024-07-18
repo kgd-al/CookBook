@@ -25,6 +25,7 @@ public:
   bool loadDefaultBook(void);
 #ifndef Q_OS_ANDROID
   bool overwriteRecipes(bool spontaneous = true);
+  bool printRecipes(void);
 #endif
 
   void closeEvent(QCloseEvent *e) override;

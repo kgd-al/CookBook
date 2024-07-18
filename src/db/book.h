@@ -27,6 +27,7 @@ public:
 #ifndef Q_OS_ANDROID
   bool autosave (bool spontaneous);
   bool save (void);
+  bool print(void);
 #endif
   bool close (QWidget *widget = nullptr);
 
@@ -36,6 +37,7 @@ public:
 
   static Book& current (void);
 
+  static QString extension (void);
   static QString monitoredName (void);
   static QString monitoredDir (void);
   static QString monitoredPath (void);
