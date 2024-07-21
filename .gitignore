@@ -2,7 +2,11 @@ CookBook
 log
 *.pro.user
 *.rbk
+.gitignore
+*.pdf
 
+.venv/
+_*/
 *build*
 android*
 
