@@ -10,33 +10,38 @@
 #include <QFontDialog>
 
 #include "gui_settings.h"
-#include "common.h"
 #include "../db/settings.h"
 
 namespace gui {
 
-QString description (const QFont &font) {
-  return font.family()
-      + " " + font.style()
-      + " " + QString::number(font.pointSizeF());
-}
-
-QWidget* factory (SettingsView *settings, db::Settings::Type stype) {
+QWidget* factory (db::Settings::Type stype) {
   auto data = db::Settings::data(stype);
-  QVariant::Type dtype = data.defaultValue.type();
-  if (QVariant::Bool == dtype) {
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  auto dtype = data.defaultValue.type();
+  const auto Bool = QVariant::Bool;
+  const auto Font = QVariant::Font;
+  const auto Int = QVariant::Int;
+#else
+  auto dtype = data.defaultValue.typeId();
+  const auto Bool = QMetaType::Bool;
+  const auto Font = QMetaType::QFont;
+  const auto Int = QMetaType::Int;
+#endif
+
+  if (Bool == dtype) {
     auto cb = new QCheckBox (data.displayName);
     cb->setChecked(db::Settings::value<bool>(stype));
-    SettingsView::connect(cb, &QCheckBox::clicked, [settings, stype, cb] {
+    SettingsView::connect(cb, &QCheckBox::clicked, [stype, cb] {
       db::Settings::updateSetting(stype, cb->isChecked());
     });
     return cb;
 
-  } else if (QVariant::Font == dtype) {
+  } else if (Font == dtype) {
     QWidget *holder = new QWidget;
     QHBoxLayout *layout = new QHBoxLayout;
     QLabel *label = new QLabel ("Police: ");
-    QLabel *flabel = new QLabel (description(db::Settings::value<QFont>(stype)));
+    QLabel *flabel = new QLabel (db::Settings::value<QFont>(stype).toString());
     QToolButton *button = new QToolButton();
     layout->addWidget(label);
     layout->addWidget(flabel);
@@ -46,35 +51,36 @@ QWidget* factory (SettingsView *settings, db::Settings::Type stype) {
     button->setText("...");
     button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     SettingsView::connect(button, &QToolButton::clicked,
-                      [settings, holder, flabel, stype] {
+                          [holder, flabel, stype] {
       bool ok;
       QFont font = QApplication::font();
       font = QFontDialog::getFont(&ok, font, holder);
       if (ok) {
         QApplication::setFont(font);
         db::Settings::updateSetting(stype, font);
-        flabel->setText(description(font));
+        flabel->setText(font.toString());
       }
     });
 
     return holder;
 
-  } else if (QVariant::Int == dtype) {
+  } else if (Int == dtype) {
     QWidget *holder = new QWidget;
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addWidget(new QLabel(data.displayName));
     auto sb = new QSpinBox;
     sb->setValue(db::Settings::value<int>(stype));
     SettingsView::connect(sb, QOverload<int>::of(&QSpinBox::valueChanged),
-                          [settings, stype] (int value) {
+                          [stype] (int value) {
       db::Settings::updateSetting(stype, value);
     });
     layout->addWidget(sb);
     holder->setLayout(layout);
     return holder;
 
-  } else
-    return nullptr;
+  }
+
+  return nullptr;
 }
 
 void addSection (QVBoxLayout *layout, const char *label) {
@@ -96,7 +102,7 @@ SettingsView::SettingsView(QWidget *parent) : QDialog(parent) {
       addSection(layout, "Fenêtres bloquantes");
     }
 
-    layout->addWidget(factory(this, t));
+    layout->addWidget(factory(t));
   }
   auto *buttons = new QDialogButtonBox(QDialogButtonBox::Close);
   connect(buttons, &QDialogButtonBox::rejected, this, &QDialog::close);

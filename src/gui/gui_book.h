@@ -13,8 +13,8 @@
 
 namespace gui {
 
-struct FilterView;
-struct PlanningView;
+class FilterView;
+class PlanningView;
 
 class Book : public QMainWindow {
   Q_OBJECT

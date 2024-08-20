@@ -10,7 +10,7 @@ namespace db {
 class PlanningModel : public QAbstractTableModel {
 public:
   static constexpr int ROWS = 3;
-  static constexpr auto MergeAction = Qt::DropAction((Qt::ActionMask+1)>>1);
+  static constexpr auto MergeAction = Qt::DropAction((int(Qt::ActionMask)+1)>>1);
   static constexpr auto JsonRole = IDRole+1;
 
   static QIcon recipeLinkIcon (void);

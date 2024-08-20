@@ -66,7 +66,7 @@ private:
     if (event->type() == QEvent::TouchBegin
         && !activeMonitors.contains(watched)) {
       static_cast<G*>(state)->setHotSpot(
-        static_cast<QTouchEvent*>(event)->touchPoints().front().pos());
+        static_cast<QTouchEvent*>(event)->points().front().position());
 //      qDebug() << __PRETTY_FUNCTION__ << "(" << state << watched << event
 //               << "):\n\tMay start at "
 //               << static_cast<QTouchEvent*>(event)->touchPoints().front().pos();
@@ -76,7 +76,7 @@ private:
     } else if (event->type() == QEvent::TouchEnd
                && activeMonitors.contains(watched)) {
       auto sg = static_cast<G*>(state);
-      sg->setEnd(static_cast<QTouchEvent*>(event)->touchPoints().front().pos());
+      sg->setEnd(static_cast<QTouchEvent*>(event)->points().front().position());
       ResultFlag flag = CancelGesture;
       if (sg->magnitude() > 100) {
 //        qDebug() << __PRETTY_FUNCTION__ << "(" << state << watched << event

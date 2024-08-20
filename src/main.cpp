@@ -4,6 +4,7 @@
 #include <QTranslator>
 #include <QLibraryInfo>
 #include <QWindow>
+#include <QSettings>
 
 #include <QJsonDocument>
 #include <QDebug>
@@ -13,8 +14,7 @@
 #include <QDir>
 
 #include "gui/gui_book.h"
-#include "gui/common.h"
-#include "gui/gui_settings.h"
+#include "db/settings.h"
 
 #ifdef Q_OS_ANDROID
 #include <android/log.h>
@@ -30,7 +30,9 @@ void logger (QtMsgType type, const QMessageLogContext &context,
     {  QtWarningMsg, "# Warning" },
     { QtCriticalMsg, " Critical" },
     {    QtFatalMsg, "### Fatal" },
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     {   QtSystemMsg, "## System" }
+#endif
   };
 
   QString typeStr = types.value(type);
@@ -59,6 +61,15 @@ void logger (QtMsgType type, const QMessageLogContext &context,
   __android_log_write(qt2androidMsgType.value(type),
                       QCoreApplication::applicationName().toStdString().c_str(),
                       formattedMessage.toStdString().c_str());
+#endif
+}
+
+auto path() {
+  auto l = QLibraryInfo::TranslationsPath;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  return QLibraryInfo::location(l);
+#else
+  return QLibraryInfo::path(l);
 #endif
 }
 
@@ -97,7 +108,7 @@ int main(int argc, char *argv[]) {
   {
     auto q = qDebug();
     q << "Current settings (@" << settings.fileName() << "):\n";
-    for (QString k: settings.allKeys())
+    for (const QString &k: settings.allKeys())
       q << "\t" << k << ": " << settings.value(k) << "\n";
     q << "************************\n";
   }
@@ -105,18 +116,17 @@ int main(int argc, char *argv[]) {
 #ifndef Q_OS_ANDROID
   QApplication::setFont(db::Settings::value<QFont>(db::Settings::FONT));
 #endif
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
   QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
 
   QLocale fr_locale (QLocale::French);
 //  QLocale fr_locale = QLocale::system();
 
   /// FIXME Does not work (on some buttons)
   QTranslator qtTranslator;
-  qDebug() << "qtTranslator.load(" << fr_locale
-           << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << ")";
-  if (qtTranslator.load(fr_locale,
-              "qt", "_",
-              QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
+  qDebug() << "qtTranslator.load(" << fr_locale << path() << ")";
+  if (qtTranslator.load(fr_locale, "qt", "_", path())) {
     qDebug() << ">> ok";
     app.installTranslator(&qtTranslator);
   }
@@ -124,8 +134,7 @@ int main(int argc, char *argv[]) {
   QTranslator qtBaseTranslator;
   qDebug() << "qtBaseTranslator (" << "qtbase_" << fr_locale.name()
            << ")";
-  if (qtBaseTranslator.load("qtbase_" + fr_locale.name(),
-              QLibraryInfo::location(QLibraryInfo::TranslationsPath))) {
+  if (qtBaseTranslator.load("qtbase_" + fr_locale.name(), path())) {
     qDebug() << ">> ok";
     qDebug() << "Installed qtbase translator:"
              << app .installTranslator(&qtBaseTranslator);
@@ -165,9 +174,6 @@ int main(int argc, char *argv[]) {
   gui::Book w;
   w.setWindowIcon(QIcon(":/icons/book.png"));
   w.show();
-
-  w.printRecipes();
-  return 42;
 
   return app.exec();
 }

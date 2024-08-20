@@ -121,8 +121,17 @@ PlanningTableView::PlanningTableView (void) {
     _contextMenu->addAction(_actions.value(a));
 }
 
+auto position (QDropEvent *e) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  return e->pos();
+#else
+  return e->position().toPoint();
+#endif
+}
+
 void PlanningTableView::dropEvent(QDropEvent *e) {
-  QModelIndex index = indexAt(e->pos());
+  auto pos = position(e);
+  QModelIndex index = indexAt(pos);
   bool notEmpty = !index.data().toString().isEmpty();
   if (notEmpty) {
     _actions[ADD]->setEnabled(false);
@@ -132,15 +141,15 @@ void PlanningTableView::dropEvent(QDropEvent *e) {
 
     populateContentsMenu(index, 0);
 
-    QAction *action = _contextMenu->exec(mapToGlobal(e->pos()));
+    QAction *action = _contextMenu->exec(mapToGlobal(pos));
     _contentsMenu->clear();
 
     if (action == nullptr)  return;
 
     switch (action->data().value<Action>()) {
     case COMBINE:
-      e->setDropAction(Qt::DropAction(e->dropAction()
-                                    + db::PlanningModel::MergeAction));
+      e->setDropAction(Qt::DropAction(int(e->dropAction())
+                                      + int(db::PlanningModel::MergeAction)));
     case OVERWRITE:
       break;
     default:

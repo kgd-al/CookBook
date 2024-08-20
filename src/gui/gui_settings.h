@@ -3,8 +3,6 @@
 
 #include <QDialog>
 
-#include "../db/settings.h"
-
 namespace gui {
 
 class SettingsView : public QDialog {

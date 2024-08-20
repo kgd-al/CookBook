@@ -22,7 +22,7 @@ ListControls::ListControls (QAbstractItemView *view,
   QWidget *spacer = new QWidget;
   spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
   layout->addWidget(spacer);
-  layout->setMargin(0);
+  layout->setContentsMargins(0, 0, 0, 0);
   setLayout(layout);
 
   connect(_del, &QToolButton::clicked, this, &ListControls::deleteSelection);

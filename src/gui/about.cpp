@@ -67,7 +67,9 @@ About::About(QWidget *parent) : QDialog(parent) {
   qts << GIT_DATE;
   gdisplay->setText(text);
 
-  bdisplay->setText(BUILD_DATE);
+  text.clear();
+  qts << BUILD_DATE << " with Qt " << QT_VERSION_STR;
+  bdisplay->setText(text);
 
   auto *buttons = new QDialogButtonBox (QDialogButtonBox::Close);
   layout->addWidget(buttons);

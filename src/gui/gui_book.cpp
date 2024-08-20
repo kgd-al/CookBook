@@ -33,7 +33,6 @@
 #include "gui_book.h"
 #include "filterview.h"
 #include "planningview.h"
-#include "autofiltercombobox.hpp"
 #include "ingredientsmanager.h"
 #include "updatemanager.h"
 #include "repairsmanager.h"
@@ -45,6 +44,18 @@
 
 
 namespace gui {
+
+template <typename ...ARGS>
+QAction* add(QMenu *menu, const QString &icon, const QString &name,
+             const QString &shortcut, ARGS ...args) {
+  QIcon i = QIcon::fromTheme(icon);
+  QKeySequence ks (shortcut);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  return menu->addAction(i, name, args..., ks);
+#else
+  return menu->addAction(i, name, ks, args...);
+#endif
+}
 
 Book::Book(QWidget *parent) : QMainWindow(parent) {
   _filter = new FilterView (this);
@@ -91,52 +102,37 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 //                        QKeySequence("Ctrl+O"));
 
 #ifndef Q_OS_ANDROID
-      m_book->addAction(QIcon::fromTheme("document-save"), "&Save",
-                        [this] { overwriteRecipes(false); },
-                        QKeySequence("Ctrl+S"));
+      add(m_book, "document-save", "&Save", "Ctrl+S", [this] { overwriteRecipes(false); });
 
 //      m_book->addAction(QIcon::fromTheme(""), "Save As",
 //                        [this] { saveRecipes(); },
 //                        QKeySequence("Ctrl+Shift+S"));
-      m_book->addAction(QIcon::fromTheme("document-print"), "&Print",
-                        [this] { printRecipes(); },
-                        QKeySequence("Ctrl+P"));
+      add(m_book, "document-print", "&Print", "Ctrl+P", [this] { printRecipes(); });
 #endif
 
       QAction *filterAction =
-        m_book->addAction(QIcon::fromTheme(""), "&Filtrer",
-                          this, &Book::toggleFilterArea,
-                          QKeySequence("Ctrl+F"));
+        add(m_book, "", "&Filtrer", "Ctrl+F", this, &Book::toggleFilterArea);
       filterAction->setCheckable(true);
 
       QAction *planningAction =
-        m_book->addAction(QIcon::fromTheme(""), "P&lanning",
-                          this, &Book::togglePlanningArea,
-                          QKeySequence("Ctrl+L"));
+        add(m_book, "", "P&lanning", "Ctrl+L", this, &Book::togglePlanningArea);
       planningAction->setCheckable(true);
 
 #ifndef Q_OS_ANDROID
     QMenu *m_recipes = bar->addMenu("Recipes");
-      m_recipes->addAction(QIcon::fromTheme(""), "Add",
-                           this, &Book::addRecipe,
-                           QKeySequence("Ctrl+N"));
+    add(m_recipes, "", "Add", "Ctrl+N", this, &Book::addRecipe);
+
     QMenu *m_ingredients = bar->addMenu("Ingredients");
-    m_ingredients->addAction(QIcon::fromTheme(""), "Manage",
-                             this, &Book::showIngredientsManager,
-                             QKeySequence("Ctrl+I"));
+    add(m_ingredients, "", "Manage", "Ctrl+I", this, &Book::showIngredientsManager);
 
     QMenu *m_other = bar->addMenu("Misc");
-      m_other->addAction("Mise à jour", this, &Book::showUpdateManager,
-                         QKeySequence("Ctrl+U"));
-      m_other->addAction("Réparer", this, &Book::showRepairUtility,
-                         QKeySequence("Ctrl+R"));
-      m_other->addAction("Configuration", this, &Book::showSettings,
-                         QKeySequence("Ctrl+C"));
-      m_other->addAction("Bug tracker", [] {
+      add(m_other, "", "Mise à jour", "Ctrl+U", this, &Book::showUpdateManager);
+      add(m_other, "", "Réparer", "Ctrl+R", this, &Book::showRepairUtility);
+      add(m_other, "", "Configuration", "Ctrl+C", this, &Book::showSettings);
+      add(m_other, "", "Bug tracker", "", [] {
         QDesktopServices::openUrl(QUrl("https://github.com/kgd-al/CookBook/issues"));
       });
-      m_other->addAction("About", this, &Book::showAbout,
-                         QKeySequence("Ctrl+?"));
+      add(m_other, "", "About", "Ctrl+?", this, &Book::showAbout);
 
 #else
       m_book->addAction("About", this, &Book::showAbout);

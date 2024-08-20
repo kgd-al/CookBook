@@ -35,14 +35,26 @@ QVariant Settings::value (Type t) {
   return v;
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+auto qvType(const QVariant &v) { return v.type(); }
+bool canConvert(const QVariant &from, const QVariant &to) {
+  return from.canConvert(to.type());
+}
+#else
+auto qvType(const QVariant &v) { return v.typeId(); }
+bool canConvert(const QVariant &from, const QVariant &to) {
+  return from.canConvert(to.metaType());
+}
+#endif
+
 void Settings::updateSetting(Type t, const QVariant &newValue) {
   qDebug() << "Setting" << t << "changed from" << value(t) << "to" << newValue;
   QSettings settings;
   settings.beginGroup("global-settings");
 #ifndef QT_NO_DEBUG
-  Q_ASSERT(newValue.type() == data(t).defaultValue.type());
+  Q_ASSERT(qvType(newValue) == qvType(data(t).defaultValue));
   auto prevValue = value(t);
-  Q_ASSERT(prevValue.canConvert(newValue.type()));
+  Q_ASSERT(canConvert(prevValue, newValue));
 #endif
   settings.setValue(QMetaEnum::fromType<Type>().key(t), newValue);
   emit instance()->settingChanged(t, newValue);

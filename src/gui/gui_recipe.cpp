@@ -16,13 +16,15 @@
 #include <QCloseEvent>
 
 #ifdef Q_OS_ANDROID
-#include <QtAndroidExtras>
 #include "androidspecifics.hpp"
 #endif
 
 #include "gui_recipe.h"
+
+#ifndef Q_OS_ANDROID
 #include "ingrediententrydialog.h"
 #include "common.h"
+#endif
 
 #include "../db/book.h"
 #include "../db/recipesmodel.h"
@@ -34,10 +36,10 @@ static constexpr int STATUS_ICONS_SCALE = 1;
 
 #ifdef Q_OS_ANDROID
 void androidKeepScreenOn (bool on) {
-  QtAndroid::runOnAndroidThread([on]{
-    QAndroidJniObject activity = QtAndroid::androidActivity();
+  QNativeInterface::QAndroidApplication::runOnAndroidMainThread([on]{
+    QJniObject activity = QNativeInterface::QAndroidApplication::context();
     if (activity.isValid()) {
-      QAndroidJniObject window =
+      QJniObject window =
           activity.callObjectMethod("getWindow", "()Landroid/view/Window;");
 
       if (window.isValid()) {
@@ -49,7 +51,7 @@ void androidKeepScreenOn (bool on) {
         }
       }
     }
-    QAndroidJniEnvironment env;
+    QJniEnvironment env;
     if (env->ExceptionCheck()) {
       env->ExceptionClear();
     }
@@ -721,9 +723,7 @@ bool Recipe::safeQuit(QEvent *e) {
   if (isReadOnly()) return true;
   auto ret = QMessageBox::warning(this, "Confirmation",
                                   "Voulez vous sauvegarder?",
-                                  QMessageBox::Yes,
-                                  QMessageBox::No,
-                                  QMessageBox::Cancel);
+                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
   switch (ret) {
   case QMessageBox::Yes:
     writeThrough();

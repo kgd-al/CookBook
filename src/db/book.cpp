@@ -39,8 +39,7 @@ bool Book::close (QWidget *widget) {
   if (!_modified) return true;
   auto ret = QMessageBox::warning(widget, "Confirmez",
                                   "Sauvegarder les changements?",
-                                  QMessageBox::Yes, QMessageBox::No,
-                                  QMessageBox::Cancel);
+                                  QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
   switch (ret) {
   case QMessageBox::Yes:
     autosave(false);

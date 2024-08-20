@@ -6,9 +6,9 @@
 
 QT += core gui printsupport #bluetooth
 
-android {
-    QT += androidextras
-}
+# android {
+#     QT += androidextras
+# }
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -89,12 +89,14 @@ RESOURCES += \
 
 DISTFILES += \
     android/AndroidManifest.xml \
+    android/gradle.properties \
     android/gradle/wrapper/gradle-wrapper.jar \
     android/gradlew \
     android/res/values/libs.xml \
     android/build.gradle \
     android/gradle/wrapper/gradle-wrapper.properties \
-    android/gradlew.bat
+    android/gradlew.bat \
+    android/res/xml/qtprovider_paths.xml
 
 !android {
 SOURCES += \
