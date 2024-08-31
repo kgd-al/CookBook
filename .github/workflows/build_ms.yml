@@ -57,6 +57,8 @@ jobs:
         echo "======================================"
         echo ">> Extracting metadata:"
         ${{ github.workspace }}/meta.sh "${{ github.workspace }}/src/gui/about_metadata.h"
+        ls ${{ github.workspace }}/src/gui/about_metadata.h
+        cat ${{ github.workspace }}/src/gui/about_metadata.h
         echo "======================================"
         echo ">> Configuring:"
         qmake -spec win32-msvc ${{ github.workspace }}/CookBook.pro
