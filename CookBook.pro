@@ -3,8 +3,13 @@
 # Project created by QtCreator 2020-09-29T17:26:23
 #
 #-------------------------------------------------
+# Missing functionalities:
+# - Photos
+# - Saisons
+# - Transfer: Google drive?
+#
 
-QT += core gui printsupport #bluetooth
+QT += core gui bluetooth
 
 # android {
 #     QT += androidextras
@@ -40,10 +45,6 @@ message("Working directory is $$PWD")
 
 CONFIG += c++17
 
-!android {
-LIBS += -lmtp
-}
-
 SOURCES += \
     src/db/book.cpp \
     src/db/pdfprint.cpp \
@@ -61,6 +62,7 @@ SOURCES += \
     src/db/planningmodel.cpp \
     src/db/settings.cpp \
     src/gui/gui_settings.cpp \
+    src/gui/synchronizer.cpp \
     src/main.cpp
 
 HEADERS += \
@@ -82,7 +84,8 @@ HEADERS += \
     src/gui/planningview.h \
     src/db/planningmodel.h \
     src/db/settings.h \
-    src/gui/gui_settings.h
+    src/gui/gui_settings.h \
+    src/gui/synchronizer.h
 
 RESOURCES += \
     resources.qrc

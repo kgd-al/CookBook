@@ -35,6 +35,7 @@
 #include "planningview.h"
 #include "ingredientsmanager.h"
 #include "updatemanager.h"
+#include "synchronizer.h"
 #include "repairsmanager.h"
 #include "gui_settings.h"
 #include "about.h"
@@ -127,6 +128,7 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
 
     QMenu *m_other = bar->addMenu("Misc");
       add(m_other, "", "Mise à jour", "Ctrl+U", this, &Book::showUpdateManager);
+      add(m_other, "", "Synchronization", "Ctrl+Y", this, &Book::showSynchronizer);
       add(m_other, "", "Réparer", "Ctrl+R", this, &Book::showRepairUtility);
       add(m_other, "", "Configuration", "Ctrl+C", this, &Book::showSettings);
       add(m_other, "", "Bug tracker", "", [] {
@@ -274,6 +276,10 @@ void Book::showIngredientsManager(void) {
 
 void Book::showUpdateManager(void) {
   UpdateManager (this).exec();
+}
+
+void Book::showSynchronizer(void) {
+  Synchronizer (this).exec();
 }
 
 void Book::showRepairUtility(void) {

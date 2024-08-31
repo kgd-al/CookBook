@@ -55,6 +55,7 @@ private:
   void showRepairUtility (void);
   void showSettings (void);
 #endif
+  void showSynchronizer(void);
   void showAbout (void);
 
   void setAutoTitle (void);
