@@ -56,7 +56,7 @@ jobs:
         cat ${{ github.workspace }}/CookBook.pro | nl
         echo "======================================"
         echo ">> Extracting metadata:"
-        ${{ github.workspace }}/meta.sh "${{ github.workspace }}/src/gui/about_metadata.h"
+        bash ${{ github.workspace }}/meta.sh "${{ github.workspace }}/src/gui/about_metadata.h"
         ls ${{ github.workspace }}/src/gui/about_metadata.h
         cat ${{ github.workspace }}/src/gui/about_metadata.h
         echo "======================================"
