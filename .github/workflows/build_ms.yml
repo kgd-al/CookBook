@@ -10,6 +10,8 @@ env:
 jobs:
   build:
     runs-on: windows-latest
+    permissions:
+      contents: write
 
     steps:
     - name: (1) Checkout
@@ -66,5 +68,15 @@ jobs:
         echo ">> Building:"
         nmake
         echo "======================================"
+        ls release\CookBook.exe
 
-    # qt5-qmake qtbase5-dev libmtp-dev
+    - name: Publish
+      uses: ncipollo/release-action@v1
+      with:
+        artifacts: "release\CookBook.exe"
+        artifactErrorsFailBuild: true
+        commit: main
+        makeLatest: true
+        name: Latest
+
+    # qt5-qmake qtbase5-dev qtconnectivity
