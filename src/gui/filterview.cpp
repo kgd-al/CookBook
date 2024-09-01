@@ -603,14 +603,16 @@ void FilterView::connectMany (Entry<T> *entry, SRC... members) {
   connect(entry->cb, &QCheckBox::stateChanged,
           this, &FilterView::processFilterChanges);
 
-  using expander = int[];
-  (void) expander{
-    (
-      connect(entry->widget, std::forward<SRC>(members),
-              this, &FilterView::processFilterChanges),
-      void(),
-      0)...
-  };
+  if constexpr (sizeof...(members) > 0) {
+    using expander = int[];
+    (void) expander{
+      (
+        connect(entry->widget, std::forward<SRC>(members),
+                this, &FilterView::processFilterChanges),
+        void(),
+        0)...
+    };
+  }
 }
 
 void FilterView::processFilterChanges (void) {
