@@ -29,7 +29,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 DEFINES += \
     BASE_DIR=\\\"$$PWD\\\" BASE_BUILD_DIR=\\\"$$OUT_PWD\\\"
 
-METADATA=src/gui/about_metadata.h
+METADATA="$$shell_path(src/gui/about_metadata.h)"
 metatarget.target=$$METADATA
 metatarget.commands='cd "$$shell_path($$PWD)"; ls; bash meta.sh "$$METADATA"'
 metatarget.depends=FORCE
