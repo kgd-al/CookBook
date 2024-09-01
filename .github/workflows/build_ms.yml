@@ -62,15 +62,9 @@ jobs:
         echo "======================================"
         echo ">> Configuring:"
         qmake -spec win32-msvc ${{ github.workspace }}/CookBook.pro
-        nmake
-        echo "======================================"
-        echo ">> Makefile:"
-        #cat Makefile | nl
-        #cat Makefile.Debug | nl
-        #cat Makefile.Release | nl
         echo "======================================"
         echo ">> Building:"
-        make -j
+        nmake
         echo "======================================"
 
     # qt5-qmake qtbase5-dev libmtp-dev
