@@ -2,10 +2,6 @@
 #include <fstream>
 #include <filesystem>
 
-#include <QPrinter>
-#include <QPageSize>
-#include <QTextDocument>
-
 #include "book.h"
 
 #include <QDebug>
