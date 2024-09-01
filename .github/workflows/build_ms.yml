@@ -79,6 +79,6 @@ jobs:
         commit: master
         makeLatest: true
         name: Latest
-        tag: ${{ github.ref }}
+        tag: $GITHUB_REF_NAME
 
     # qt5-qmake qtbase5-dev qtconnectivity
