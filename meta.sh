@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo "Extracting metadata..."
-f=$1
+cd $1
+f=$2
 
 echo "Generating metadata in $f"
 echo "/* Auto-generated file */" > "$f"
