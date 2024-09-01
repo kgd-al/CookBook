@@ -21,6 +21,7 @@ jobs:
       run: |
         ls
         tree
+        echo ${{ github.ref }}
 
     - name: Set up Visual Studio shell
       uses: egor-tensin/vs-shell@v2
@@ -73,10 +74,11 @@ jobs:
     - name: Publish
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "release/CookBook.exe"
+        artifacts: "${{ runner.temp }}/build/release/CookBook.exe"
         artifactErrorsFailBuild: true
         commit: master
         makeLatest: true
         name: Latest
+        tag: ${{ github.ref }}
 
     # qt5-qmake qtbase5-dev qtconnectivity
