@@ -120,7 +120,7 @@ struct EditableModel : public QAbstractTableModel {
 
   bool setData (const QModelIndex &index, const QVariant &value,
                 int role)  override {
-    qDebug() << __PRETTY_FUNCTION__ << "(" << index << value << ")";
+    // qDebug() << __PRETTY_FUNCTION__ << "(" << index << value << ")";
     if (role != Qt::EditRole) return false;
     bool ok = _data[index.row()].setData(index.column(), value);
     if (ok) emit dataChanged(index, index, {role});
@@ -396,13 +396,13 @@ struct RecipeReferenceDelegate : public QStyledItemDelegate {
     Q_ASSERT(!currentIndex.isValid());
     currentIndex = index;
     Q_ASSERT(currentIndex.isValid());
-    qDebug() << __PRETTY_FUNCTION__ << "(" << parent << index << ")";
+    // qDebug() << __PRETTY_FUNCTION__ << "(" << parent << index << ")";
     externalSet = true;
     return cbox;
   }
 
   void destroyEditor(QWidget *editor, const QModelIndex &index) const override {
-    qDebug() << __PRETTY_FUNCTION__ << "(" << index << ")";
+    // qDebug() << __PRETTY_FUNCTION__ << "(" << index << ")";
     Q_ASSERT(editor == cbox);
     Q_ASSERT(index == currentIndex);
     cbox->setParent(nullptr);
@@ -410,7 +410,7 @@ struct RecipeReferenceDelegate : public QStyledItemDelegate {
   }
 
   void setEditorData(QWidget *editor, const QModelIndex &index) const override {
-    qDebug() << __PRETTY_FUNCTION__ << "(" << index << ")";
+    // qDebug() << __PRETTY_FUNCTION__ << "(" << index << ")";
     Q_ASSERT(editor == cbox);
     QString text = index.data().toString();
     if (cbox->currentText() != text)  cbox->setCurrentText(text);
@@ -422,7 +422,7 @@ struct RecipeReferenceDelegate : public QStyledItemDelegate {
                     QAbstractItemModel *model,
                     const QModelIndex &index) const override {
 
-    qDebug() << __PRETTY_FUNCTION__ << "(" << index << ")";
+    // qDebug() << __PRETTY_FUNCTION__ << "(" << index << ")";
     Q_ASSERT(editor == cbox);
     Q_ASSERT(model == this->model);
     model->setData(index, cbox->currentText(), Qt::EditRole);
