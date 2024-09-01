@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Extracting metadata..."
-#f=$(realpath $1)
+f=$1
 
 echo "Generating metadata in $f"
 echo "/* Auto-generated file */" > "$f"
