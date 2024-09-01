@@ -73,9 +73,9 @@ jobs:
     - name: Publish
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "release\CookBook.exe"
+        artifacts: "release/CookBook.exe"
         artifactErrorsFailBuild: true
-        commit: main
+        commit: master
         makeLatest: true
         name: Latest
 
