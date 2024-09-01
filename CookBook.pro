@@ -31,7 +31,7 @@ DEFINES += \
 
 METADATA=src/gui/about_metadata.h
 metatarget.target=$$METADATA
-metatarget.commands='cd $$shell_path($$PWD); ls; ./meta.sh "$$METADATA"'
+metatarget.commands='cd "$$shell_path($$PWD)"; ls; ./meta.sh "$$METADATA"'
 metatarget.depends=FORCE
 PRE_TARGETDEPS += $$METADATA
 QMAKE_EXTRA_TARGETS += metatarget
