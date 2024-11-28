@@ -1,12 +1,103 @@
+#include <QTabWidget>
+#include <QPushButton>
 #include <QFormLayout>
 #include <QLabel>
 
 #include <QFileInfo>
 
+#include <QBluetoothServer>
+
 #include "synchronizer.h"
 #include "../db/book.h"
 
+#include <iostream>
+
 namespace gui {
+
+enum TABS {
+  CLIENT = 0,
+  SERVER = 1
+};
+
+struct Synchronizer::Data {
+  QLabel *status, *localDate, *remoteDate;
+  QTabWidget *tabs;
+
+  QBluetoothAddress address;
+  QBluetoothServer *server;
+};
+
+struct Synchronizer::Worker : public QObject {
+  Synchronizer &parent;
+  Data &data;
+
+  Worker(Synchronizer *parent) : parent(*parent), data(*parent->_data) {}
+
+  void panelChanged() {
+    std::cerr << "Panel changed" << std::endl;
+    auto i = data.tabs->currentIndex();
+    data.status->setText(i == TABS::CLIENT ? "Client mode" : "Server mode");
+  }
+
+  void startServer() {
+    data.server = new QBluetoothServer(QBluetoothServiceInfo::RfcommProtocol, &parent);
+    connect(data.server, &QBluetoothServer::newConnection, this, &Worker::newConnection);
+  }
+
+  void newConnection(void) {
+    data.status->setText("New connection");
+  }
+};
+
+Synchronizer::Synchronizer(QWidget *parent) : QDialog(parent) {
+  _data = new Data();
+  _worker = new Worker(this);
+
+  _data->address = QBluetoothAddress();
+
+  _data->status = new QLabel();
+  _data->localDate = new QLabel();
+  _data->remoteDate = new QLabel();
+
+  auto layout = new QVBoxLayout();
+
+  auto tabWidget = _data->tabs = new QTabWidget();
+  layout->addWidget(tabWidget);
+
+  auto serverWidget = new QWidget();
+  tabWidget->insertTab(TABS::SERVER, serverWidget, "Server");
+
+  auto clientWidget = new QWidget();
+  tabWidget->insertTab(TABS::CLIENT, clientWidget, "Client");
+
+  connect(tabWidget, &QTabWidget::currentChanged, _worker, &Worker::panelChanged);
+
+  auto statusLayout = new QFormLayout();
+  layout->addLayout(statusLayout);
+
+  statusLayout->addRow("Status", _data->status);
+  statusLayout->addRow("Local", _data->localDate);
+  statusLayout->addRow("Remote", _data->remoteDate);
+
+  auto close = new QPushButton("Close");
+  layout->addWidget(close, 0, Qt::AlignRight);
+  connect(close, &QPushButton::clicked, this, &QDialog::accept);
+
+  setLayout(layout);
+  setWindowTitle("Synchronisation");
+
+  _worker->panelChanged();
+
+  adjustSize();
+  update();
+}
+
+void Synchronizer::update(void) {
+  _data->localDate->setText(QFileInfo(db::Book::monitoredPath()).lastModified().toString());
+}
+
+} // end of namespace gui
+
 
 // struct DevicesManager : public QWidget {
 //   DevicesManager (void) {
@@ -220,28 +311,3 @@ namespace gui {
 //   //   return s->target;
 //   // }
 // };
-
-struct Synchronizer::Data {
-  QLabel *localDate, *remoteDate;
-};
-
-Synchronizer::Synchronizer(QWidget *parent) : QDialog(parent) {
-  _data = new Data();
-  _data->localDate = new QLabel();
-  _data->remoteDate = new QLabel();
-
-  auto layout = new QFormLayout();
-
-  layout->addRow("Local", _data->localDate);
-  layout->addRow("Remote", _data->remoteDate);
-
-  setLayout(layout);
-
-  update();
-}
-
-void Synchronizer::update(void) {
-  _data->localDate->setText(QFileInfo(db::Book::monitoredPath()).lastModified().toString());
-}
-
-} // end of namespace gui

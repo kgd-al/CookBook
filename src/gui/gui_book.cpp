@@ -137,6 +137,7 @@ Book::Book(QWidget *parent) : QMainWindow(parent) {
       add(m_other, "", "About", "Ctrl+?", this, &Book::showAbout);
 
 #else
+      m_book->addAction("Synchronization", this, &Book::showSynchronizer);
       m_book->addAction("About", this, &Book::showAbout);
 
 //  grabGesture(android::SingleFingerSwipeRecognizer::type());
@@ -278,10 +279,6 @@ void Book::showUpdateManager(void) {
   UpdateManager (this).exec();
 }
 
-void Book::showSynchronizer(void) {
-  Synchronizer (this).exec();
-}
-
 void Book::showRepairUtility(void) {
   maybeShowModal<RepairsManager>(this, db::Settings::MODAL_REPAIRS);
 }
@@ -291,6 +288,10 @@ void Book::showSettings(void) {
 }
 
 #endif
+
+void Book::showSynchronizer(void) {
+  Synchronizer (this).exec();
+}
 
 void Book::showAbout(void) {
   About (this).exec();
