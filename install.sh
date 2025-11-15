@@ -2,6 +2,7 @@
 
 set -euo pipefail
 
+dir=build
 ./build.sh
 
 ddir="/home/$USER/.local/share/applications/"
