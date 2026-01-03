@@ -4,19 +4,19 @@
             1,
             "farine",
             3,
-            38
+            39
         ],
         [
             2,
             "oeuf",
             1,
-            27
+            28
         ],
         [
             3,
             "lait",
             8,
-            16
+            17
         ],
         [
             4,
@@ -28,7 +28,7 @@
             5,
             "bicarbonate alimentaire",
             5,
-            1
+            2
         ],
         [
             6,
@@ -58,7 +58,7 @@
             11,
             "sel",
             5,
-            25
+            26
         ],
         [
             13,
@@ -148,7 +148,7 @@
             34,
             "levure",
             5,
-            16
+            17
         ],
         [
             36,
@@ -268,7 +268,7 @@
             56,
             "huile",
             9,
-            36
+            37
         ],
         [
             57,
@@ -1365,7 +1365,7 @@
                     ]
                 ]
             ],
-            "notes": "- Mettre du sucre vanillé pour plus de goût.\n- Décorer avec des graines de pavot.",
+            "notes": "- Mettre du sucre vanillé pour plus de goût.\n- Décorer avec des graines de pavot ou des amandes effilées.",
             "regimen": 2,
             "status": 3,
             "steps": [
@@ -3642,8 +3642,8 @@
                 [
                     0,
                     [
+                        100,
                         1,
-                        7,
                         62,
                         "vertes"
                     ]
@@ -8313,18 +8313,102 @@
             "title": "Hamburgers d'Edna",
             "type": 2,
             "used": 0
+        },
+        {
+            "basic": false,
+            "d-portions": 8,
+            "duration": 1,
+            "id": 112,
+            "ing": [
+                [
+                    0,
+                    [
+                        150,
+                        1,
+                        1,
+                        "blanche"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        11,
+                        34,
+                        "chimique"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        11,
+                        "fin"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        4,
+                        5,
+                        ""
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        2,
+                        2,
+                        "entier"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        1,
+                        5,
+                        56,
+                        "colza"
+                    ]
+                ],
+                [
+                    0,
+                    [
+                        200,
+                        12,
+                        3,
+                        "entier"
+                    ]
+                ]
+            ],
+            "notes": "- On peut rajouter une cuillère à soupe de sucre dans la pâte si on ne met rien dessus.\n",
+            "regimen": 2,
+            "status": 3,
+            "steps": [
+                "Mettre la farine, le sel, le bicarbonate et la levure dans un saladier.",
+                "Mettre l'oeuf et l'huile par dessus. Mélenger jusqu'à former une boule de pâte homogène.",
+                "Ajouter le lait petit à petit (en quatre fois environ) pour détendre la pâte sans faire de grumeaux.",
+                "Cuire immédiatement dans une poële à crêpes graissée à feu moyen. Les retourner quand le pancake fait des bulles et qu'il est cuit sur le bord."
+            ],
+            "t-portions": "pancakes moyens",
+            "title": "Pancakes ",
+            "type": 1,
+            "used": 0
         }
     ],
     "units": [
         [
             1,
             "g",
-            146
+            148
         ],
         [
             2,
             "Ø",
-            110
+            111
         ],
         [
             3,
@@ -8334,12 +8418,12 @@
         [
             4,
             "pincée",
-            26
+            28
         ],
         [
             5,
             "cas",
-            90
+            91
         ],
         [
             6,
@@ -8349,7 +8433,7 @@
         [
             7,
             "verre",
-            22
+            21
         ],
         [
             8,
@@ -8369,12 +8453,12 @@
         [
             11,
             "sachet",
-            15
+            16
         ],
         [
             12,
             "ml",
-            22
+            23
         ],
         [
             13,
